@@ -3,6 +3,7 @@ using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
+using Ecommerce.Repository.Repositories.ProductRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -13,10 +14,12 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class ProductCategoryController : ControllerBase
     {
-        private readonly IProductCategory _productCategory;
-        public ProductCategoryController(IProductCategory _productCategory)
+        private readonly IProductCategory _cateegoryRepository;
+        private readonly IProduct _productRepository;
+        public ProductCategoryController(IProductCategory _cateegoryRepository, IProduct _productRepository)
         {
-            this._productCategory = _productCategory;
+            this._cateegoryRepository = _cateegoryRepository;
+            this._productRepository = _productRepository;
         }
 
         [HttpGet("allcategories")]
@@ -24,7 +27,7 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var products = _productCategory.GetAllCategories();
+                var products = _cateegoryRepository.GetAllCategories();
                 if (products.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductCategory>>
@@ -73,7 +76,7 @@ namespace Ecommerce.Api.Controllers
                 if (productCategoryDto.ParentCategoryId != null)
                 {
                     if (!productCategoryDto.ParentCategoryId.IsNullOrEmpty()
-                         && _productCategory.GetCategoryById(new Guid(productCategoryDto.ParentCategoryId)) == null)
+                         && _cateegoryRepository.GetCategoryById(new Guid(productCategoryDto.ParentCategoryId)) == null)
                     {
                         return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductCategory>
                         {
@@ -94,7 +97,7 @@ namespace Ecommerce.Api.Controllers
                         });
                     }
                 }
-                ProductCategory newCategory = _productCategory.AddNewCategory(
+                ProductCategory newCategory = _cateegoryRepository.AddNewCategory(
                     ConvertFromDto.ConvertFromProductCategoryDto_Add(productCategoryDto));
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<ProductCategory>
                 {
@@ -131,7 +134,9 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductCategory()
                     });
                 }
-                ProductCategory category = _productCategory.GetCategoryById(categoryId);
+                IEnumerable<Product> products = _productRepository.GetProductsByCategoryId(categoryId);
+                ProductCategory category = _cateegoryRepository.GetCategoryById(categoryId);
+                category.Products = new HashSet<Product>(products);
                 if(category == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductCategory>
@@ -180,7 +185,7 @@ namespace Ecommerce.Api.Controllers
                 if (productCategoryDto.ParentCategoryId != null)
                 {
                     if (!productCategoryDto.ParentCategoryId.IsNullOrEmpty()
-                         && _productCategory.GetCategoryById(new Guid(productCategoryDto.ParentCategoryId)) == null)
+                         && _cateegoryRepository.GetCategoryById(new Guid(productCategoryDto.ParentCategoryId)) == null)
                     {
                         return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductCategory>
                         {
@@ -201,7 +206,7 @@ namespace Ecommerce.Api.Controllers
                         });
                     }
                 }
-                ProductCategory category = _productCategory.UpdateCategory(
+                ProductCategory category = _cateegoryRepository.UpdateCategory(
                     ConvertFromDto.ConvertFromProductCategoryDto_Update(productCategoryDto));
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductCategory>
                 {
@@ -238,7 +243,12 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductCategory()
                     });
                 }
-                ProductCategory deletedCategory = _productCategory.DeleteCategory(categoryId);
+                var products = _productRepository.GetProductsByCategoryId(categoryId);
+                foreach(var p in products)
+                {
+                    DeleteExistingProductImage(p.ProductImageUrl);
+                }
+                ProductCategory deletedCategory = _cateegoryRepository.DeleteCategory(categoryId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductCategory>
                 {
                     IsSuccess = true,
@@ -256,6 +266,17 @@ namespace Ecommerce.Api.Controllers
                     Message = ex.Message,
                     ResponseObject = new ProductCategory()
                 });
+            }
+        }
+
+
+        private void DeleteExistingProductImage(string imageUrl)
+        {
+            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/Products/";
+            string existingImage = Path.Combine(path, $"{imageUrl}");
+            if (System.IO.File.Exists(existingImage))
+            {
+                System.IO.File.Delete(existingImage);
             }
         }
 

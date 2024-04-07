@@ -100,7 +100,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPost("addproduct")]
-        public IActionResult AddProduct([FromForm] ProductDto productDto)
+        public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
         {
             try
             {
@@ -172,7 +172,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Product()
                     });
                 }
-                DeleteExistingDishImage(product.ProductImageUrl);
+                DeleteExistingProductImage(product.ProductImageUrl);
                 Product deletedProduct = _productRepository.DeleteProductById(productId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Product>
                 {
@@ -216,7 +216,7 @@ namespace Ecommerce.Api.Controllers
                     {
                         productDto.ProductImageUrl = productDto.Image.FileName;
                         Product oldProduct = _productRepository.GetProductById(new Guid(productDto.Id));
-                        DeleteExistingDishImage(oldProduct.ProductImageUrl);
+                        DeleteExistingProductImage(oldProduct.ProductImageUrl);
                         string productImage = SaveProductImage(productDto);
                         productDto.ProductImageUrl = productImage;
                         var updatedProduct = _productRepository.UpdateProduct(ConvertFromDto.ConvertFromProductDto_Update(productDto));
@@ -253,7 +253,7 @@ namespace Ecommerce.Api.Controllers
         }
 
 
-        [HttpDelete("getproduct/{productId}")]
+        [HttpGet("getproduct/{productId}")]
         public IActionResult GetProductByProductId([FromRoute] Guid productId)
         {
             try
@@ -299,13 +299,19 @@ namespace Ecommerce.Api.Controllers
             {
                 if (productDto.ProductImageUrl != null)
                 {
-                    DeleteExistingDishImage(productDto.ProductImageUrl);
+                    DeleteExistingProductImage(productDto.ProductImageUrl);
                 }
-                string path = @"D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Client\wwwroot\Images\Products";
-                string uploadsFolder = Path.Combine("D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/", "Images/Products");
+                string path = @"D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Client\wwwroot";
+
+                string uploadsFolder = Path.Combine(path, "Images/Products");
+                if (!System.IO.Directory.Exists(uploadsFolder))
+                {
+                    System.IO.Directory.CreateDirectory(uploadsFolder);
+                }
                 uniqueFileName = Guid.NewGuid().ToString().Substring(0, 8) + "_" + productDto.Image.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     productDto.Image.CopyTo(fileStream);
                     fileStream.Flush();
@@ -314,9 +320,9 @@ namespace Ecommerce.Api.Controllers
             return uniqueFileName;
         }
 
-        private void DeleteExistingDishImage(string imageUrl)
+        private void DeleteExistingProductImage(string imageUrl)
         {
-            string path = @"D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Client\wwwroot\Images\Products";
+            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/Products/";
             string existingImage = Path.Combine(path, $"{imageUrl}");
             if (System.IO.File.Exists(existingImage))
             {
