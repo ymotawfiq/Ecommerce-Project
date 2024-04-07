@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\obj\\Debug\\net8.0\\compressed\\qfcsyu4qol.gz",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Ecommerce.Client.styles.css",
+      "PackagePath": "staticwebassets\\Ecommerce.Client.styles.css"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\icon-192.png",
+      "PackagePath": "staticwebassets\\icon-192.png"
+    },
+    {
+      "Id": "D:\\my_source_code\\C sharp\\__Blazor Course\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Ecommerce.Client.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Ecommerce.Client.props",
+      "PackagePath": "build\\Ecommerce.Client.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Ecommerce.Client.props",
+      "PackagePath": "buildMultiTargeting\\Ecommerce.Client.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Ecommerce.Client.props",
+      "PackagePath": "buildTransitive\\Ecommerce.Client.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
