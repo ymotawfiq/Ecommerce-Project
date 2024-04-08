@@ -12,7 +12,7 @@ namespace Ecommerce.Data.EntityConfigurations
         {
             builder.HasKey(e => e.Id);
             builder.HasOne(e => e.ProductItem).WithMany(e => e.ProductVariation2)
-                .HasForeignKey(e => e.ProductItemId).IsRequired(false);
+                .HasForeignKey(e => e.ProductItemId);
             builder.HasOne(e => e.VariationOption).WithMany(e => e.ProductVariation1)
                 .HasForeignKey(e => e.VariationOptionId).IsRequired(false);
         }

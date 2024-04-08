@@ -6,7 +6,7 @@ namespace Ecommerce.Data.Models.Entities
         public Guid Id { get; set; }
         public Guid ProductItemId { get; set; }
         public Guid VariationOptionId { get; set; }
-        public ProductItem? ProductItem { get; set; } = new();
-        public VariationOptions? VariationOption { get; set; } = new();
+        public ProductItem? ProductItem { get; set; }
+        public VariationOptions? VariationOption { get; set; }
     }
 }

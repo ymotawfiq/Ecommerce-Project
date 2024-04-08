@@ -1,6 +1,8 @@
 ﻿using Ecommerce.Data;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
+using Ecommerce.Repository.Repositories.ProductImagesRepository;
+using Ecommerce.Repository.Repositories.ProductItemRepository;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -9,11 +11,11 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
     public class ProductRepository : IProduct
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IProductCategory _productCategoryRepository;
-        public ProductRepository(ApplicationDbContext _dbContext, IProductCategory _productCategoryRepository)
+
+        public ProductRepository(ApplicationDbContext _dbContext
+            )
         {
             this._dbContext = _dbContext;
-            this._productCategoryRepository = _productCategoryRepository;
         }
         public Product AddProduct(Product product)
         {
@@ -103,7 +105,6 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
                 product1.Name = product.Name;
                 product1.CategoryId = product.CategoryId;
                 product1.Description = product.Description;
-                product1.Category = _productCategoryRepository.GetCategoryById(product.CategoryId);
                 SaveChanges();
                 return product1;
             }

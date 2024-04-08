@@ -2,6 +2,7 @@
 
 using Ecommerce.Data;
 using Ecommerce.Data.Models.Entities;
+using Ecommerce.Repository.Repositories.ProductRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository.Repositories.ProductImagesRepository

@@ -1,7 +1,11 @@
 using Ecommerce.Data;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
 using Ecommerce.Repository.Repositories.ProductImagesRepository;
+using Ecommerce.Repository.Repositories.ProductItemRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
+using Ecommerce.Repository.Repositories.ProductVariationRepository;
+using Ecommerce.Repository.Repositories.VariationOptionsRepository;
+using Ecommerce.Repository.Repositories.VariationRepository;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
@@ -25,7 +29,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(op =>
 builder.Services.AddScoped<IProductCategory, ProductCategoryRepository>();
 builder.Services.AddScoped<IProduct, ProductRepository>();
 builder.Services.AddScoped<IProductImages, ProductImagesRepository>();
-
+builder.Services.AddScoped<IProductItem, ProductItemRepository>();
+builder.Services.AddScoped<IVariation, VariationRepository>();
+builder.Services.AddScoped<IVariationOptions, VariationOptionsRepository>();
+builder.Services.AddScoped<IProductVariation, ProductVariationRepository>();
 
 
 // to kill circular in json

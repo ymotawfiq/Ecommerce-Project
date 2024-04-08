@@ -2,6 +2,8 @@
 
 using Ecommerce.Data;
 using Ecommerce.Data.Models.Entities;
+using Ecommerce.Repository.Repositories.ProductRepository;
+using Ecommerce.Repository.Repositories.VariationRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
@@ -9,15 +11,19 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
     public class ProductCategoryRepository : IProductCategory
     {
         private readonly ApplicationDbContext _dbContext;
-        public ProductCategoryRepository(ApplicationDbContext _dbContext)
+
+        public ProductCategoryRepository(ApplicationDbContext _dbContext
+            )
         {
             this._dbContext = _dbContext;
+
         }
         public ProductCategory AddNewCategory(ProductCategory productCategory)
         {
             try
             {
                 _dbContext.Category.Add(productCategory);
+                
                 SaveChanges();
                 return productCategory;
             }

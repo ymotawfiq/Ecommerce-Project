@@ -10,8 +10,8 @@ namespace Ecommerce.Data.Models.Entities
         public int QuantityInStock { get; set; }
         public string ProducItemImageUrl { get; set; } = string.Empty;
         public decimal Price { get; set; }
-        public Product? Product { get; set; } = new();
-        public HashSet<ProductVariation>? ProductVariation2 { get; set; } = new();
+        public Product? Product { get; set; }
+        public HashSet<ProductVariation>? ProductVariation2 { get; set; }
 
     }
 }

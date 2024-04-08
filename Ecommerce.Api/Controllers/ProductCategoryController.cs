@@ -247,6 +247,17 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductCategory()
                     });
                 }
+                ProductCategory productCategory = _cateegoryRepository.GetCategoryById(categoryId);
+                if (productCategory == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, new ApiResponse<Variation>
+                    {
+                        StatusCode = 404,
+                        IsSuccess = false,
+                        Message = $"Category with id ({categoryId}) not exists",
+                        ResponseObject = new Variation()
+                    });
+                }
                 var products = _productRepository.GetProductsByCategoryId(categoryId);
                 foreach (var p in products)
                 {

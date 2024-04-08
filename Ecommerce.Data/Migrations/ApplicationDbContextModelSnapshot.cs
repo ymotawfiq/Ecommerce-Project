@@ -224,7 +224,9 @@ namespace Ecommerce.Data.Migrations
                 {
                     b.HasOne("Ecommerce.Data.Models.Entities.ProductItem", "ProductItem")
                         .WithMany("ProductVariation2")
-                        .HasForeignKey("ProductItemId");
+                        .HasForeignKey("ProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Ecommerce.Data.Models.Entities.VariationOptions", "VariationOption")
                         .WithMany("ProductVariation1")

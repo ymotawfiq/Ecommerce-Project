@@ -4,6 +4,7 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
 using Ecommerce.Repository.Repositories.ProductImagesRepository;
+using Ecommerce.Repository.Repositories.ProductItemRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,13 +21,16 @@ namespace Ecommerce.Api.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IProductCategory _productCategoryRepository;
         private readonly IProductImages _productImagesRepository;
+        private readonly IProductItem _productItemRepository;
         public ProductController(IProduct _productRepository, IWebHostEnvironment _webHostEnvironment,
-            IProductCategory _productCategoryRepository, IProductImages _productImagesRepository)
+            IProductCategory _productCategoryRepository, IProductImages _productImagesRepository,
+            IProductItem _productItemRepository)
         {
             this._productRepository = _productRepository;
             this._webHostEnvironment = _webHostEnvironment;
             this._productCategoryRepository = _productCategoryRepository;
             this._productImagesRepository = _productImagesRepository;
+            this._productItemRepository = _productItemRepository;
         }
 
         [HttpGet("allproducts")]
@@ -183,6 +187,11 @@ namespace Ecommerce.Api.Controllers
                     DeleteExistingProductImage(p.ProductImageUrl);
                 }
                 _productImagesRepository.RemoveImagesByProductId(productId);
+                var productItemsImages = _productItemRepository.GetAllProductItemsByProductId(productId);
+                foreach(var i in productItemsImages)
+                {
+                    DeleteExistingItemImage(i.ProducItemImageUrl);
+                }
                 Product deletedProduct = _productRepository.DeleteProductById(productId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Product>
                 {
@@ -408,6 +417,16 @@ namespace Ecommerce.Api.Controllers
         private void DeleteExistingProductImage(string imageUrl)
         {
             string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/Products/";
+            string existingImage = Path.Combine(path, $"{imageUrl}");
+            if (System.IO.File.Exists(existingImage))
+            {
+                System.IO.File.Delete(existingImage);
+            }
+        }
+
+        private void DeleteExistingItemImage(string imageUrl)
+        {
+            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/ProductItems/";
             string existingImage = Path.Combine(path, $"{imageUrl}");
             if (System.IO.File.Exists(existingImage))
             {
