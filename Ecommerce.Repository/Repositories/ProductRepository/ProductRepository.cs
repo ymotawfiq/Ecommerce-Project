@@ -48,7 +48,8 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
         {
             try
             {
-                return _dbContext.Product.Include(e=>e.Category).Include(e=>e.ProductItems).ToList();
+                return _dbContext.Product.Include(e=>e.Category).Include(e=>e.ProductImages)
+                    .Include(e=>e.ProductItems).ToList();
             }
             catch (Exception)
             {
@@ -100,7 +101,6 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             {
                 Product? product1 = GetProductById(product.Id);
                 product1.Name = product.Name;
-                product1.ProductImageUrl = product.ProductImageUrl;
                 product1.CategoryId = product.CategoryId;
                 product1.Description = product.Description;
                 product1.Category = _productCategoryRepository.GetCategoryById(product.CategoryId);

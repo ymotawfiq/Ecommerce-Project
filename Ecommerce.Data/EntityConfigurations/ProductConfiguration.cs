@@ -14,7 +14,6 @@ namespace Ecommerce.Data.EntityConfigurations
             builder.HasOne(e => e.Category).WithMany(e => e.Products).HasForeignKey(e=>e.CategoryId);
             builder.Property(e => e.Name).IsRequired().HasColumnName("Product Name");
             builder.Property(e => e.Description).IsRequired().HasColumnName("Product Description");
-            builder.Property(e => e.ProductImageUrl).IsRequired().HasColumnName("Product Image");
         }
     }
 }

@@ -26,11 +26,13 @@ namespace Ecommerce.Data
                 .ApplyConfiguration(new ProductItemConfiguration())
                 .ApplyConfiguration(new ProductVariationConfiguration())
                 .ApplyConfiguration(new VariationConfigurations())
-                .ApplyConfiguration(new VariationOptionsConfiguration());
+                .ApplyConfiguration(new VariationOptionsConfiguration())
+                .ApplyConfiguration(new ProductImagesConfigurations());
         }
 
         public DbSet<ProductCategory> Category { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<ProductImages> ProductImages { get; set; }
         public DbSet<ProductItem> ProductItem { get; set; }
         public DbSet<ProductVariation> ProductVariation { get; set; }
         public DbSet<Variation> Variation { get; set; }

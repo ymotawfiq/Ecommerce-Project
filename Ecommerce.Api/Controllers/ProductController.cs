@@ -3,6 +3,7 @@ using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
+using Ecommerce.Repository.Repositories.ProductImagesRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,12 +19,14 @@ namespace Ecommerce.Api.Controllers
         private readonly IProduct _productRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IProductCategory _productCategoryRepository;
+        private readonly IProductImages _productImagesRepository;
         public ProductController(IProduct _productRepository, IWebHostEnvironment _webHostEnvironment,
-            IProductCategory _productCategoryRepository)
+            IProductCategory _productCategoryRepository, IProductImages _productImagesRepository)
         {
             this._productRepository = _productRepository;
             this._webHostEnvironment = _webHostEnvironment;
             this._productCategoryRepository = _productCategoryRepository;
+            this._productImagesRepository = _productImagesRepository;
         }
 
         [HttpGet("allproducts")]
@@ -132,9 +135,11 @@ namespace Ecommerce.Api.Controllers
                         Message = "You must enter product image",
                     });
                 }
-                string productImage = SaveProductImage(productDto);
-                productDto.ProductImageUrl = productImage;
-                var product = _productRepository.AddProduct(ConvertFromDto.ConvertFromProductDto_Add(productDto));
+
+                Product product = SaveProductImages(productDto);
+                
+                
+                
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<Product>
                 {
                     StatusCode = 201,
@@ -162,7 +167,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 Product product = _productRepository.GetProductById(productId);
-                if(product == null)
+                if (product == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
                     {
@@ -172,7 +177,12 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Product()
                     });
                 }
-                DeleteExistingProductImage(product.ProductImageUrl);
+                var productImages = _productImagesRepository.GetProductImagesByProductId(productId);
+                foreach(var p in productImages)
+                {
+                    DeleteExistingProductImage(p.ProductImageUrl);
+                }
+                _productImagesRepository.RemoveImagesByProductId(productId);
                 Product deletedProduct = _productRepository.DeleteProductById(productId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Product>
                 {
@@ -182,7 +192,7 @@ namespace Ecommerce.Api.Controllers
                     ResponseObject = deletedProduct
                 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<Product>
                 {
@@ -196,7 +206,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPut("updateproduct")]
-        public IActionResult updateProduct([FromForm] ProductDto productDto)
+        public IActionResult UpdateProduct([FromForm] ProductDto productDto)
         {
             try
             {
@@ -210,33 +220,24 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Product()
                     });
                 }
-                if(!productDto.Id.IsNullOrEmpty() && productDto.Id != null)
+                Product updatedProduct = UpdateProductImages(productDto);
+                if (updatedProduct == null)
                 {
-                    if (productDto.Image != null)
+                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
                     {
-                        productDto.ProductImageUrl = productDto.Image.FileName;
-                        Product oldProduct = _productRepository.GetProductById(new Guid(productDto.Id));
-                        DeleteExistingProductImage(oldProduct.ProductImageUrl);
-                        string productImage = SaveProductImage(productDto);
-                        productDto.ProductImageUrl = productImage;
-                        var updatedProduct = _productRepository.UpdateProduct(ConvertFromDto.ConvertFromProductDto_Update(productDto));
-                        return StatusCode(StatusCodes.Status200OK, new ApiResponse<Product>
-                        {
-                            StatusCode = 200,
-                            IsSuccess = true,
-                            Message = "Product updaed successfully",
-                            ResponseObject = updatedProduct
-                        });
-                    }
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = $"No products found with id ({productDto.Id})",
+                        ResponseObject = new Product()
+                    });
                 }
-               
 
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
+                return StatusCode(StatusCodes.Status200OK, new ApiResponse<Product>
                 {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "You must enter product image",
-                    ResponseObject = new Product()
+                    StatusCode = 200,
+                    IsSuccess = true,
+                    Message = "Product updated successfully",
+                    ResponseObject = updatedProduct
                 });
 
             }
@@ -290,17 +291,101 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        //
+        private Product SaveProductImages(ProductDto productDto)
+        {
+            try
+            {
+                Product product = ConvertFromDto.ConvertFromProductDto_Add(productDto);
+                Product savedProduct = _productRepository.AddProduct(product);
+                List<ProductImageDto> productImageDtos = new();
+                foreach (var i in productDto.Image)
+                {
+                    productImageDtos.Add(new ProductImageDto
+                    {
+                        Image = i,
+                        ProductId = savedProduct.Id.ToString()
+                    });
+                }
+
+                foreach (var p in productImageDtos)
+                {
+                    p.ImageUrl = SaveProductImage(p);
+                    _productImagesRepository.AddProductImages(new ProductImages
+                    {
+                        ProductId = new Guid(p.ProductId),
+                        ProductImageUrl = p.ImageUrl
+                    });
+                }
+                savedProduct.ProductImages = _productImagesRepository.GetProductImagesByProductId(savedProduct.Id).ToList();
+                return savedProduct;
+            }
+            catch (Exception)
+            {
+                throw;
+            } 
+        }
+
+        private Product UpdateProductImages(ProductDto productDto)
+        {
+            try
+            {
+                if (productDto.Id == null)
+                {
+                    throw new NullReferenceException("You must enter product id");
+                }
+                Product product = _productRepository.GetProductById(new Guid(productDto.Id));
+                Product updatedProduct = 
+                    _productRepository.UpdateProduct(ConvertFromDto.ConvertFromProductDto_Update(productDto));
+                if(product == null)
+                {
+                    return null;
+                }
+                IEnumerable<ProductImages> productImages = 
+                    _productImagesRepository.GetProductImagesByProductId(product.Id);
+                
+                foreach(var p in productImages)
+                {
+                    DeleteExistingProductImage(p.ProductImageUrl);
+                }
+                List<ProductImageDto> productImageDtos = new();
+                foreach (var i in productDto.Image)
+                {
+                    productImageDtos.Add(new ProductImageDto
+                    {
+                        Image = i,
+                        ProductId = product.Id.ToString()
+                    });
+                }
+
+                foreach (var p in productImageDtos)
+                {
+                    p.ImageUrl = SaveProductImage(p);
+                    _productImagesRepository.AddProductImages(new ProductImages
+                    {
+                        ProductId = new Guid(p.ProductId),
+                        ProductImageUrl = p.ImageUrl
+                    });
+                }
+                updatedProduct.ProductImages = _productImagesRepository.GetProductImagesByProductId(updatedProduct.Id).ToList();
+                return updatedProduct;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         // Save Image Url
-        private string SaveProductImage(ProductDto productDto)
+        private string SaveProductImage(ProductImageDto productImageDto)
         {
             string uniqueFileName = null;
-            if (productDto.Image != null)
+            if (productImageDto.Image != null)
             {
-                if (productDto.ProductImageUrl != null)
-                {
-                    DeleteExistingProductImage(productDto.ProductImageUrl);
-                }
+                //if (productImageDto.ImageUrl != null)
+                //{
+                //    DeleteExistingProductImage(productImageDto.ImageUrl);
+                //}
                 string path = @"D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Client\wwwroot";
 
                 string uploadsFolder = Path.Combine(path, "Images/Products");
@@ -308,12 +393,12 @@ namespace Ecommerce.Api.Controllers
                 {
                     System.IO.Directory.CreateDirectory(uploadsFolder);
                 }
-                uniqueFileName = Guid.NewGuid().ToString().Substring(0, 8) + "_" + productDto.Image.FileName;
+                uniqueFileName = Guid.NewGuid().ToString().Substring(0, 8) + "_" + productImageDto.Image.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    productDto.Image.CopyTo(fileStream);
+                    productImageDto.Image.CopyTo(fileStream);
                     fileStream.Flush();
                 }
             }

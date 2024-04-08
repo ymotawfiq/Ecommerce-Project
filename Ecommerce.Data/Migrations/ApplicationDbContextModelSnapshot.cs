@@ -41,11 +41,6 @@ namespace Ecommerce.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Product Name");
 
-                    b.Property<string>("ProductImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Product Image");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -73,6 +68,26 @@ namespace Ecommerce.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.ProductImages", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.ProductItem", b =>
@@ -183,6 +198,17 @@ namespace Ecommerce.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.ProductImages", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Models.Entities.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.ProductItem", b =>
                 {
                     b.HasOne("Ecommerce.Data.Models.Entities.Product", "Product")
@@ -233,6 +259,8 @@ namespace Ecommerce.Data.Migrations
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Product", b =>
                 {
+                    b.Navigation("ProductImages");
+
                     b.Navigation("ProductItems");
                 });
 

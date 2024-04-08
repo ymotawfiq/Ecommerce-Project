@@ -32,16 +32,11 @@ namespace Ecommerce.Data.Extensions
 
         public static Product ConvertFromProductDto_Add(ProductDto productDto)
         {
-            if (productDto.ProductImageUrl == null)
-            {
-                throw new NullReferenceException("Image url must not be null");
-            }
             return new Product
             {
                 CategoryId = productDto.CategoryId,
                 Description = productDto.Description,
                 Name = productDto.Name,
-                ProductImageUrl = productDto.ProductImageUrl,
             };
         }
 
@@ -51,17 +46,12 @@ namespace Ecommerce.Data.Extensions
             {
                 throw new NullReferenceException("Category id must not be null");
             }
-            if (productDto.ProductImageUrl == null)
-            {
-                throw new NullReferenceException("Image url must not be null");
-            }
             return new Product
             {
                 Id = new Guid(productDto.Id),
                 CategoryId = productDto.CategoryId,
                 Description = productDto.Description,
                 Name = productDto.Name,
-                ProductImageUrl = productDto.ProductImageUrl,
             };
         }
 

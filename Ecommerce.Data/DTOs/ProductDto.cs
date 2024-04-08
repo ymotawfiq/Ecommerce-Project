@@ -17,9 +17,7 @@ namespace Ecommerce.Data.DTOs
         [Required]
         public string Description { get; set; } = string.Empty;
 
-        public string? ProductImageUrl { get; set; } = string.Empty;
-
         [Required]
-        public IFormFile? Image { get; set; }
+        public List<IFormFile>? Image { get; set; }
     }
 }

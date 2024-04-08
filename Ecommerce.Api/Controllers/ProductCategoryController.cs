@@ -3,6 +3,7 @@ using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
+using Ecommerce.Repository.Repositories.ProductImagesRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,13 @@ namespace Ecommerce.Api.Controllers
     {
         private readonly IProductCategory _cateegoryRepository;
         private readonly IProduct _productRepository;
-        public ProductCategoryController(IProductCategory _cateegoryRepository, IProduct _productRepository)
+        private readonly IProductImages _productImagesRepository;
+        public ProductCategoryController(IProductCategory _cateegoryRepository, IProduct _productRepository,
+            IProductImages _productImagesRepository)
         {
             this._cateegoryRepository = _cateegoryRepository;
             this._productRepository = _productRepository;
+            this._productImagesRepository = _productImagesRepository;
         }
 
         [HttpGet("allcategories")]
@@ -244,9 +248,13 @@ namespace Ecommerce.Api.Controllers
                     });
                 }
                 var products = _productRepository.GetProductsByCategoryId(categoryId);
-                foreach(var p in products)
+                foreach (var p in products)
                 {
-                    DeleteExistingProductImage(p.ProductImageUrl);
+                    var productImages = _productImagesRepository.GetProductImagesByProductId(p.Id);
+                    foreach(var k in productImages)
+                    {
+                        DeleteExistingProductImage(k.ProductImageUrl);
+                    }
                 }
                 ProductCategory deletedCategory = _cateegoryRepository.DeleteCategory(categoryId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductCategory>

@@ -13,10 +13,6 @@
       "PackagePath": "staticwebassets\\Ecommerce.Client.styles.css"
     },
     {
-      "Id": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\Images\\Products",
-      "PackagePath": "staticwebassets\\Images"
-    },
-    {
       "Id": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\css\\app.css",
       "PackagePath": "staticwebassets\\css\\app.css"
     },

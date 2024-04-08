@@ -1,5 +1,6 @@
 using Ecommerce.Data;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
+using Ecommerce.Repository.Repositories.ProductImagesRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(op =>
 // Repositorieec Injection
 builder.Services.AddScoped<IProductCategory, ProductCategoryRepository>();
 builder.Services.AddScoped<IProduct, ProductRepository>();
+builder.Services.AddScoped<IProductImages, ProductImagesRepository>();
 
 
 
