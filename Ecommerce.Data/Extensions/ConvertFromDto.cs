@@ -214,5 +214,64 @@ namespace Ecommerce.Data.Extensions
             };
         }
 
+
+        public static Countary ConvertFromCountaryDto_Add(CountaryDto countaryDto)
+        {
+            return new Countary
+            {
+                Name = countaryDto.Name
+            };
+        }
+
+        public static Countary ConvertFromCountaryDto_Update(CountaryDto countaryDto)
+        {
+            if (countaryDto.Id == null)
+            {
+                throw new NullReferenceException("Country id must not be null");
+            }
+            return new Countary
+            {
+                Id = new Guid(countaryDto.Id),
+                Name = countaryDto.Name
+            };
+        }
+
+
+        public static Address ConvertFromAddressDto_Add(AddressDto addressDto)
+        {
+            return new Address
+            {
+                AddressLine1 = addressDto.AddressLine1,
+                AddressLine2 = addressDto.AddressLine2,
+                City = addressDto.City,
+                CountaryId = addressDto.CountaryId,
+                PostalCode = addressDto.PostalCode,
+                Region = addressDto.Region,
+                StreetNumber = addressDto.StreetNumber,
+                UnitNumber = addressDto.UnitNumber
+            };
+        }
+
+        public static Address ConvertFromAddressDto_Update(AddressDto addressDto)
+        {
+            if (addressDto.Id == null)
+            {
+                throw new NullReferenceException("Address id must not be null");
+            }
+            return new Address
+            {
+                Id = new Guid(addressDto.Id),
+                AddressLine1 = addressDto.AddressLine1,
+                AddressLine2 = addressDto.AddressLine2,
+                City = addressDto.City,
+                CountaryId = addressDto.CountaryId,
+                PostalCode = addressDto.PostalCode,
+                Region = addressDto.Region,
+                StreetNumber = addressDto.StreetNumber,
+                UnitNumber = addressDto.UnitNumber
+            };
+        }
+
+
     }
 }

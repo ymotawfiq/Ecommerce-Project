@@ -29,7 +29,9 @@ namespace Ecommerce.Data
                 .ApplyConfiguration(new VariationOptionsConfiguration())
                 .ApplyConfiguration(new ProductImagesConfigurations())
                 .ApplyConfiguration(new PromotionConfiguration())
-                .ApplyConfiguration(new PromotionCategoryConfiguration());
+                .ApplyConfiguration(new PromotionCategoryConfiguration())
+                .ApplyConfiguration(new CountaryConfiguration())
+                .ApplyConfiguration(new AddressConfiguration());
         }
 
         public DbSet<ProductCategory> Category { get; set; }
@@ -41,5 +43,7 @@ namespace Ecommerce.Data
         public DbSet<VariationOptions> VariationOptions { get; set; }
         public DbSet<Promotion> Promotion { get; set; }
         public DbSet<PromotionCategory> PromotionCategory { get; set; }
+        public DbSet<Countary> Countary { get; set; }
+        public DbSet<Address> Address { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 using Ecommerce.Data;
+using Ecommerce.Repository.Repositories.AddressRepository;
+using Ecommerce.Repository.Repositories.CountaryRepository;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
 using Ecommerce.Repository.Repositories.ProductImagesRepository;
 using Ecommerce.Repository.Repositories.ProductItemRepository;
@@ -37,6 +39,8 @@ builder.Services.AddScoped<IVariationOptions, VariationOptionsRepository>();
 builder.Services.AddScoped<IProductVariation, ProductVariationRepository>();
 builder.Services.AddScoped<IPromotion, PromotionRepository>();
 builder.Services.AddScoped<IPromotionCategory, PromotionCategoryRepository>();
+builder.Services.AddScoped<ICountary, CountaryRepository>();
+builder.Services.AddScoped<IAddress, AddressRepository>();
 
 
 // to kill circular in json

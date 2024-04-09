@@ -22,6 +22,64 @@ namespace Ecommerce.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Address", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddressLine2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CountaryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StreetNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountaryId");
+
+                    b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Countary", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Countary Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countary");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -240,6 +298,17 @@ namespace Ecommerce.Data.Migrations
                     b.ToTable("VariationOptions");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Address", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Models.Entities.Countary", "Countary")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CountaryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Countary");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Product", b =>
                 {
                     b.HasOne("Ecommerce.Data.Models.Entities.ProductCategory", "Category")
@@ -327,6 +396,11 @@ namespace Ecommerce.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Variation");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Countary", b =>
+                {
+                    b.Navigation("Addresses");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Product", b =>
