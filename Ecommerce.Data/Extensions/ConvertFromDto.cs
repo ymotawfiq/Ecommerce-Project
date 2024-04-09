@@ -159,5 +159,60 @@ namespace Ecommerce.Data.Extensions
             };
         }
 
+        public static Promotion ConvertFromPromotionDto_Add(PromotionDto promotionDto)
+        {
+            return new Promotion
+            {
+                Description = promotionDto.Description,
+                DiscountRate = promotionDto.DiscountRate,
+                EndDate = promotionDto.EndDate,
+                Name = promotionDto.Name,
+                StartDate = promotionDto.StartDate
+            };
+        }
+
+        public static Promotion ConvertFromPromotionDto_Update(PromotionDto promotionDto)
+        {
+            if (promotionDto.Id == null)
+            {
+                throw new NullReferenceException("Promotion id must not be null");
+            }
+            return new Promotion
+            {
+                Id = new Guid(promotionDto.Id),
+                Description = promotionDto.Description,
+                DiscountRate = promotionDto.DiscountRate,
+                EndDate = promotionDto.EndDate,
+                Name = promotionDto.Name,
+                StartDate = promotionDto.StartDate
+            };
+        }
+
+
+        public static PromotionCategory ConvertFromPromotionCategoryDto_Add
+            (PromotionCategoryDto promotionCategoryDto)
+        {
+            return new PromotionCategory
+            {
+                CategoryId = promotionCategoryDto.CategoryId,
+                PromotionId = promotionCategoryDto.PromotionId
+            };
+        }
+
+        public static PromotionCategory ConvertFromPromotionCategoryDto_Update
+            (PromotionCategoryDto promotionCategoryDto)
+        {
+            if (promotionCategoryDto.Id == null)
+            {
+                throw new NullReferenceException("Promotion category id must not be null");
+            }
+            return new PromotionCategory
+            {
+                Id = new Guid(promotionCategoryDto.Id),
+                CategoryId = promotionCategoryDto.CategoryId,
+                PromotionId = promotionCategoryDto.PromotionId
+            };
+        }
+
     }
 }

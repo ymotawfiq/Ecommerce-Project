@@ -145,6 +145,59 @@ namespace Ecommerce.Data.Migrations
                     b.ToTable("ProductVariation");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Promotion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Promotion Description");
+
+                    b.Property<float>("DiscountRate")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Promotion Ending Date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Promotion Name");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Promotion Starting Date");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promotion");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.PromotionCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PromotionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PromotionId");
+
+                    b.ToTable("PromotionCategory");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Variation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -237,6 +290,23 @@ namespace Ecommerce.Data.Migrations
                     b.Navigation("VariationOption");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.PromotionCategory", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Models.Entities.ProductCategory", "ProductCategory")
+                        .WithMany("PromotionCategories")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.Promotion", "Promotion")
+                        .WithMany("PromotionCategories")
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductCategory");
+
+                    b.Navigation("Promotion");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Variation", b =>
                 {
                     b.HasOne("Ecommerce.Data.Models.Entities.ProductCategory", "Category")
@@ -270,12 +340,19 @@ namespace Ecommerce.Data.Migrations
                 {
                     b.Navigation("Products");
 
+                    b.Navigation("PromotionCategories");
+
                     b.Navigation("Variations");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.ProductItem", b =>
                 {
                     b.Navigation("ProductVariation2");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Promotion", b =>
+                {
+                    b.Navigation("PromotionCategories");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Variation", b =>

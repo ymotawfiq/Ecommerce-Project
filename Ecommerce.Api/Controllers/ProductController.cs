@@ -107,7 +107,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPost("addproduct")]
-        public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
+        public IActionResult AddProduct([FromForm] ProductDto productDto)
         {
             try
             {

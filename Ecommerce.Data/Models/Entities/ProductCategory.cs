@@ -13,5 +13,6 @@ namespace Ecommerce.Data.Models.Entities
         public HashSet<Product>? Products { get; set; }
 
         public HashSet<Variation>? Variations { get; set; }
+        public List<PromotionCategory>? PromotionCategories { get; set; }
     }
 }
