@@ -18,13 +18,13 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             this._dbContext = _dbContext;
 
         }
-        public ProductCategory AddNewCategory(ProductCategory productCategory)
+        public async Task<ProductCategory> AddNewCategoryAsync(ProductCategory productCategory)
         {
             try
             {
-                _dbContext.Category.Add(productCategory);
+                await _dbContext.Category.AddAsync(productCategory);
                 
-                SaveChanges();
+                SaveChangesAsync();
                 return productCategory;
             }
             catch(Exception)
@@ -33,14 +33,15 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             }
         }
 
-        public ProductCategory DeleteCategory(Guid CategoryId)
+        public async Task<ProductCategory> DeleteCategoryAsync(Guid CategoryId)
         {
             try
             {
-                ProductCategory category = GetCategoryById(CategoryId);
-                _dbContext.Category.Remove(category);
-                SaveChanges();
-                return category;
+                ProductCategory oldCategory = await GetCategoryByIdAsync(CategoryId);
+                _dbContext.Category.Attach(oldCategory);
+                _dbContext.Category.Remove(oldCategory);
+                SaveChangesAsync();
+                return oldCategory;
             }
             catch (Exception)
             {
@@ -48,14 +49,14 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             }
         }
 
-        public ProductCategory UpdateCategory(ProductCategory productCategory)
+        public async Task<ProductCategory> UpdateCategoryAsync(ProductCategory productCategory)
         {
             try
             {
-                ProductCategory category = GetCategoryById(productCategory.Id);
+                ProductCategory category = await GetCategoryByIdAsync(productCategory.Id);
                 category.ParentCategoryId = productCategory.ParentCategoryId;
                 category.CategoryName = productCategory.CategoryName;
-                SaveChanges();
+                SaveChangesAsync();
                 return category;
             }
             catch (Exception)
@@ -64,11 +65,11 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             }
         }
 
-        public IEnumerable<ProductCategory> GetAllCategories()
+        public async Task<IEnumerable<ProductCategory>> GetAllCategoriesAsync()
         {
             try
             {
-                return _dbContext.Category.Include(e=>e.Variations).Include(e=>e.Products).ToList();
+                return await _dbContext.Category.Include(e=>e.Variations).Include(e=>e.Products).ToListAsync();
             }
             catch (Exception)
             {
@@ -76,11 +77,12 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             }
         }
 
-        public ProductCategory GetCategoryById(Guid CategoryId)
+        public async Task<ProductCategory> GetCategoryByIdAsync(Guid CategoryId)
         {
             try
             {
-                ProductCategory? category = _dbContext.Category.Where(e => e.Id == CategoryId).FirstOrDefault(); 
+                ProductCategory? category = await _dbContext.Category.Where(e => e.Id == CategoryId)
+                    .FirstOrDefaultAsync(); 
                 if(category == null)
                 {
                     return null;
@@ -93,21 +95,21 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public ProductCategory Upsert(ProductCategory productCategory)
+        public async Task<ProductCategory> UpsertAsync(ProductCategory productCategory)
         {
             try
             {
-                ProductCategory? category = GetCategoryById(productCategory.Id);
+                ProductCategory? category = await GetCategoryByIdAsync(productCategory.Id);
                 if (category == null)
                 {
-                    return AddNewCategory(productCategory);
+                    return await AddNewCategoryAsync(productCategory);
                 }
-                return UpdateCategory(productCategory);
+                return await UpdateCategoryAsync(productCategory);
             }
             catch (Exception)
             {
@@ -115,6 +117,5 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             }
         }
 
-       
     }
 }

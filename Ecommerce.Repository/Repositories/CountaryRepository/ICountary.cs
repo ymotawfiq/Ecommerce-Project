@@ -9,12 +9,12 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
 {
     public interface ICountary
     {
-        public Countary AddCountary(Countary countary);
-        public Countary UpdateCountary(Countary countary);
-        public Countary DeleteCountaryByCountaryId(Guid countaryId);
-        public Countary GetCountaryByCountaryId(Guid countaryId);
-        public IEnumerable<Countary> GetAllCountaries();
-        public void SaveChanges();
-        public Countary Upsert(Countary countary);
+        public Task<Countary> AddCountaryAsync(Countary countary);
+        public Task<Countary> UpdateCountaryAsync(Countary countary);
+        public Task<Countary> DeleteCountaryByCountaryIdAsync(Guid countaryId);
+        public Task<Countary> GetCountaryByCountaryIdAsync(Guid countaryId);
+        public Task<IEnumerable<Countary>> GetAllCountariesAsync();
+        public void SaveChangesAsync();
+        public Task<Countary> UpsertAsync(Countary countary);
     }
 }

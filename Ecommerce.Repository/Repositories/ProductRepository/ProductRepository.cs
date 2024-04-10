@@ -17,12 +17,12 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
         {
             this._dbContext = _dbContext;
         }
-        public Product AddProduct(Product product)
+        public async Task<Product> AddProductAsync(Product product)
         {
             try
             {
-                _dbContext.Product.Add(product);
-                SaveChanges();
+                await _dbContext.Product.AddAsync(product);
+                SaveChangesAsync();
                 return product;
             }
             catch (Exception)
@@ -31,13 +31,14 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             }
         }
 
-        public Product DeleteProductById(Guid productId)
+        public async Task<Product> DeleteProductByIdAsync(Guid productId)
         {
             try
             {
-                Product product = GetProductById(productId);
+                Product product = await GetProductByIdAsync(productId);
+                //_dbContext.Product.Attach(product);
                 _dbContext.Product.Remove(product);
-                SaveChanges();
+                SaveChangesAsync();
                 return product;
             }
             catch (Exception)
@@ -46,12 +47,12 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             }
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
             try
             {
-                return _dbContext.Product.Include(e=>e.Category).Include(e=>e.ProductImages)
-                    .Include(e=>e.ProductItems).ToList();
+                return await _dbContext.Product.Include(e=>e.Category).Include(e=>e.ProductImages)
+                    .Include(e=>e.ProductItems).ToListAsync();
             }
             catch (Exception)
             {
@@ -59,11 +60,12 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             }
         }
 
-        public Product GetProductById(Guid productId)
+        public async Task<Product> GetProductByIdAsync(Guid productId)
         {
             try
             {
-                Product? product = _dbContext.Product.Where(p => p.Id == productId).FirstOrDefault();
+                Product? product = await _dbContext.Product.Where(p => p.Id == productId)
+                    .FirstOrDefaultAsync();
                 if(product == null)
                 {
                     return null;
@@ -76,12 +78,12 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             }
         }
 
-        public IEnumerable<Product> GetProductsByCategoryId(Guid CategoryId)
+        public async Task<IEnumerable<Product>> GetProductsByCategoryIdAsync(Guid CategoryId)
         {
             try
             {
                 return (
-                    from p in GetAllProducts()
+                    from p in await GetAllProductsAsync()
                     where p.CategoryId == CategoryId
                     select p
                     );
@@ -92,20 +94,20 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public Product UpdateProduct(Product product)
+        public async Task<Product> UpdateProductAsync(Product product)
         {
             try
             {
-                Product? product1 = GetProductById(product.Id);
+                Product? product1 = await GetProductByIdAsync(product.Id);
                 product1.Name = product.Name;
                 product1.CategoryId = product.CategoryId;
                 product1.Description = product.Description;
-                SaveChanges();
+                SaveChangesAsync();
                 return product1;
             }
             catch (Exception)
@@ -114,16 +116,16 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             }
         }
 
-        public Product Upsert(Product product)
+        public async Task<Product> UpsertAsync(Product product)
         {
             try
             {
-                Product? product1 = GetProductById(product.Id);
+                Product? product1 = await GetProductByIdAsync(product.Id);
                 if (product1 == null)
                 {
-                    return AddProduct(product);
+                    return await AddProductAsync(product);
                 }
-                return UpdateProduct(product);
+                return await UpdateProductAsync(product);
             }
             catch (Exception)
             {

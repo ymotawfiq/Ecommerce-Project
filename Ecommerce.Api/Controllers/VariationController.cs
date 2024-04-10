@@ -21,11 +21,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allvariations")]
-        public IActionResult GetAllVariations()
+        public async Task<IActionResult> GetAllVariationsAsync()
         {
             try
             {
-                var variations = _variationRepository.GetAllVariations();
+                var variations = await _variationRepository.GetAllVariationsAsync();
                 if (variations.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -59,11 +59,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allvariationsbycategoryId/{categoryId}")]
-        public IActionResult GetAllVariations([FromRoute] Guid categoryId)
+        public async Task<IActionResult> GetAllVariationsAsync([FromRoute] Guid categoryId)
         {
             try
             {
-                var variations = _variationRepository.GetAllVariationsByCategoryId(categoryId);
+                var variations = await _variationRepository.GetAllVariationsByCategoryIdAsync(categoryId);
                 if (variations.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -97,7 +97,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("addvariation")]
-        public IActionResult AddVariation([FromBody] VariationDto variationDto)
+        public async Task<IActionResult> AddVariationAsync([FromBody] VariationDto variationDto)
         {
             try
             {
@@ -111,7 +111,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Variation()
                     });
                 }
-                ProductCategory productCategory = _categoryRepository.GetCategoryById(new Guid(variationDto.CatrgoryId));
+                ProductCategory productCategory = await _categoryRepository.GetCategoryByIdAsync
+                    (new Guid(variationDto.CatrgoryId));
                 if (productCategory == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
@@ -122,7 +123,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Variation()
                     });
                 }
-                Variation variation = _variationRepository.AddVariation(
+                Variation variation = await _variationRepository.AddVariationAsync(
                     ConvertFromDto.ConvertFromVariationDto_Add(variationDto));
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<Variation>
                 {
@@ -145,7 +146,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("updatevariation")]
-        public IActionResult UpdateVariation([FromBody] VariationDto variationDto)
+        public async Task<IActionResult> UpdateVariationAsync([FromBody] VariationDto variationDto)
         {
             try
             {
@@ -169,7 +170,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Variation()
                     });
                 }
-                ProductCategory productCategory = _categoryRepository.GetCategoryById(new Guid(variationDto.CatrgoryId));
+                ProductCategory productCategory = await _categoryRepository.GetCategoryByIdAsync
+                    (new Guid(variationDto.CatrgoryId));
                 if (productCategory == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
@@ -180,7 +182,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Variation()
                     });
                 }
-                Variation oldVariation = _variationRepository.GetVariationById(new Guid(variationDto.Id));
+                Variation oldVariation = await _variationRepository.GetVariationByIdAsync
+                    (new Guid(variationDto.Id));
                 if(oldVariation == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
@@ -191,7 +194,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Variation()
                     });   
                 }
-                Variation variation = _variationRepository.UpdateVariation(
+                Variation variation = await _variationRepository.UpdateVariationAsync(
                     ConvertFromDto.ConvertFromVariationDto_Update(variationDto));
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Variation>
                 {
@@ -214,11 +217,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("deletevariation/{variationId}")]
-        public IActionResult DeleteVariationById([FromRoute] Guid variationId)
+        public async Task<IActionResult> DeleteVariationByIdAsync([FromRoute] Guid variationId)
         {
             try
             {
-                Variation variation = _variationRepository.GetVariationById(variationId);
+                Variation variation = await _variationRepository.GetVariationByIdAsync(variationId);
                 if(variation == null)
                 {
                     return StatusCode(StatusCodes.Status404NotFound, new ApiResponse<Variation>
@@ -229,13 +232,13 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Variation()
                     });
                 }
-                _variationRepository.DeleteVariationById(variationId);
+                var deletedVariation = await _variationRepository.DeleteVariationByIdAsync(variationId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Variation>
                 {
                     StatusCode = 200,
                     IsSuccess = true,
                     Message = "Variation deleted successfully",
-                    ResponseObject = variation
+                    ResponseObject = deletedVariation
                 });
             }
             catch(Exception ex)
@@ -251,11 +254,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("getvariation/{variationId}")]
-        public IActionResult GetVariationById([FromRoute] Guid variationId)
+        public async Task<IActionResult> GetVariationByIdAsync([FromRoute] Guid variationId)
         {
             try
             {
-                Variation variation = _variationRepository.GetVariationById(variationId);
+                Variation variation = await _variationRepository.GetVariationByIdAsync(variationId);
                 if (variation == null)
                 {
                     return StatusCode(StatusCodes.Status404NotFound, new ApiResponse<Variation>

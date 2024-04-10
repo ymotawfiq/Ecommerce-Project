@@ -17,12 +17,12 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             this._dbContext = _dbContext;
 
         }
-        public Variation AddVariation(Variation variation)
+        public async Task<Variation> AddVariationAsync(Variation variation)
         {
             try
             {
-                _dbContext.Variation.Add(variation);
-                SaveChanges();
+                await _dbContext.Variation.AddAsync(variation);
+                SaveChangesAsync();
                 return variation;
             }
             catch (Exception)
@@ -31,14 +31,14 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             }
         }
 
-        public Variation DeleteVariationById(Guid variationId)
+        public async Task<Variation> DeleteVariationByIdAsync(Guid variationId)
         {
             try
             {
-                Variation variation = GetVariationById(variationId);
-              
+                Variation variation = await GetVariationByIdAsync(variationId);
+                _dbContext.Variation.Attach(variation);
                 _dbContext.Variation.Remove(variation);
-                SaveChanges();
+                SaveChangesAsync();
                 return variation;
             }
             catch (Exception)
@@ -47,11 +47,12 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             }
         }
 
-        public IEnumerable<Variation> GetAllVariations()
+        public async Task<IEnumerable<Variation>> GetAllVariationsAsync()
         {
             try
             {
-                return _dbContext.Variation.Include(e=>e.Category).Include(e=>e.VariationOptions).ToList();
+                return await _dbContext.Variation.Include(e=>e.Category).Include(e=>e.VariationOptions)
+                    .ToListAsync();
             }
             catch (Exception)
             {
@@ -59,12 +60,12 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             }
         }
 
-        public IEnumerable<Variation> GetAllVariationsByCategoryId(Guid categoryId)
+        public async Task<IEnumerable<Variation>> GetAllVariationsByCategoryIdAsync(Guid categoryId)
         {
             try
             {
                 return
-                    from v in GetAllVariations()
+                    from v in await GetAllVariationsAsync()
                     where v.CategoryId == categoryId
                     select v;
             }
@@ -74,11 +75,12 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             }
         }
 
-        public Variation GetVariationById(Guid variationId)
+        public async Task<Variation> GetVariationByIdAsync(Guid variationId)
         {
             try
             {
-                Variation? variation = _dbContext.Variation.Where(e => e.Id == variationId).FirstOrDefault();
+                Variation? variation = await _dbContext.Variation.Where(e => e.Id == variationId)
+                    .FirstOrDefaultAsync();
                 if (variation == null)
                 {
                     return null;
@@ -92,20 +94,20 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public Variation UpdateVariation(Variation variation)
+        public async Task<Variation> UpdateVariationAsync(Variation variation)
         {
             try
             {
-                Variation variation1 = GetVariationById(variation.Id);
+                Variation variation1 = await GetVariationByIdAsync(variation.Id);
                 variation1.CategoryId = variation.CategoryId;
                 variation1.Name = variation.Name;
                 
-                SaveChanges();
+                SaveChangesAsync();
                 return variation1;
             }
             catch (Exception)
@@ -114,16 +116,16 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             }
         }
 
-        public Variation Upsert(Variation variation)
+        public async Task<Variation> UpsertAsync(Variation variation)
         {
             try
             {
-                Variation oldVariation = GetVariationById(variation.Id);
+                Variation oldVariation = await GetVariationByIdAsync(variation.Id);
                 if(oldVariation == null)
                 {
-                    return AddVariation(variation);
+                    return await AddVariationAsync(variation);
                 }
-                return UpdateVariation(variation);
+                return await UpdateVariationAsync(variation);
             }
             catch (Exception)
             {

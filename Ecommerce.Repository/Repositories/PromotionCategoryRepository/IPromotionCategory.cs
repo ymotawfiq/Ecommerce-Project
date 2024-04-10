@@ -5,14 +5,14 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
 {
     public interface IPromotionCategory
     {
-        public PromotionCategory AddPromotionCategory(PromotionCategory promotionCategory);
-        public PromotionCategory UpdatePromotionCategory(PromotionCategory promotionCategory);
-        public PromotionCategory GetPromotionCategoryById(Guid id);
-        public PromotionCategory DeletePromotionCategoryById(Guid id);
-        public IEnumerable<PromotionCategory> GetAllPromotions();
-        public IEnumerable<PromotionCategory> GetAllPromotionsByPromotionId(Guid promotionId);
-        public IEnumerable<PromotionCategory> GetAllPromotionsByCategoryId(Guid categoryId);
-        public void SaveChanges();
-        public PromotionCategory Upsert(PromotionCategory promotionCategory);
+        public Task<PromotionCategory> AddPromotionCategoryAsync(PromotionCategory promotionCategory);
+        public Task<PromotionCategory> UpdatePromotionCategoryAsync(PromotionCategory promotionCategory);
+        public Task<PromotionCategory> GetPromotionCategoryByIdAsync(Guid id);
+        public Task<PromotionCategory> DeletePromotionCategoryByIdAsync(Guid id);
+        public Task<IEnumerable<PromotionCategory>> GetAllPromotionsAsync();
+        public Task<IEnumerable<PromotionCategory>> GetAllPromotionsByPromotionIdAsync(Guid promotionId);
+        public Task<IEnumerable<PromotionCategory>> GetAllPromotionsByCategoryIdAsync(Guid categoryId);
+        public void SaveChangesAsync();
+        public Task<PromotionCategory> UpsertAsync(PromotionCategory promotionCategory);
     }
 }

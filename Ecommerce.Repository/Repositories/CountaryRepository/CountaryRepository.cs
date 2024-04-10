@@ -2,6 +2,7 @@
 
 using Ecommerce.Data;
 using Ecommerce.Data.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository.Repositories.CountaryRepository
 {
@@ -12,12 +13,12 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
         {
             this._dbContext = _dbContext;
         }
-        public Countary AddCountary(Countary countary)
+        public async Task<Countary> AddCountaryAsync(Countary countary)
         {
             try
             {
-                _dbContext.Countary.Add(countary);
-                SaveChanges();
+                await _dbContext.Countary.AddAsync(countary);
+                SaveChangesAsync();
                 return countary;
             }
             catch (Exception)
@@ -26,13 +27,14 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             }
         }
 
-        public Countary DeleteCountaryByCountaryId(Guid countaryId)
+        public async Task<Countary> DeleteCountaryByCountaryIdAsync(Guid countaryId)
         {
             try
             {
-                Countary countary = GetCountaryByCountaryId(countaryId);
+                Countary countary = await GetCountaryByCountaryIdAsync(countaryId);
+                _dbContext.Countary.Attach(countary);
                 _dbContext.Countary.Remove(countary);
-                SaveChanges();
+                SaveChangesAsync();
                 return countary;
             }
             catch (Exception)
@@ -41,11 +43,11 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             }
         }
 
-        public IEnumerable<Countary> GetAllCountaries()
+        public async Task<IEnumerable<Countary>> GetAllCountariesAsync()
         {
             try
             {
-                return _dbContext.Countary.ToList();
+                return await _dbContext.Countary.ToListAsync();
             }
             catch (Exception)
             {
@@ -53,11 +55,12 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             }
         }
 
-        public Countary GetCountaryByCountaryId(Guid countaryId)
+        public async Task<Countary> GetCountaryByCountaryIdAsync(Guid countaryId)
         {
             try
             {
-                Countary? countary = _dbContext.Countary.Where(e => e.Id == countaryId).FirstOrDefault();
+                Countary? countary = await _dbContext.Countary.Where(e => e.Id == countaryId)
+                    .FirstOrDefaultAsync();
                 if(countary == null)
                 {
                     return null;
@@ -70,18 +73,18 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public Countary UpdateCountary(Countary countary)
+        public async Task<Countary> UpdateCountaryAsync(Countary countary)
         {
             try
             {
-                Countary countary1 = GetCountaryByCountaryId(countary.Id);
+                Countary countary1 = await GetCountaryByCountaryIdAsync(countary.Id);
                 countary1.Name = countary.Name;
-                SaveChanges();
+                SaveChangesAsync();
                 return countary1;
             }
             catch (Exception)
@@ -90,16 +93,16 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             }
         }
 
-        public Countary Upsert(Countary countary)
+        public async Task<Countary> UpsertAsync(Countary countary)
         {
             try
             {
-                Countary countary1 = GetCountaryByCountaryId(countary.Id);
+                Countary countary1 = await GetCountaryByCountaryIdAsync(countary.Id);
                 if (countary1 == null)
                 {
-                    return AddCountary(countary);
+                    return await AddCountaryAsync(countary);
                 }
-                return UpdateCountary(countary);
+                return await UpdateCountaryAsync(countary);
             }
             catch (Exception)
             {

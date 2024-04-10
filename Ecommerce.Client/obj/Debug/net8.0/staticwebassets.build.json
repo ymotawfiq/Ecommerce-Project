@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uALQaRoWSjj1rxeKozyR/+oy5MaJOZ4MPle/phi69n8=",
+  "Hash": "cnRIgA6+UC6DtYoesY6i1w2xBQd/whJqo/XtYQW80uc=",
   "Source": "Ecommerce.Client",
   "BasePath": "/",
   "Mode": "Root",
@@ -7862,25 +7862,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\icon-192.png"
-    },
-    {
-      "Identity": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\Images\\ProductItems\\2a3044b1_22.jpg",
-      "SourceId": "Ecommerce.Client",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "Images/ProductItems/2a3044b1_22.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Images\\ProductItems\\2a3044b1_22.jpg"
     },
     {
       "Identity": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Client\\wwwroot\\index.html",

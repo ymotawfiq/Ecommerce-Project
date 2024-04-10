@@ -23,11 +23,11 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpGet("alladdresses")]
-        public IActionResult GetAllAddresses()
+        public async Task<IActionResult> GetAllAddressesAsync()
         {
             try
             {
-                var addresses = _addressRepository.GetAllAddresses();
+                var addresses = await _addressRepository.GetAllAddressesAsync();
                 if (addresses.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -62,11 +62,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("alladdressesbycountaryid/{countaryId}")]
-        public IActionResult GetAllAddressesByCountaryId([FromRoute] Guid countaryId)
+        public async Task<IActionResult> GetAllAddressesByCountaryIdAsync([FromRoute] Guid countaryId)
         {
             try
             {
-                var addresses = _addressRepository.GetAllAddressesByCountaryId(countaryId);
+                var addresses = await _addressRepository.GetAllAddressesByCountaryIdAsync(countaryId);
                 if (addresses.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -102,7 +102,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPost("addaddress")]
-        public IActionResult AddAddress([FromBody] AddressDto addressDto)
+        public async Task<IActionResult> AddAddressAsync([FromBody] AddressDto addressDto)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Address()
                     });
                 }
-                Countary countary = _countaryRepository.GetCountaryByCountaryId(addressDto.CountaryId);
+                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(addressDto.CountaryId);
                 if (countary == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
@@ -127,7 +127,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Address()
                     });
                 }
-                Address addedAddress = _addressRepository.AddAddress(
+                Address addedAddress = await _addressRepository.AddAddressAsync(
                     ConvertFromDto.ConvertFromAddressDto_Add(addressDto));
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<Address>
                 {
@@ -150,7 +150,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("updateaddress")]
-        public IActionResult UpdateAddress([FromBody] AddressDto addressDto)
+        public async Task<IActionResult> UpdateAddressAsync([FromBody] AddressDto addressDto)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Address()
                     });
                 }
-                Address oldAddress = _addressRepository.GetAddressById(new Guid(addressDto.Id));
+                Address oldAddress = await _addressRepository.GetAddressByIdAsync(new Guid(addressDto.Id));
                 if (oldAddress == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
@@ -185,7 +185,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Address()
                     });
                 }
-                Countary countary = _countaryRepository.GetCountaryByCountaryId(addressDto.CountaryId);
+                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(addressDto.CountaryId);
                 if (countary == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
@@ -196,7 +196,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Address()
                     });
                 }
-                Address updatedAddress = _addressRepository.UpdateAddress(
+                Address updatedAddress = await _addressRepository.UpdateAddressAsync(
                     ConvertFromDto.ConvertFromAddressDto_Update(addressDto));
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<Address>
                 {
@@ -220,11 +220,11 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpGet("getaddressbyid/{addressId}")]
-        public IActionResult GetAddressById([FromRoute] Guid addressId)
+        public async Task<IActionResult> GetAddressByIdAsync([FromRoute] Guid addressId)
         {
             try
             {
-                Address address = _addressRepository.GetAddressById(addressId);
+                Address address = await _addressRepository.GetAddressByIdAsync(addressId);
                 if(address == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
@@ -256,11 +256,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("deleteaddressbyid/{addressId}")]
-        public IActionResult DeleteAddressById([FromRoute] Guid addressId)
+        public async Task<IActionResult> DeleteAddressByIdAsync([FromRoute] Guid addressId)
         {
             try
             {
-                Address address = _addressRepository.GetAddressById(addressId);
+                Address address = await _addressRepository.GetAddressByIdAsync(addressId);
                 if (address == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
@@ -271,7 +271,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Address()
                     });
                 }
-                Address deletedAddress = _addressRepository.DeleteAddressById(addressId);
+                Address deletedAddress = await _addressRepository.DeleteAddressByIdAsync(addressId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Address>
                 {
                     StatusCode = 200,

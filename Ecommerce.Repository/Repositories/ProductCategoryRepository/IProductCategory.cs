@@ -5,12 +5,12 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
 {
     public interface IProductCategory
     {
-        public ProductCategory AddNewCategory(ProductCategory productCategory);
-        public ProductCategory UpdateCategory(ProductCategory productCategory);
-        public ProductCategory DeleteCategory(Guid CategoryId);
-        public ProductCategory GetCategoryById(Guid CategoryId);
-        public IEnumerable<ProductCategory> GetAllCategories();
-        public ProductCategory Upsert(ProductCategory productCategory);
-        public void SaveChanges();
+        public Task<ProductCategory> AddNewCategoryAsync(ProductCategory productCategory);
+        public Task<ProductCategory> UpdateCategoryAsync(ProductCategory productCategory);
+        public Task<ProductCategory> DeleteCategoryAsync(Guid CategoryId);
+        public Task<ProductCategory> GetCategoryByIdAsync(Guid CategoryId);
+        public Task<IEnumerable<ProductCategory>> GetAllCategoriesAsync();
+        public Task<ProductCategory> UpsertAsync(ProductCategory productCategory);
+        public void SaveChangesAsync();
     }
 }

@@ -19,12 +19,12 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
 
         }
 
-        public ProductVariation AddProductVariation(ProductVariation productVariation)
+        public async Task<ProductVariation> AddProductVariationAsync(ProductVariation productVariation)
         {
             try
             {
-                _dbContext.ProductVariation.Add(productVariation);
-                SaveChanges();
+                await _dbContext.ProductVariation.AddAsync(productVariation);
+                SaveChangesAsync();
                 return productVariation;
             }
             catch (Exception)
@@ -33,13 +33,14 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public ProductVariation DeleteProductVariationById(Guid id)
+        public async Task<ProductVariation> DeleteProductVariationByIdAsync(Guid id)
         {
             try
             {
-                ProductVariation productVariation = GetProductVariationById(id);
+                ProductVariation productVariation = await GetProductVariationByIdAsync(id);
+                _dbContext.ProductVariation.Attach(productVariation);
                 _dbContext.ProductVariation.Remove(productVariation);
-                SaveChanges();
+                SaveChangesAsync();
                 return productVariation;
             }
             catch (Exception)
@@ -48,12 +49,12 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public IEnumerable<ProductVariation> GetAllProductVariations()
+        public async Task<IEnumerable<ProductVariation>> GetAllProductVariationsAsync()
         {
             try
             {
-                return _dbContext.ProductVariation.Include(e=>e.ProductItem)
-                    .Include(e=>e.VariationOption).ToList();
+                return await _dbContext.ProductVariation.Include(e=>e.ProductItem)
+                    .Include(e=>e.VariationOption).ToListAsync();
             }
             catch (Exception)
             {
@@ -61,12 +62,12 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public IEnumerable<ProductVariation> GetAllVariationsByProductItemId(Guid productItemId)
+        public async Task<IEnumerable<ProductVariation>> GetAllVariationsByProductItemIdAsync(Guid productItemId)
         {
             try
             {
                 return
-                    from v in GetAllProductVariations()
+                    from v in await GetAllProductVariationsAsync()
                     where v.ProductItemId == productItemId
                     select v;
             }
@@ -76,12 +77,13 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public IEnumerable<ProductVariation> GetAllVariationsByVariationOptionId(Guid variationOptionId)
+        public async Task<IEnumerable<ProductVariation>> GetAllVariationsByVariationOptionIdAsync
+            (Guid variationOptionId)
         {
             try
             {
                 return
-                    from v in GetAllProductVariations()
+                    from v in await GetAllProductVariationsAsync()
                     where v.VariationOptionId == variationOptionId
                     select v;
             }
@@ -91,12 +93,12 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public ProductVariation GetProductVariationById(Guid id)
+        public async Task<ProductVariation> GetProductVariationByIdAsync(Guid id)
         {
             try
             {
-                ProductVariation? productVariation = _dbContext.ProductVariation
-                    .Where(e => e.Id == id).FirstOrDefault();
+                ProductVariation? productVariation = await _dbContext.ProductVariation
+                    .Where(e => e.Id == id).FirstOrDefaultAsync();
                 if(productVariation == null)
                 {
                     return null;
@@ -109,19 +111,19 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public ProductVariation UpdateProductVariation(ProductVariation productVariation)
+        public async Task<ProductVariation> UpdateProductVariationAsync(ProductVariation productVariation)
         {
             try
             {
-                ProductVariation productVariation1 = GetProductVariationById(productVariation.Id);
+                ProductVariation productVariation1 = await GetProductVariationByIdAsync(productVariation.Id);
                 productVariation1.ProductItemId = productVariation.ProductItemId;
                 productVariation1.VariationOptionId = productVariation.VariationOptionId;
-                SaveChanges();
+                SaveChangesAsync();
                 return productVariation1;
             }
             catch (Exception)
@@ -130,16 +132,16 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public ProductVariation Upsert(ProductVariation productVariation)
+        public async Task<ProductVariation> UpsertAsync(ProductVariation productVariation)
         {
             try
             {
-                ProductVariation productVariation1 = GetProductVariationById(productVariation.Id);
+                ProductVariation productVariation1 = await GetProductVariationByIdAsync(productVariation.Id);
                 if(productVariation1 == null)
                 {
-                    return AddProductVariation(productVariation);
+                    return await AddProductVariationAsync(productVariation);
                 }
-                return UpdateProductVariation(productVariation);
+                return await UpdateProductVariationAsync(productVariation);
             }
             catch (Exception)
             {

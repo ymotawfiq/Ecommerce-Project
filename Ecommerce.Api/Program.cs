@@ -12,6 +12,7 @@ using Ecommerce.Repository.Repositories.VariationOptionsRepository;
 using Ecommerce.Repository.Repositories.VariationRepository;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json.Serialization;
 
@@ -25,13 +26,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Connect to database
 builder.Services.AddDbContext<ApplicationDbContext>(op =>
-{
-    op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+
+    op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
+    ServiceLifetime.Transient);
 
 // Repositories Injection
-builder.Services.AddScoped<IProductCategory, ProductCategoryRepository>();
-builder.Services.AddScoped<IProduct, ProductRepository>();
+builder.Services.AddTransient<IProductCategory, ProductCategoryRepository>();
+builder.Services.AddTransient<IProduct, ProductRepository>();
 builder.Services.AddScoped<IProductImages, ProductImagesRepository>();
 builder.Services.AddScoped<IProductItem, ProductItemRepository>();
 builder.Services.AddScoped<IVariation, VariationRepository>();

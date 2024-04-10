@@ -34,11 +34,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allproducts")]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProductsAsync()
         {
             try
             {
-                var products = _productRepository.GetAllProducts();
+                var products = await _productRepository.GetAllProductsAsync();
                 if (products.ToList().Count==0)
                 {
                     return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<Product>>
@@ -70,11 +70,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allproductsbycategoryid/{categoryId}")]
-        public IActionResult GetAllProducts([FromRoute] Guid categoryId)
+        public async Task<IActionResult> GetAllProductsAsync([FromRoute] Guid categoryId)
         {
             try
             {
-                var products = _productRepository.GetProductsByCategoryId(categoryId);
+                var products = await _productRepository.GetProductsByCategoryIdAsync(categoryId);
                 if (products.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<Product>>
@@ -107,7 +107,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPost("addproduct")]
-        public IActionResult AddProduct([FromForm] ProductDto productDto)
+        public async Task<IActionResult> AddProductAsync([FromForm] ProductDto productDto)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace Ecommerce.Api.Controllers
                         Message = "Input must not be null",
                     });
                 }
-                if (_productCategoryRepository.GetCategoryById(productDto.CategoryId) == null)
+                if (await _productCategoryRepository.GetCategoryByIdAsync(productDto.CategoryId) == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
                     {
@@ -140,10 +140,10 @@ namespace Ecommerce.Api.Controllers
                     });
                 }
 
-                Product product = SaveProductImages(productDto);
-                
-                
-                
+
+
+                Product product = await SaveProductImagesAsync(productDto);
+
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<Product>
                 {
                     StatusCode = 201,
@@ -166,11 +166,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("deleteproduct/{productId}")]
-        public IActionResult DeleteProduct([FromRoute] Guid productId)
+        public async Task<IActionResult> DeleteProductAsync([FromRoute] Guid productId)
         {
             try
             {
-                Product product = _productRepository.GetProductById(productId);
+                Product product = await _productRepository.GetProductByIdAsync(productId);
                 if (product == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
@@ -181,18 +181,19 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Product()
                     });
                 }
-                var productImages = _productImagesRepository.GetProductImagesByProductId(productId);
+                Product deletedProduct = await _productRepository.DeleteProductByIdAsync(productId);
+
+                var productImages = await _productImagesRepository.GetProductImagesByProductIdAsync(productId);
                 foreach(var p in productImages)
                 {
                     DeleteExistingProductImage(p.ProductImageUrl);
                 }
-                _productImagesRepository.RemoveImagesByProductId(productId);
-                var productItemsImages = _productItemRepository.GetAllProductItemsByProductId(productId);
+                _productImagesRepository.RemoveImagesByProductIdAsync(productId);
+                var productItemsImages = await _productItemRepository.GetAllProductItemsByProductIdAsync(productId);
                 foreach(var i in productItemsImages)
                 {
                     DeleteExistingItemImage(i.ProducItemImageUrl);
                 }
-                Product deletedProduct = _productRepository.DeleteProductById(productId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Product>
                 {
                     StatusCode = 200,
@@ -215,7 +216,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPut("updateproduct")]
-        public IActionResult UpdateProduct([FromForm] ProductDto productDto)
+        public async Task<IActionResult> UpdateProductAsync([FromForm] ProductDto productDto)
         {
             try
             {
@@ -229,7 +230,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Product()
                     });
                 }
-                Product updatedProduct = UpdateProductImages(productDto);
+                Product updatedProduct = await UpdateProductImagesAsync(productDto);
                 if (updatedProduct == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
@@ -264,11 +265,11 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpGet("getproduct/{productId}")]
-        public IActionResult GetProductByProductId([FromRoute] Guid productId)
+        public async Task<IActionResult> GetProductByProductIdAsync([FromRoute] Guid productId)
         {
             try
             {
-                Product product = _productRepository.GetProductById(productId);
+                Product product = await _productRepository.GetProductByIdAsync(productId);
                 if (product == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
@@ -279,7 +280,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Product()
                     });
                 }
-                Product ExistingProduct = _productRepository.GetProductById(productId);
+                Product ExistingProduct = await _productRepository.GetProductByIdAsync(productId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<Product>
                 {
                     StatusCode = 200,
@@ -301,12 +302,16 @@ namespace Ecommerce.Api.Controllers
         }
 
         //
-        private Product SaveProductImages(ProductDto productDto)
+        private async Task<Product> SaveProductImagesAsync(ProductDto productDto)
         {
             try
             {
+                if (productDto.Image == null)
+                {
+                    throw new NullReferenceException("You must enter image url");
+                }
                 Product product = ConvertFromDto.ConvertFromProductDto_Add(productDto);
-                Product savedProduct = _productRepository.AddProduct(product);
+                Product savedProduct = await _productRepository.AddProductAsync(product);
                 List<ProductImageDto> productImageDtos = new();
                 foreach (var i in productDto.Image)
                 {
@@ -319,14 +324,23 @@ namespace Ecommerce.Api.Controllers
 
                 foreach (var p in productImageDtos)
                 {
+                    if (p.ProductId == null)
+                    {
+                        throw new NullReferenceException("You must enter product id");
+                    }
                     p.ImageUrl = SaveProductImage(p);
-                    _productImagesRepository.AddProductImages(new ProductImages
+                    await _productImagesRepository.AddProductImagesAsync(new ProductImages
                     {
                         ProductId = new Guid(p.ProductId),
                         ProductImageUrl = p.ImageUrl
                     });
                 }
-                savedProduct.ProductImages = _productImagesRepository.GetProductImagesByProductId(savedProduct.Id).ToList();
+                //if (productDto.Id == null)
+                //{
+                //    throw new NullReferenceException("You must enter product id");
+                //}
+                savedProduct.ProductImages = (await _productImagesRepository
+                    .GetProductImagesByProductIdAsync(new Guid(productDto.Id))).ToList();
                 return savedProduct;
             }
             catch (Exception)
@@ -335,7 +349,7 @@ namespace Ecommerce.Api.Controllers
             } 
         }
 
-        private Product UpdateProductImages(ProductDto productDto)
+        private async Task<Product> UpdateProductImagesAsync(ProductDto productDto)
         {
             try
             {
@@ -343,15 +357,20 @@ namespace Ecommerce.Api.Controllers
                 {
                     throw new NullReferenceException("You must enter product id");
                 }
-                Product product = _productRepository.GetProductById(new Guid(productDto.Id));
+                else if (productDto.Image == null)
+                {
+                    throw new NullReferenceException("You must enter image url");
+                }
+                Product product = await _productRepository.GetProductByIdAsync(new Guid(productDto.Id));
                 Product updatedProduct = 
-                    _productRepository.UpdateProduct(ConvertFromDto.ConvertFromProductDto_Update(productDto));
+                    await _productRepository.UpdateProductAsync
+                    (ConvertFromDto.ConvertFromProductDto_Update(productDto));
                 if(product == null)
                 {
                     return null;
                 }
                 IEnumerable<ProductImages> productImages = 
-                    _productImagesRepository.GetProductImagesByProductId(product.Id);
+                    await _productImagesRepository.GetProductImagesByProductIdAsync(product.Id);
                 
                 foreach(var p in productImages)
                 {
@@ -369,14 +388,20 @@ namespace Ecommerce.Api.Controllers
 
                 foreach (var p in productImageDtos)
                 {
+                    if (p.ProductId == null)
+                    {
+                        throw new NullReferenceException("You must enter product id");
+                    }
                     p.ImageUrl = SaveProductImage(p);
-                    _productImagesRepository.AddProductImages(new ProductImages
+                    await _productImagesRepository.AddProductImagesAsync(new ProductImages
                     {
                         ProductId = new Guid(p.ProductId),
                         ProductImageUrl = p.ImageUrl
                     });
                 }
-                updatedProduct.ProductImages = _productImagesRepository.GetProductImagesByProductId(updatedProduct.Id).ToList();
+                updatedProduct.ProductImages = (await _productImagesRepository
+                    .GetProductImagesByProductIdAsync(new Guid(productDto.Id))).ToList();
+                
                 return updatedProduct;
             }
             catch (Exception)

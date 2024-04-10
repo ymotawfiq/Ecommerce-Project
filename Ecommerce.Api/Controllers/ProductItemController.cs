@@ -22,11 +22,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allitems")]
-        public IActionResult GetAllItems()
+        public async Task<IActionResult> GetAllItemsAsync()
         {
             try
             {
-                var items = _productItemRepository.GetAllItems();
+                var items = await _productItemRepository.GetAllItemsAsync();
                 if (items.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductItem>>
@@ -58,11 +58,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allitemsbyproductid/{productId}")]
-        public IActionResult GetAllItemsByProductId([FromRoute] Guid productId)
+        public async Task<IActionResult> GetAllItemsByProductIdAsync([FromRoute] Guid productId)
         {
             try
             {
-                var items = _productItemRepository.GetAllProductItemsByProductId(productId);
+                var items = await _productItemRepository.GetAllProductItemsByProductIdAsync(productId);
                 if (items.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductItem>>
@@ -94,7 +94,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("additem")]
-        public IActionResult AddItem([FromForm]ProductItemDto productItemDto)
+        public async Task<IActionResult> AddItemAsync([FromForm]ProductItemDto productItemDto)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductItem()
                     });
                 }
-                var product = _productRepository.GetProductById(new Guid(productItemDto.ProductId));
+                var product = await _productRepository.GetProductByIdAsync(new Guid(productItemDto.ProductId));
                 if(product == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
@@ -131,7 +131,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductItem()
                     });
                 }
-                var item = _productItemRepository.AddProductItem(ConvertFromDto
+                var item = await _productItemRepository.AddProductItemAsync(ConvertFromDto
                     .ConvertFromProductItemDto_Add(productItemDto));
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<ProductItem>
                 {
@@ -155,7 +155,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("updateitem")]
-        public IActionResult UpdateItem([FromForm] ProductItemDto productItemDto)
+        public async Task<IActionResult> UpdateItemAsync([FromForm] ProductItemDto productItemDto)
         {
             try
             {
@@ -179,7 +179,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductItem()
                     });
                 }
-                var oldItem = _productItemRepository.GetProductItemById(new Guid(productItemDto.Id));
+                var oldItem = await _productItemRepository.GetProductItemByIdAsync(new Guid(productItemDto.Id));
                 if (oldItem == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
@@ -214,7 +214,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductItem()
                     });
                 }
-                var newItem = _productItemRepository.UpdateProductItem(ConvertFromDto
+                var newItem = await _productItemRepository.UpdateProductItemAsync(ConvertFromDto
                     .ConvertFromProductItemDto_Update(productItemDto));
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductItem>
                 {
@@ -238,11 +238,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("deleteitem/{itemId}")]
-        public IActionResult DeleteItem([FromRoute] Guid itemId)
+        public async Task<IActionResult> DeleteItemAsync([FromRoute] Guid itemId)
         {
             try
             {
-                var oldItem = _productItemRepository.GetProductItemById(itemId);
+                var oldItem = await _productItemRepository.GetProductItemByIdAsync(itemId);
                 if (oldItem == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
@@ -266,7 +266,7 @@ namespace Ecommerce.Api.Controllers
                     });
                 }
 
-                var deletedItem = _productItemRepository.DeleteProductItemById(itemId);
+                var deletedItem = await _productItemRepository.DeleteProductItemByIdAsync(itemId);
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductItem>
                 {
                     StatusCode = 200,
@@ -289,11 +289,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("getitem/{itemId}")]
-        public IActionResult GetItemById([FromRoute] Guid itemId)
+        public async Task<IActionResult> GetItemByIdAsync([FromRoute] Guid itemId)
         {
             try
             {
-                var oldItem = _productItemRepository.GetProductItemById(itemId);
+                var oldItem = await _productItemRepository.GetProductItemByIdAsync(itemId);
                 if (oldItem == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>

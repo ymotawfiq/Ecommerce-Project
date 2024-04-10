@@ -14,12 +14,12 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
         {
             this._dbContext = _dbContext;
         }
-        public ProductImages AddProductImages(ProductImages productImages)
+        public async Task<ProductImages> AddProductImagesAsync(ProductImages productImages)
         {
             try
             {
-                _dbContext.ProductImages.Add(productImages);
-                SaveChanges();
+                await _dbContext.ProductImages.AddAsync(productImages);
+                SaveChangesAsync();
                 return productImages;
             }
             catch (Exception)
@@ -28,13 +28,14 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public ProductImages DeleteProductImages(Guid id)
+        public async Task<ProductImages> DeleteProductImagesAsync(Guid id)
         {
             try
             {
-                ProductImages productImages = GetProductImagesById(id);
+                ProductImages productImages = await GetProductImagesByIdAsync(id);
+                _dbContext.ProductImages.Attach(productImages);
                 _dbContext.ProductImages.Remove(productImages);
-                SaveChanges();
+                SaveChangesAsync();
                 return productImages;
             }
             catch (Exception)
@@ -43,11 +44,11 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public IEnumerable<ProductImages> GetAllProductsImages()
+        public async Task<IEnumerable<ProductImages>> GetAllProductsImagesAsync()
         {
             try
             {
-                return _dbContext.ProductImages.Include(p=>p.Product).ToList();
+                return await _dbContext.ProductImages.Include(p=>p.Product).ToListAsync();
             }
             catch (Exception)
             {
@@ -55,11 +56,12 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public ProductImages GetProductImagesById(Guid id)
+        public async Task<ProductImages> GetProductImagesByIdAsync(Guid id)
         {
             try
             {
-                ProductImages? productImages = _dbContext.ProductImages.Where(p => p.Id == id).FirstOrDefault();
+                ProductImages? productImages = await _dbContext.ProductImages.Where(p => p.Id == id)
+                    .FirstOrDefaultAsync();
                 if(productImages == null)
                 {
                     return null;
@@ -72,12 +74,12 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public IEnumerable<ProductImages> GetProductImagesByProductId(Guid productId)
+        public async Task<IEnumerable<ProductImages>> GetProductImagesByProductIdAsync(Guid productId)
         {
             try
             {
                 return
-                    from p in GetAllProductsImages()
+                    from p in await GetAllProductsImagesAsync()
                     where p.ProductId == productId
                     select p;
             }
@@ -87,13 +89,13 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public bool RemoveImagesByProductId(Guid productId)
+        public bool RemoveImagesByProductIdAsync(Guid productId)
         {
             try
             {
                 var images = _dbContext.ProductImages.Where(p => p.ProductId == productId);
                 _dbContext.ProductImages.RemoveRange(images);
-                SaveChanges();
+                SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -102,18 +104,18 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public ProductImages UpdateProductImages(ProductImages productImages)
+        public async Task<ProductImages> UpdateProductImagesAsync(ProductImages productImages)
         {
             try
             {
-                ProductImages productImages1 = GetProductImagesById(productImages.Id);
+                ProductImages productImages1 = await GetProductImagesByIdAsync(productImages.Id);
                 productImages1.ProductImageUrl = productImages.ProductImageUrl;
-                SaveChanges();
+                SaveChangesAsync();
                 return productImages1;
             }
             catch (Exception)
@@ -122,16 +124,16 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public ProductImages Upsert(ProductImages productImages)
+        public async Task<ProductImages> UpsertAsync(ProductImages productImages)
         {
             try
             {
-                ProductImages productImages1 = GetProductImagesById(productImages.Id);
+                ProductImages productImages1 = await GetProductImagesByIdAsync(productImages.Id);
                 if(productImages1 == null)
                 {
-                    return AddProductImages(productImages);
+                    return await AddProductImagesAsync(productImages);
                 }
-                return UpdateProductImages(productImages);
+                return await UpdateProductImagesAsync(productImages);
             }
             catch (Exception)
             {

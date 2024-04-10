@@ -31,11 +31,11 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpGet("allpromotioncategory")]
-        public IActionResult GetAllPromotionCategories()
+        public async Task<IActionResult> GetAllPromotionCategoriesAsync()
         {
             try
             {
-                var promotionCategories = _promotionCategoryRepository.GetAllPromotions();
+                var promotionCategories = await _promotionCategoryRepository.GetAllPromotionsAsync();
                 if (promotionCategories.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -71,11 +71,12 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpGet("allpromotioncategorybycategoryid/{categoryId}")]
-        public IActionResult GetAllPromotionCategoriesByCategoryId([FromRoute] Guid categoryId)
+        public async Task<IActionResult> GetAllPromotionCategoriesByCategoryIdAsync([FromRoute] Guid categoryId)
         {
             try
             {
-                var promotionCategories = _promotionCategoryRepository.GetAllPromotionsByCategoryId(categoryId);
+                var promotionCategories = await _promotionCategoryRepository
+                    .GetAllPromotionsByCategoryIdAsync(categoryId);
                 if (promotionCategories.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -110,11 +111,13 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allpromotioncategorybypromotionid/{promotionId}")]
-        public IActionResult GetAllPromotionCategoriesByPromotionId([FromRoute] Guid promotionId)
+        public async Task<IActionResult> GetAllPromotionCategoriesByPromotionIdAsync
+            ([FromRoute] Guid promotionId)
         {
             try
             {
-                var promotionCategories = _promotionCategoryRepository.GetAllPromotionsByPromotionId(promotionId);
+                var promotionCategories = await _promotionCategoryRepository
+                    .GetAllPromotionsByCategoryIdAsync(promotionId);
                 if (promotionCategories.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -149,7 +152,8 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("addpromotioncategory")]
-        public IActionResult AddPromotionCategory([FromBody] PromotionCategoryDto promotionCategoryDto)
+        public async Task<IActionResult> AddPromotionCategoryAsync
+            ([FromBody] PromotionCategoryDto promotionCategoryDto)
         {
             try
             {
@@ -164,7 +168,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new PromotionCategory()
                     });
                 }
-                PromotionCategory promotionCategory = _promotionCategoryRepository.AddPromotionCategory(
+                PromotionCategory promotionCategory = await _promotionCategoryRepository.AddPromotionCategoryAsync(
                     ConvertFromDto.ConvertFromPromotionCategoryDto_Add(promotionCategoryDto));
                 return StatusCode(StatusCodes.Status201Created
                     , new ApiResponse<PromotionCategory>
@@ -189,7 +193,8 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("updatepromotioncategory")]
-        public IActionResult UpdatePromotionCategory([FromBody] PromotionCategoryDto promotionCategoryDto)
+        public async Task<IActionResult> UpdatePromotionCategoryAsync
+            ([FromBody] PromotionCategoryDto promotionCategoryDto)
         {
             try
             {
@@ -215,7 +220,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new PromotionCategory()
                     });
                 }
-                Promotion promotion = _promotionRepository.GetPromotionById(promotionCategoryDto.PromotionId);
+                Promotion promotion = await _promotionRepository
+                    .GetPromotionByIdAsync(promotionCategoryDto.PromotionId);
                 if (promotion == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -227,7 +233,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new PromotionCategory()
                     });
                 }
-                ProductCategory productCategory = _productCategoryRepository.GetCategoryById
+                ProductCategory productCategory = await _productCategoryRepository.GetCategoryByIdAsync
                     (promotionCategoryDto.CategoryId);
                 if (productCategory == null)
                 {
@@ -240,7 +246,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new PromotionCategory()
                     });
                 }
-                PromotionCategory promotionCategory = _promotionCategoryRepository.UpdatePromotionCategory(
+                PromotionCategory promotionCategory = await _promotionCategoryRepository.UpdatePromotionCategoryAsync(
                     ConvertFromDto.ConvertFromPromotionCategoryDto_Update(promotionCategoryDto));
                 return StatusCode(StatusCodes.Status200OK
                     , new ApiResponse<PromotionCategory>
@@ -266,12 +272,12 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpGet("getpromotioncategorybyid/{promotionCategoryId}")]
-        public IActionResult GetPromotionCategoryById([FromRoute] Guid promotionCategoryId)
+        public async Task<IActionResult> GetPromotionCategoryByIdAsync([FromRoute] Guid promotionCategoryId)
         {
             try
             {
-                PromotionCategory promotionCategory = _promotionCategoryRepository
-                    .GetPromotionCategoryById(promotionCategoryId);
+                PromotionCategory promotionCategory = await _promotionCategoryRepository
+                    .GetPromotionCategoryByIdAsync(promotionCategoryId);
                 if (promotionCategory == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -307,12 +313,12 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpDelete("deletepromotioncategorybyid/{promotionCategoryId}")]
-        public IActionResult DeletePromotionCategoryById([FromRoute] Guid promotionCategoryId)
+        public async Task<IActionResult> DeletePromotionCategoryByIdAsync([FromRoute] Guid promotionCategoryId)
         {
             try
             {
-                PromotionCategory promotionCategory = _promotionCategoryRepository
-                    .GetPromotionCategoryById(promotionCategoryId);
+                PromotionCategory promotionCategory = await _promotionCategoryRepository
+                    .GetPromotionCategoryByIdAsync(promotionCategoryId);
                 if (promotionCategory == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -324,8 +330,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new PromotionCategory()
                     });
                 }
-                PromotionCategory deletedPromotionCategory = _promotionCategoryRepository
-                    .DeletePromotionCategoryById(promotionCategoryId);
+                PromotionCategory deletedPromotionCategory = await _promotionCategoryRepository
+                    .DeletePromotionCategoryByIdAsync(promotionCategoryId);
                 return StatusCode(StatusCodes.Status200OK
                     , new ApiResponse<PromotionCategory>
                     {

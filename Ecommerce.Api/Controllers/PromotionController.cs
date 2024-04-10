@@ -20,11 +20,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allpromotions")]
-        public IActionResult GetAllPromotions()
+        public async Task<IActionResult> GetAllPromotionsAsync()
         {
             try
             {
-                var prromotions = _promotionRepository.GetAllPromotions();
+                var prromotions = await _promotionRepository.GetAllPromotionsAsync();
                 if (prromotions.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -60,7 +60,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPost("addpromotion")]
-        public IActionResult AddPromotion([FromBody] PromotionDto promotionDto)
+        public async Task<IActionResult> AddPromotionAsync([FromBody] PromotionDto promotionDto)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Promotion()
                     });
                 }
-                Promotion addedPromotion = _promotionRepository.AddPromotion(
+                Promotion addedPromotion = await _promotionRepository.AddPromotionAsync(
                     ConvertFromDto.ConvertFromPromotionDto_Add(promotionDto));
                 return StatusCode(StatusCodes.Status201Created
                     , new ApiResponse<Promotion>
@@ -101,7 +101,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPut("Updatepromotion")]
-        public IActionResult UpdatePromotion([FromBody] PromotionDto promotionDto)
+        public async Task<IActionResult> UpdatePromotionAsync([FromBody] PromotionDto promotionDto)
         {
             try
             {
@@ -127,8 +127,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Promotion()
                     });
                 }
-                Promotion oldPromotion = _promotionRepository
-                    .GetPromotionById(new Guid(promotionDto.Id));
+                Promotion oldPromotion = await _promotionRepository
+                    .GetPromotionByIdAsync(new Guid(promotionDto.Id));
                 if (oldPromotion == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -140,7 +140,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Promotion()
                     });
                 }
-                Promotion updatedPromotion = _promotionRepository.UpdatePromotion(
+                Promotion updatedPromotion = await _promotionRepository.UpdatePromotionAsync(
                     ConvertFromDto.ConvertFromPromotionDto_Update(promotionDto));
                 return StatusCode(StatusCodes.Status200OK
                     , new ApiResponse<Promotion>
@@ -165,11 +165,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("getpromotionbyid/{promotionId}")]
-        public IActionResult GetPromotionById([FromRoute] Guid promotionId)
+        public async Task<IActionResult> GetPromotionByIdAsync([FromRoute] Guid promotionId)
         {
             try
             {
-                Promotion promotion = _promotionRepository.GetPromotionById(promotionId);
+                Promotion promotion = await _promotionRepository.GetPromotionByIdAsync(promotionId);
                 if (promotion == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -205,11 +205,11 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpDelete("deletepromotionbyid/{promotionId}")]
-        public IActionResult DeletePromotionById([FromRoute] Guid promotionId)
+        public async Task<IActionResult> DeletePromotionByIdAsync([FromRoute] Guid promotionId)
         {
             try
             {
-                Promotion promotion = _promotionRepository.GetPromotionById(promotionId);
+                Promotion promotion = await _promotionRepository.GetPromotionByIdAsync(promotionId);
                 if (promotion == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -221,7 +221,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Promotion()
                     });
                 }
-                Promotion deletedPromotion = _promotionRepository.DeletePromotionById(promotionId);
+                Promotion deletedPromotion = await _promotionRepository.DeletePromotionByIdAsync(promotionId);
                 return StatusCode(StatusCodes.Status200OK
                     , new ApiResponse<Promotion>
                     {

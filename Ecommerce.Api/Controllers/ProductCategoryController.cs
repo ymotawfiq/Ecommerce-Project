@@ -27,11 +27,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allcategories")]
-        public IActionResult GetAllCategories()
+        public async Task<IActionResult> GetAllCategoriesAsync()
         {
             try
             {
-                var products = _cateegoryRepository.GetAllCategories();
+                var products = await _cateegoryRepository.GetAllCategoriesAsync();
                 if (products.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductCategory>>
@@ -63,7 +63,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("addcategory")]
-        public IActionResult AddCategory([FromBody] ProductCategoryDto productCategoryDto)
+        public async Task<IActionResult> AddCategoryAsync([FromBody] ProductCategoryDto productCategoryDto)
         {
             try
             {
@@ -80,7 +80,8 @@ namespace Ecommerce.Api.Controllers
                 if (productCategoryDto.ParentCategoryId != null)
                 {
                     if (!productCategoryDto.ParentCategoryId.IsNullOrEmpty()
-                         && _cateegoryRepository.GetCategoryById(new Guid(productCategoryDto.ParentCategoryId)) == null)
+                         && await _cateegoryRepository.GetCategoryByIdAsync
+                         (new Guid(productCategoryDto.ParentCategoryId)) == null)
                     {
                         return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductCategory>
                         {
@@ -101,7 +102,7 @@ namespace Ecommerce.Api.Controllers
                         });
                     }
                 }
-                ProductCategory newCategory = _cateegoryRepository.AddNewCategory(
+                ProductCategory newCategory = await _cateegoryRepository.AddNewCategoryAsync(
                     ConvertFromDto.ConvertFromProductCategoryDto_Add(productCategoryDto));
                 return StatusCode(StatusCodes.Status201Created, new ApiResponse<ProductCategory>
                 {
@@ -124,7 +125,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("getcategorybyid/{categoryId}")]
-        public IActionResult GetCategoryById([FromRoute] Guid categoryId)
+        public async Task<IActionResult> GetCategoryByIdAsync([FromRoute] Guid categoryId)
         {
             try
             {
@@ -138,8 +139,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductCategory()
                     });
                 }
-                IEnumerable<Product> products = _productRepository.GetProductsByCategoryId(categoryId);
-                ProductCategory category = _cateegoryRepository.GetCategoryById(categoryId);
+                IEnumerable<Product> products = await _productRepository.GetProductsByCategoryIdAsync(categoryId);
+                ProductCategory category = await _cateegoryRepository.GetCategoryByIdAsync(categoryId);
                 category.Products = new HashSet<Product>(products);
                 if(category == null)
                 {
@@ -172,7 +173,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("updatecategory")]
-        public IActionResult UpdateCategory(ProductCategoryDto productCategoryDto)
+        public async Task<IActionResult> UpdateCategoryAsync(ProductCategoryDto productCategoryDto)
         {
             try
             {
@@ -189,7 +190,8 @@ namespace Ecommerce.Api.Controllers
                 if (productCategoryDto.ParentCategoryId != null)
                 {
                     if (!productCategoryDto.ParentCategoryId.IsNullOrEmpty()
-                         && _cateegoryRepository.GetCategoryById(new Guid(productCategoryDto.ParentCategoryId)) == null)
+                         && await _cateegoryRepository.GetCategoryByIdAsync
+                         (new Guid(productCategoryDto.ParentCategoryId)) == null)
                     {
                         return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductCategory>
                         {
@@ -210,7 +212,7 @@ namespace Ecommerce.Api.Controllers
                         });
                     }
                 }
-                ProductCategory category = _cateegoryRepository.UpdateCategory(
+                ProductCategory category = await _cateegoryRepository.UpdateCategoryAsync(
                     ConvertFromDto.ConvertFromProductCategoryDto_Update(productCategoryDto));
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductCategory>
                 {
@@ -233,7 +235,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("deletecategory/{categoryId}")]
-        public IActionResult DeleteCategoryByCategoryId([FromRoute] Guid categoryId)
+        public async Task<IActionResult> DeleteCategoryByCategoryIdAsync([FromRoute] Guid categoryId)
         {
             try
             {
@@ -247,7 +249,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new ProductCategory()
                     });
                 }
-                ProductCategory productCategory = _cateegoryRepository.GetCategoryById(categoryId);
+                ProductCategory productCategory = await _cateegoryRepository.GetCategoryByIdAsync(categoryId);
                 if (productCategory == null)
                 {
                     return StatusCode(StatusCodes.Status404NotFound, new ApiResponse<Variation>
@@ -258,16 +260,17 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Variation()
                     });
                 }
-                var products = _productRepository.GetProductsByCategoryId(categoryId);
+                ProductCategory deletedCategory = await _cateegoryRepository.DeleteCategoryAsync(categoryId);
+                var products = await _productRepository.GetProductsByCategoryIdAsync(categoryId);
                 foreach (var p in products)
                 {
-                    var productImages = _productImagesRepository.GetProductImagesByProductId(p.Id);
+                    var productImages = await _productImagesRepository.GetProductImagesByProductIdAsync(p.Id);
                     foreach(var k in productImages)
                     {
                         DeleteExistingProductImage(k.ProductImageUrl);
                     }
                 }
-                ProductCategory deletedCategory = _cateegoryRepository.DeleteCategory(categoryId);
+                
                 return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductCategory>
                 {
                     IsSuccess = true,

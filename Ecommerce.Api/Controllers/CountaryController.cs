@@ -19,11 +19,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allcountaries")]
-        public IActionResult GetAllCountaries()
+        public async Task<IActionResult> GetAllCountariesAsync()
         {
             try
             {
-                var countaries = _countaryRepository.GetAllCountaries();
+                var countaries = await _countaryRepository.GetAllCountariesAsync();
                 if (countaries.ToList().Count == 0)
                 {
                     return StatusCode(StatusCodes.Status200OK
@@ -58,7 +58,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("addcountary")]
-        public IActionResult AddCountary([FromBody] CountaryDto countaryDto)
+        public async Task<IActionResult> AddCountaryAsync([FromBody] CountaryDto countaryDto)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Countary()
                     });
                 }
-                Countary newCountary = _countaryRepository.AddCountary(
+                Countary newCountary = await _countaryRepository.AddCountaryAsync(
                     ConvertFromDto.ConvertFromCountaryDto_Add(countaryDto));
                 return StatusCode(StatusCodes.Status201Created
                     , new ApiResponse<Countary>
@@ -99,7 +99,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPut("updatecountary")]
-        public IActionResult UpdateCountary([FromBody] CountaryDto countaryDto)
+        public async Task<IActionResult> UpdateCountaryAsync([FromBody] CountaryDto countaryDto)
         {
             try
             {
@@ -125,7 +125,8 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Countary()
                     });
                 }
-                Countary oldCountary = _countaryRepository.GetCountaryByCountaryId(new Guid(countaryDto.Id));
+                Countary oldCountary = await _countaryRepository
+                    .GetCountaryByCountaryIdAsync(new Guid(countaryDto.Id));
                 if (oldCountary == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -137,7 +138,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Countary()
                     });
                 }
-                Countary updatedCountary = _countaryRepository.UpdateCountary(
+                Countary updatedCountary = await _countaryRepository.UpdateCountaryAsync(
                     ConvertFromDto.ConvertFromCountaryDto_Update(countaryDto));
                 return StatusCode(StatusCodes.Status200OK
                     , new ApiResponse<Countary>
@@ -162,11 +163,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("getcountrybyid/{countaryId}")]
-        public IActionResult GetCountryById([FromRoute] Guid countaryId)
+        public async Task<IActionResult> GetCountryByIdAsync([FromRoute] Guid countaryId)
         {
             try
             {
-                Countary countary = _countaryRepository.GetCountaryByCountaryId(countaryId);
+                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(countaryId);
                 if(countary == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -202,11 +203,11 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpDelete("deletecountrybyid/{countaryId}")]
-        public IActionResult DeleteCountryById([FromRoute] Guid countaryId)
+        public async Task<IActionResult> DeleteCountryByIdAsync([FromRoute] Guid countaryId)
         {
             try
             {
-                Countary countary = _countaryRepository.GetCountaryByCountaryId(countaryId);
+                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(countaryId);
                 if (countary == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest
@@ -218,7 +219,7 @@ namespace Ecommerce.Api.Controllers
                         ResponseObject = new Countary()
                     });
                 }
-                Countary deletedCountary = _countaryRepository.DeleteCountaryByCountaryId(countaryId);
+                Countary deletedCountary = await _countaryRepository.DeleteCountaryByCountaryIdAsync(countaryId);
                 return StatusCode(StatusCodes.Status200OK
                     , new ApiResponse<Countary>
                     {

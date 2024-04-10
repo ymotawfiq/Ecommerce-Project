@@ -13,12 +13,12 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
         {
             this._dbContext = _dbContext;
         }
-        public Promotion AddPromotion(Promotion promotion)
+        public async Task<Promotion> AddPromotionAsync(Promotion promotion)
         {
             try
             {
-                _dbContext.Promotion.Add(promotion);
-                SaveChanges();
+                await _dbContext.Promotion.AddAsync(promotion);
+                SaveChangesAsync();
                 return promotion;
             }
             catch (Exception)
@@ -27,13 +27,14 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
             }
         }
 
-        public Promotion DeletePromotionById(Guid id)
+        public async Task<Promotion> DeletePromotionByIdAsync(Guid id)
         {
             try
             {
-                Promotion promotion = GetPromotionById(id);
+                Promotion promotion = await GetPromotionByIdAsync(id);
+                _dbContext.Promotion.Attach(promotion);
                 _dbContext.Promotion.Remove(promotion);
-                SaveChanges();
+                SaveChangesAsync();
                 return promotion;
             }
             catch (Exception)
@@ -42,11 +43,11 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
             }
         }
 
-        public IEnumerable<Promotion> GetAllPromotions()
+        public async Task<IEnumerable<Promotion>> GetAllPromotionsAsync()
         {
             try
             {
-                return _dbContext.Promotion.Include(e=>e.PromotionCategories).ToList();
+                return await _dbContext.Promotion.Include(e=>e.PromotionCategories).ToListAsync();
             }
             catch (Exception)
             {
@@ -55,11 +56,12 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
         }
 
 
-        public Promotion GetPromotionById(Guid id)
+        public async Task<Promotion> GetPromotionByIdAsync(Guid id)
         {
             try
             {
-                Promotion? promotion = _dbContext.Promotion.Where(e => e.Id == id).FirstOrDefault();
+                Promotion? promotion = await _dbContext.Promotion.Where(e => e.Id == id)
+                    .FirstOrDefaultAsync();
                 if (promotion == null)
                 {
                     return null;
@@ -72,21 +74,21 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public Promotion UpdatePromotion(Promotion promotion)
+        public async Task<Promotion> UpdatePromotionAsync(Promotion promotion)
         {
             try
             {
-                Promotion promotion1 = GetPromotionById(promotion.Id);
+                Promotion promotion1 = await GetPromotionByIdAsync(promotion.Id);
                 promotion1.Name = promotion.Name;
                 promotion1.StartDate = promotion.StartDate;
                 promotion1.EndDate = promotion.EndDate;
                 promotion1.Description = promotion.Description;
-                SaveChanges();
+                SaveChangesAsync();
                 return promotion1;
             }
             catch (Exception)
@@ -95,16 +97,16 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
             }
         }
 
-        public Promotion Upsert(Promotion promotion)
+        public async Task<Promotion> UpsertAsync(Promotion promotion)
         {
             try
             {
-                Promotion promotion1 = GetPromotionById(promotion.Id);
+                Promotion promotion1 = await GetPromotionByIdAsync(promotion.Id);
                 if(promotion1 == null)
                 {
-                    return AddPromotion(promotion);
+                    return await AddPromotionAsync(promotion);
                 }
-                return UpdatePromotion(promotion);
+                return await UpdatePromotionAsync(promotion);
             }
             catch (Exception)
             {

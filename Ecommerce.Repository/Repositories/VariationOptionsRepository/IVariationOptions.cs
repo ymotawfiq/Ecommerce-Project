@@ -6,13 +6,13 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
 {
     public interface IVariationOptions
     {
-        public VariationOptions AddVariationOptions(VariationOptions variationOptions);
-        public VariationOptions UpdateVariationOptions(VariationOptions variationOptions);
-        public VariationOptions DeleteVariationOptionsById(Guid id);
-        public VariationOptions GetVariationOptionsById(Guid id);
-        public IEnumerable<VariationOptions> GetAllVariationOptions();
-        public IEnumerable<VariationOptions> GetAllVariationOptionsByVariationId(Guid variationId);
-        public void SaveChanges();
-        public VariationOptions Upsert(VariationOptions variationOptions);
+        public Task<VariationOptions> AddVariationOptionsAsync(VariationOptions variationOptions);
+        public Task<VariationOptions> UpdateVariationOptionsAsync(VariationOptions variationOptions);
+        public Task<VariationOptions> DeleteVariationOptionsByIdAsync(Guid id);
+        public Task<VariationOptions> GetVariationOptionsByIdAsync(Guid id);
+        public Task<IEnumerable<VariationOptions>> GetAllVariationOptionsAsync();
+        public Task<IEnumerable<VariationOptions>> GetAllVariationOptionsByVariationIdAsync(Guid variationId);
+        public void SaveChangesAsync();
+        public Task<VariationOptions> UpsertAsync(VariationOptions variationOptions);
     }
 }

@@ -6,13 +6,13 @@ namespace Ecommerce.Repository.Repositories.ProductItemRepository
 {
     public interface IProductItem
     {
-        public ProductItem AddProductItem(ProductItem productItem);
-        public ProductItem UpdateProductItem(ProductItem productItem);
-        public ProductItem DeleteProductItemById(Guid id);
-        public ProductItem GetProductItemById(Guid id);
-        public IEnumerable<ProductItem> GetAllProductItemsByProductId(Guid productId);
-        public IEnumerable<ProductItem> GetAllItems();
-        public void SaveChanges();
-        public ProductItem Upsert(ProductItem productItem);
+        public Task<ProductItem> AddProductItemAsync(ProductItem productItem);
+        public Task<ProductItem> UpdateProductItemAsync(ProductItem productItem);
+        public Task<ProductItem> DeleteProductItemByIdAsync(Guid id);
+        public Task<ProductItem> GetProductItemByIdAsync(Guid id);
+        public Task<IEnumerable<ProductItem>> GetAllProductItemsByProductIdAsync(Guid productId);
+        public Task<IEnumerable<ProductItem>> GetAllItemsAsync();
+        public void SaveChangesAsync();
+        public Task<ProductItem> UpsertAsync(ProductItem productItem);
     }
 }

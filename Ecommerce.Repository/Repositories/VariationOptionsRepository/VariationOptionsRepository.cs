@@ -16,13 +16,13 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
         {
             this._dbContext = _dbContext;
         }
-        public VariationOptions AddVariationOptions(VariationOptions variationOptions)
+        public async Task<VariationOptions> AddVariationOptionsAsync(VariationOptions variationOptions)
         {
             try
             {
-                _dbContext.VariationOptions.Add(variationOptions);
+                await _dbContext.VariationOptions.AddAsync(variationOptions);
       
-                SaveChanges();
+                SaveChangesAsync();
                 return variationOptions;
             }
             catch (Exception)
@@ -31,14 +31,15 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
             }
         }
 
-        public VariationOptions DeleteVariationOptionsById(Guid id)
+        public async Task<VariationOptions> DeleteVariationOptionsByIdAsync(Guid id)
         {
             try
             {
-                VariationOptions variationOptions = GetVariationOptionsById(id);
+                VariationOptions variationOptions = await GetVariationOptionsByIdAsync(id);
+                _dbContext.VariationOptions.Attach(variationOptions);
                 _dbContext.VariationOptions.Remove(variationOptions);
 
-                SaveChanges();
+                SaveChangesAsync();
                 return variationOptions;
             }
             catch (Exception)
@@ -47,12 +48,12 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
             }
         }
 
-        public IEnumerable<VariationOptions> GetAllVariationOptions()
+        public async Task<IEnumerable<VariationOptions>> GetAllVariationOptionsAsync()
         {
             try
             {
-                return _dbContext.VariationOptions.Include(e=>e.Variation)
-                    .Include(e=>e.ProductVariation1).ToList();
+                return await _dbContext.VariationOptions.Include(e=>e.Variation)
+                    .Include(e=>e.ProductVariation1).ToListAsync();
             }
             catch (Exception)
             {
@@ -60,12 +61,13 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
             }
         }
 
-        public IEnumerable<VariationOptions> GetAllVariationOptionsByVariationId(Guid variationId)
+        public async Task<IEnumerable<VariationOptions>> GetAllVariationOptionsByVariationIdAsync
+            (Guid variationId)
         {
             try
             {
                 return
-                    from v in GetAllVariationOptions()
+                    from v in await GetAllVariationOptionsAsync()
                     where v.VariationId == variationId
                     select v;
             }
@@ -75,12 +77,12 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
             }
         }
 
-        public VariationOptions GetVariationOptionsById(Guid id)
+        public async Task<VariationOptions> GetVariationOptionsByIdAsync(Guid id)
         {
             try
             {
-                VariationOptions? variationOptions = _dbContext.VariationOptions.Where(e => e.Id == id)
-                    .FirstOrDefault();
+                VariationOptions? variationOptions = await _dbContext.VariationOptions.Where(e => e.Id == id)
+                    .FirstOrDefaultAsync();
                 if (variationOptions == null)
                 {
                     return null;
@@ -94,20 +96,20 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public VariationOptions UpdateVariationOptions(VariationOptions variationOptions)
+        public async Task<VariationOptions> UpdateVariationOptionsAsync(VariationOptions variationOptions)
         {
             try
             {
-                VariationOptions variationOptions1 = GetVariationOptionsById(variationOptions.Id);
+                VariationOptions variationOptions1 = await GetVariationOptionsByIdAsync(variationOptions.Id);
                 variationOptions1.VariationId = variationOptions.VariationId;
                 variationOptions1.Value = variationOptions.Value;
 
-                SaveChanges();
+                SaveChangesAsync();
                 return variationOptions1;
             }
             catch (Exception)
@@ -116,16 +118,16 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
             }
         }
 
-        public VariationOptions Upsert(VariationOptions variationOptions)
+        public async Task<VariationOptions> UpsertAsync(VariationOptions variationOptions)
         {
             try
             {
-                VariationOptions variationOptions1 = GetVariationOptionsById(variationOptions.Id);
+                VariationOptions variationOptions1 = await GetVariationOptionsByIdAsync(variationOptions.Id);
                 if (variationOptions1 == null)
                 {
-                    return AddVariationOptions(variationOptions);
+                    return await AddVariationOptionsAsync(variationOptions);
                 }
-                return UpdateVariationOptions(variationOptions);
+                return await UpdateVariationOptionsAsync(variationOptions);
             }
             catch (Exception)
             {

@@ -13,12 +13,12 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
         {
             this._dbContext = _dbContext;
         }
-        public Address AddAddress(Address address)
+        public async Task<Address> AddAddressAsync(Address address)
         {
             try
             {
-                _dbContext.Address.Add(address);
-                SaveChanges();
+                await _dbContext.Address.AddAsync(address);
+                SaveChangesAsync();
                 return address;
             }
             catch (Exception)
@@ -27,13 +27,14 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             }
         }
 
-        public Address DeleteAddressById(Guid addressId)
+        public async Task<Address> DeleteAddressByIdAsync(Guid addressId)
         {
             try
             {
-                Address address = GetAddressById(addressId);
+                Address address = await GetAddressByIdAsync(addressId);
+                _dbContext.Address.Attach(address);
                 _dbContext.Address.Remove(address);
-                SaveChanges();
+                SaveChangesAsync();
                 return address;
             }
             catch (Exception)
@@ -42,11 +43,12 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             }
         }
 
-        public Address GetAddressById(Guid addressId)
+        public async Task<Address> GetAddressByIdAsync(Guid addressId)
         {
             try
             {
-                Address? address = _dbContext.Address.Where(e => e.Id == addressId).FirstOrDefault();
+                Address? address = await _dbContext.Address.Where(e => e.Id == addressId)
+                    .FirstOrDefaultAsync();
                 if (address == null)
                 {
                     return null;
@@ -59,11 +61,11 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             }
         }
 
-        public IEnumerable<Address> GetAllAddresses()
+        public async Task<IEnumerable<Address>> GetAllAddressesAsync()
         {
             try
             {
-                return _dbContext.Address.Include(e=>e.Countary).ToList();
+                return await _dbContext.Address.Include(e=>e.Countary).ToListAsync();
             }
             catch (Exception)
             {
@@ -71,12 +73,12 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             }
         }
 
-        public IEnumerable<Address> GetAllAddressesByCountaryId(Guid countaryId)
+        public async Task<IEnumerable<Address>> GetAllAddressesByCountaryIdAsync(Guid countaryId)
         {
             try
             {
                 return
-                    from a in GetAllAddresses()
+                    from a in await GetAllAddressesAsync()
                     where a.CountaryId == countaryId
                     select a;
             }
@@ -86,16 +88,16 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
-        public Address UpdateAddress(Address address)
+        public async Task<Address> UpdateAddressAsync(Address address)
         {
             try
             {
-                Address address1 = GetAddressById(address.Id);
+                Address address1 = await GetAddressByIdAsync(address.Id);
                 address1.AddressLine1 = address.AddressLine1;
                 address1.AddressLine2 = address.AddressLine2;
                 address1.City = address.City;
@@ -104,7 +106,7 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
                 address1.Region = address.Region;
                 address1.StreetNumber = address.StreetNumber;
                 address1.UnitNumber = address.UnitNumber;
-                SaveChanges();
+                SaveChangesAsync();
                 return address1;
             }
             catch (Exception)
@@ -113,16 +115,16 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             }
         }
 
-        public Address Upsert(Address address)
+        public async Task<Address> UpsertAsync(Address address)
         {
             try
             {
-                Address address1 = GetAddressById(address.Id);
+                Address address1 = await GetAddressByIdAsync(address.Id);
                 if (address1 == null)
                 {
-                    return AddAddress(address);
+                    return await AddAddressAsync(address);
                 }
-                return UpdateAddress(address);
+                return await UpdateAddressAsync(address);
             }
             catch (Exception)
             {

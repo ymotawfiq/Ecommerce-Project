@@ -6,15 +6,15 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
 {
     public interface IProductVariation
     {
-        public ProductVariation AddProductVariation(ProductVariation productVariation);
-        public ProductVariation UpdateProductVariation(ProductVariation productVariation);
-        public ProductVariation DeleteProductVariationById(Guid id);
-        public ProductVariation GetProductVariationById(Guid id);
-        public IEnumerable<ProductVariation> GetAllProductVariations();
-        public IEnumerable<ProductVariation> GetAllVariationsByProductItemId(Guid productItemId);
-        public IEnumerable<ProductVariation> GetAllVariationsByVariationOptionId(Guid variationOptionId);
-        public void SaveChanges();
-        public ProductVariation Upsert(ProductVariation productVariation);
+        public Task<ProductVariation> AddProductVariationAsync(ProductVariation productVariation);
+        public Task<ProductVariation> UpdateProductVariationAsync(ProductVariation productVariation);
+        public Task<ProductVariation> DeleteProductVariationByIdAsync(Guid id);
+        public Task<ProductVariation> GetProductVariationByIdAsync(Guid id);
+        public Task<IEnumerable<ProductVariation>> GetAllProductVariationsAsync();
+        public Task<IEnumerable<ProductVariation>> GetAllVariationsByProductItemIdAsync(Guid productItemId);
+        public Task<IEnumerable<ProductVariation>> GetAllVariationsByVariationOptionIdAsync(Guid variationOptionId);
+        public void SaveChangesAsync();
+        public Task<ProductVariation> UpsertAsync(ProductVariation productVariation);
 
     }
 }

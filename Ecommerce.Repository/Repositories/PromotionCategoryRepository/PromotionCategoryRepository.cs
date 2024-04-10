@@ -2,6 +2,7 @@
 
 using Ecommerce.Data;
 using Ecommerce.Data.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
 {
@@ -12,12 +13,12 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
         {
             this._dbContext = _dbContext;
         }
-        public PromotionCategory AddPromotionCategory(PromotionCategory promotionCategory)
+        public async Task<PromotionCategory> AddPromotionCategoryAsync(PromotionCategory promotionCategory)
         {
             try
             {
-                _dbContext.PromotionCategory.Add(promotionCategory);
-                SaveChanges();
+                await _dbContext.PromotionCategory.AddAsync(promotionCategory);
+                SaveChangesAsync();
                 return promotionCategory;
             }
             catch (Exception)
@@ -26,13 +27,14 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public PromotionCategory DeletePromotionCategoryById(Guid id)
+        public async Task<PromotionCategory> DeletePromotionCategoryByIdAsync(Guid id)
         {
             try
             {
-                PromotionCategory promotionCategory = GetPromotionCategoryById(id);
+                PromotionCategory promotionCategory = await GetPromotionCategoryByIdAsync(id);
+                _dbContext.PromotionCategory.Attach(promotionCategory);
                 _dbContext.PromotionCategory.Remove(promotionCategory);
-                SaveChanges();
+                SaveChangesAsync();
                 return promotionCategory;
             }
             catch (Exception)
@@ -41,11 +43,11 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public IEnumerable<PromotionCategory> GetAllPromotions()
+        public async Task<IEnumerable<PromotionCategory>> GetAllPromotionsAsync()
         {
             try
             {
-                return _dbContext.PromotionCategory.ToList();
+                return await _dbContext.PromotionCategory.ToListAsync();
             }
             catch (Exception)
             {
@@ -53,12 +55,12 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public IEnumerable<PromotionCategory> GetAllPromotionsByCategoryId(Guid categoryId)
+        public async Task<IEnumerable<PromotionCategory>> GetAllPromotionsByCategoryIdAsync(Guid categoryId)
         {
             try
             {
                 return
-                    from p in GetAllPromotions()
+                    from p in await GetAllPromotionsAsync()
                     where p.CategoryId == categoryId
                     select p;
             }
@@ -68,12 +70,12 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public IEnumerable<PromotionCategory> GetAllPromotionsByPromotionId(Guid promotionId)
+        public async Task<IEnumerable<PromotionCategory>> GetAllPromotionsByPromotionIdAsync(Guid promotionId)
         {
             try
             {
                 return
-                    from p in GetAllPromotions()
+                    from p in await GetAllPromotionsAsync()
                     where p.PromotionId == promotionId
                     select p;
             }
@@ -83,12 +85,12 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public PromotionCategory GetPromotionCategoryById(Guid id)
+        public async Task<PromotionCategory> GetPromotionCategoryByIdAsync(Guid id)
         {
             try
             {
-                PromotionCategory? promotionCategory = _dbContext.PromotionCategory
-                    .Where(e => e.Id == id).FirstOrDefault();
+                PromotionCategory? promotionCategory = await _dbContext.PromotionCategory
+                    .Where(e => e.Id == id).FirstOrDefaultAsync();
                 if(promotionCategory == null)
                 {
                     return null;
@@ -101,19 +103,19 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public void SaveChanges()
+        public void SaveChangesAsync()
         {
             _dbContext.SaveChanges();
         }
 
-        public PromotionCategory UpdatePromotionCategory(PromotionCategory promotionCategory)
+        public async Task<PromotionCategory> UpdatePromotionCategoryAsync(PromotionCategory promotionCategory)
         {
             try
             {
-                PromotionCategory promotionCategory1 = GetPromotionCategoryById(promotionCategory.Id);
+                PromotionCategory promotionCategory1 = await GetPromotionCategoryByIdAsync(promotionCategory.Id);
                 promotionCategory1.PromotionId = promotionCategory.PromotionId;
                 promotionCategory1.CategoryId = promotionCategory.CategoryId;
-                SaveChanges();
+                SaveChangesAsync();
                 return promotionCategory1;
             }
             catch (Exception)
@@ -122,16 +124,16 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public PromotionCategory Upsert(PromotionCategory promotionCategory)
+        public async Task<PromotionCategory> UpsertAsync(PromotionCategory promotionCategory)
         {
             try
             {
-                PromotionCategory promotionCategory1 = GetPromotionCategoryById(promotionCategory.Id);
+                PromotionCategory promotionCategory1 = await GetPromotionCategoryByIdAsync(promotionCategory.Id);
                 if (promotionCategory1 == null)
                 {
-                    return AddPromotionCategory(promotionCategory);
+                    return await AddPromotionCategoryAsync(promotionCategory);
                 }
-                return UpdatePromotionCategory(promotionCategory);
+                return await UpdatePromotionCategoryAsync(promotionCategory);
             }
             catch (Exception)
             {
