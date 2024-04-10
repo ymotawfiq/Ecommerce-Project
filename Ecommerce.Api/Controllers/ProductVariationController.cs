@@ -1,11 +1,7 @@
 ﻿using Ecommerce.Data.DTOs;
-using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
-using Ecommerce.Repository.Repositories.ProductItemRepository;
-using Ecommerce.Repository.Repositories.ProductVariationRepository;
-using Ecommerce.Repository.Repositories.VariationOptionsRepository;
-using Microsoft.AspNetCore.Http;
+using Ecommerce.Service.Services.ProductVariationService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -14,15 +10,10 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class ProductVariationController : ControllerBase
     {
-        private readonly IProductVariation _producVariationRepository;
-        private readonly IVariationOptions _variationOptionsRepository;
-        private readonly IProductItem _productItemRepository;
-        public ProductVariationController(IProductVariation _producVariationRepository,
-            IVariationOptions _variationOptionsRepository, IProductItem _productItemRepository)
+        private readonly IProductVariationService _productVariationService;
+        public ProductVariationController(IProductVariationService _productVariationService)
         {
-            this._productItemRepository = _productItemRepository;
-            this._producVariationRepository = _producVariationRepository;
-            this._variationOptionsRepository = _variationOptionsRepository;
+            this._productVariationService = _productVariationService;
         }
 
         [HttpGet("allproductvariations")]
@@ -30,24 +21,17 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var productVariations = await _producVariationRepository.GetAllProductVariationsAsync();
-                if (productVariations.ToList().Count == 0)
+                var response = await _productVariationService.GetAllProductVariationsAsync();
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<ProductVariation>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No product variations founded",
-                        ResponseObject = new List<ProductVariation>()
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<ProductVariation>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Product variations founded successfully",
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
                         ResponseObject = new List<ProductVariation>()
                     });
             }
@@ -70,25 +54,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var productVariations = await _producVariationRepository
-                    .GetAllVariationsByVariationOptionIdAsync(variationOptionId);
-                if (productVariations.ToList().Count == 0)
+                var response = await _productVariationService
+                    .GetAllProductVariationsByVariationOptionIdAsync(variationOptionId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<ProductVariation>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No products founded for this variation",
-                        ResponseObject = new List<ProductVariation>()
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<ProductVariation>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Product variations founded successfully",
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
                         ResponseObject = new List<ProductVariation>()
                     });
             }
@@ -112,25 +89,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var productVariations = await _producVariationRepository
-                    .GetAllVariationsByProductItemIdAsync(productItemId);
-                if (productVariations.ToList().Count == 0)
+                var response = await _productVariationService
+                    .GetAllProductVariationsByProductItemIdAsync(productItemId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<ProductVariation>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No variations founded for this product",
-                        ResponseObject = new List<ProductVariation>()
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<ProductVariation>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Product variations founded successfully",
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
                         ResponseObject = new List<ProductVariation>()
                     });
             }
@@ -153,53 +123,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (productVariationDto == null)
+                var response = await _productVariationService.AddProductVariationAsync(productVariationDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<ProductVariation>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new ProductVariation()
-                    });
-                }
-                ProductItem productItem = await _productItemRepository.GetProductItemByIdAsync
-                    (productVariationDto.ProductItemId);
-                if(productItem == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No product items founded with product id ({productVariationDto.ProductItemId})",
-                        ResponseObject = new ProductVariation()
-                    });
-                }
-                VariationOptions variationOptions = await _variationOptionsRepository.GetVariationOptionsByIdAsync
-                    (productVariationDto.VariationOptionId);
-                if (variationOptions == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No variation options founded with id ({productVariationDto.VariationOptionId})",
-                        ResponseObject = new ProductVariation()
-                    });
-                }
-
-                ProductVariation productVariation = await _producVariationRepository.AddProductVariationAsync(
-                    ConvertFromDto.ConvertFromProductVariationsDto_Add(productVariationDto));
-                return StatusCode(StatusCodes.Status201Created
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 201,
-                        IsSuccess = true,
-                        Message = "Product variation created successfully",
-                        ResponseObject = productVariation
                     });
 
             }
@@ -223,63 +158,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (productVariationDto == null)
+                var response = await _productVariationService.UpdateProductVariationAsync(productVariationDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<ProductVariation>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new ProductVariation()
-                    });
-                }
-                if (productVariationDto.Id == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Product variation id must not be null",
-                        ResponseObject = new ProductVariation()
-                    });
-                }
-                ProductItem productItem = await _productItemRepository.GetProductItemByIdAsync
-                    (productVariationDto.ProductItemId);
-                if (productItem == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No product items founded with product id ({productVariationDto.ProductItemId})",
-                        ResponseObject = new ProductVariation()
-                    });
-                }
-                VariationOptions variationOptions = await _variationOptionsRepository.GetVariationOptionsByIdAsync
-                    (productVariationDto.VariationOptionId);
-                if (variationOptions == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No variation options founded with id ({productVariationDto.VariationOptionId})",
-                        ResponseObject = new ProductVariation()
-                    });
-                }
-                ProductVariation productVariation = await _producVariationRepository.UpdateProductVariationAsync(
-                    ConvertFromDto.ConvertFromProductVariationsDto_Update(productVariationDto));
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Product variation updated successfully",
-                        ResponseObject = productVariation
                     });
             }
             catch (Exception ex)
@@ -300,26 +190,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                ProductVariation productVariation = await _producVariationRepository
-                    .GetProductVariationByIdAsync(productVariationId);
-                if (productVariation == null)
+                var response = await _productVariationService.GetProductVariationByIdAsync(productVariationId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<ProductVariation>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No product variation founded with id ({productVariationId})",
+                        Message = "Unknown error",
                         ResponseObject = new ProductVariation()
-                    });
-                }
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Product variation founded successfully",
-                        ResponseObject = productVariation
                     });
             }
             catch(Exception ex)
@@ -340,28 +222,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                ProductVariation productVariation = await _producVariationRepository
-                    .GetProductVariationByIdAsync(productVariationId);
-                if (productVariation == null)
+                var response = await _productVariationService
+                    .DeleteProductVariationByIdAsync(productVariationId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<ProductVariation>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No product variation founded with id ({productVariationId})",
+                        Message = "Unknown error",
                         ResponseObject = new ProductVariation()
-                    });
-                }
-                var deletedProductVariation = await _producVariationRepository
-                    .DeleteProductVariationByIdAsync(productVariationId);
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<ProductVariation>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Product variation founded successfully",
-                        ResponseObject = deletedProductVariation
                     });
             }
             catch (Exception ex)

@@ -2,8 +2,8 @@
 using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
-using Ecommerce.Repository.Repositories.AddressRepository;
-using Ecommerce.Repository.Repositories.CountaryRepository;
+
+using Ecommerce.Service.Services.AddressService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +13,10 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-        private readonly IAddress _addressRepository;
-        private readonly ICountary _countaryRepository;
-        public AddressController(IAddress _addressRepository, ICountary _countaryRepository)
+        private readonly IAddressService _addressService;
+        public AddressController(IAddressService _addressService)
         {
-            this._addressRepository = _addressRepository;
-            this._countaryRepository = _countaryRepository;
+            this._addressService = _addressService;
         }
 
 
@@ -27,26 +25,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var addresses = await _addressRepository.GetAllAddressesAsync();
-                if (addresses.ToList().Count == 0)
+                var response = await _addressService.GetAllAddressesAsync();
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                        , new ApiResponse<IEnumerable<Address>>
-                        {
-                            StatusCode = 200,
-                            IsSuccess = true,
-                            Message = "No addresses founded",
-                            ResponseObject = addresses
-                        });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
-                        , new ApiResponse<IEnumerable<Address>>
-                        {
-                            StatusCode = 200,
-                            IsSuccess = true,
-                            Message = "Addresses founded successfully",
-                            ResponseObject = addresses
-                        });
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<IEnumerable<Address>>
+                    {
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Address>()
+                    });
             }
             catch(Exception ex)
             {
@@ -66,26 +57,20 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var addresses = await _addressRepository.GetAllAddressesByCountaryIdAsync(countaryId);
-                if (addresses.ToList().Count == 0)
+                var response = await _addressService.GetAllAddressesByCountaryIdAsync(countaryId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                        , new ApiResponse<IEnumerable<Address>>
-                        {
-                            StatusCode = 200,
-                            IsSuccess = true,
-                            Message = "No addresses founded for this countary",
-                            ResponseObject = addresses
-                        });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
-                        , new ApiResponse<IEnumerable<Address>>
-                        {
-                            StatusCode = 200,
-                            IsSuccess = true,
-                            Message = "Addresses founded successfully",
-                            ResponseObject = addresses
-                        });
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<IEnumerable<Address>>
+                    {
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Address>()
+                    });
+            
             }
             catch (Exception ex)
             {
@@ -106,36 +91,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (addressDto == null)
+                var response = await _addressService.AddAddressAsync(addressDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new Address()
                     });
-                }
-                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(addressDto.CountaryId);
-                if (countary == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No countaries founded with id ({addressDto.CountaryId})",
-                        ResponseObject = new Address()
-                    });
-                }
-                Address addedAddress = await _addressRepository.AddAddressAsync(
-                    ConvertFromDto.ConvertFromAddressDto_Add(addressDto));
-                return StatusCode(StatusCodes.Status201Created, new ApiResponse<Address>
-                {
-                    StatusCode = 201,
-                    IsSuccess = true,
-                    Message = $"Address added successfully",
-                    ResponseObject = addedAddress
-                });
             }
             catch(Exception ex)
             {
@@ -154,57 +122,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (addressDto == null)
+                var response = await _addressService.UpdateAddressAsync(addressDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new Address()
                     });
-                }
-                if (addressDto.Id == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Id must not be null",
-                        ResponseObject = new Address()
-                    });
-                }
-                Address oldAddress = await _addressRepository.GetAddressByIdAsync(new Guid(addressDto.Id));
-                if (oldAddress == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No addresses founded with id ({addressDto.Id})",
-                        ResponseObject = new Address()
-                    });
-                }
-                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(addressDto.CountaryId);
-                if (countary == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No countaries founded with id ({addressDto.CountaryId})",
-                        ResponseObject = new Address()
-                    });
-                }
-                Address updatedAddress = await _addressRepository.UpdateAddressAsync(
-                    ConvertFromDto.ConvertFromAddressDto_Update(addressDto));
-                return StatusCode(StatusCodes.Status201Created, new ApiResponse<Address>
-                {
-                    StatusCode = 201,
-                    IsSuccess = true,
-                    Message = $"Address added successfully",
-                    ResponseObject = updatedAddress
-                });
             }
             catch (Exception ex)
             {
@@ -224,24 +154,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Address address = await _addressRepository.GetAddressByIdAsync(addressId);
-                if(address == null)
+                var response = await _addressService.GetAddressByIdAsync(addressId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No address founded with id ({addressId})",
+                        Message = "Unknown error",
                         ResponseObject = new Address()
                     });
-                }
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<Address>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = $"Address founded successfully",
-                    ResponseObject = address
-                });
             }
             catch (Exception ex)
             {
@@ -260,25 +185,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Address address = await _addressRepository.GetAddressByIdAsync(addressId);
-                if (address == null)
+                var response = await _addressService.DeleteAddressByIdAsync(addressId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Address>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No address founded with id ({addressId})",
+                        Message = "Unknown error",
                         ResponseObject = new Address()
                     });
-                }
-                Address deletedAddress = await _addressRepository.DeleteAddressByIdAsync(addressId);
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<Address>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = $"Address deleted successfully",
-                    ResponseObject = deletedAddress
-                });
             }
             catch (Exception ex)
             {

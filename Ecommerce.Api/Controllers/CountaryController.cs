@@ -3,6 +3,7 @@ using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.CountaryRepository;
+using Ecommerce.Service.Services.CountaryService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +13,10 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class CountaryController : ControllerBase
     {
-        private readonly ICountary _countaryRepository;
-        public CountaryController(ICountary _countaryRepository)
+        private readonly ICountaryService _countaryService;
+        public CountaryController(ICountaryService _countaryService)
         {
-            this._countaryRepository = _countaryRepository;
+            this._countaryService = _countaryService;
         }
 
         [HttpGet("allcountaries")]
@@ -23,25 +24,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var countaries = await _countaryRepository.GetAllCountariesAsync();
-                if (countaries.ToList().Count == 0)
+                var response = await _countaryService.GetAllCountariesAsync();
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<Countary>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No countaries founded",
-                        ResponseObject = countaries
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<Countary>>
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<IEnumerable<Address>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Countaries founded successfully",
-                        ResponseObject = countaries
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Address>()
                     });
             }
             catch(Exception ex)
@@ -62,26 +56,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (countaryDto == null)
+                var response = await _countaryService.AddCountaryAsync(countaryDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Countary>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
-                        ResponseObject = new Countary()
-                    });
-                }
-                Countary newCountary = await _countaryRepository.AddCountaryAsync(
-                    ConvertFromDto.ConvertFromCountaryDto_Add(countaryDto));
-                return StatusCode(StatusCodes.Status201Created
-                    , new ApiResponse<Countary>
-                    {
-                        StatusCode = 201,
-                        IsSuccess = true,
-                        Message = "Country saved successfully",
-                        ResponseObject = newCountary
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
             }
             catch (Exception ex)
@@ -103,50 +89,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (countaryDto == null)
+                var response = await _countaryService.UpdateCountaryAsync(countaryDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Countary>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
-                        ResponseObject = new Countary()
-                    });
-                }
-                if (countaryDto.Id == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Countary>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Country id must not be null",
-                        ResponseObject = new Countary()
-                    });
-                }
-                Countary oldCountary = await _countaryRepository
-                    .GetCountaryByCountaryIdAsync(new Guid(countaryDto.Id));
-                if (oldCountary == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Countary>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No country founded with id ({countaryDto.Id})",
-                        ResponseObject = new Countary()
-                    });
-                }
-                Countary updatedCountary = await _countaryRepository.UpdateCountaryAsync(
-                    ConvertFromDto.ConvertFromCountaryDto_Update(countaryDto));
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<Countary>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Country updated successfully",
-                        ResponseObject = updatedCountary
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
             }
             catch (Exception ex)
@@ -167,25 +121,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(countaryId);
-                if(countary == null)
+                var response = await _countaryService.GetCountryByIdAsync(countaryId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Countary>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No country founded with id ({countaryId})",
-                        ResponseObject = new Countary()
-                    });
-                }
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<Countary>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = $"Countary founded successfully",
-                        ResponseObject = countary
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
             }
             catch (Exception ex)
@@ -207,26 +154,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Countary countary = await _countaryRepository.GetCountaryByCountaryIdAsync(countaryId);
-                if (countary == null)
+                var response = await _countaryService.DeleteCountryByIdAsync(countaryId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Countary>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No country founded with id ({countaryId})",
-                        ResponseObject = new Countary()
-                    });
-                }
-                Countary deletedCountary = await _countaryRepository.DeleteCountaryByCountaryIdAsync(countaryId);
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<Countary>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = $"Countary deleted successfully",
-                        ResponseObject = deletedCountary
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
             }
             catch (Exception ex)

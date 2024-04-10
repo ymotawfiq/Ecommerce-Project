@@ -4,6 +4,7 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ProductItemRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
+using Ecommerce.Service.Services.ProductItemService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +14,10 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class ProductItemController : ControllerBase
     {
-        private readonly IProductItem _productItemRepository;
-        private readonly IProduct _productRepository;
-        public ProductItemController(IProductItem _productItemRepository, IProduct _productRepository)
+        private readonly IProductItemService _productItemService;
+        public ProductItemController(IProductItemService _productItemService)
         {
-            this._productItemRepository = _productItemRepository;
-            this._productRepository = _productRepository;
+            this._productItemService = _productItemService;
         }
 
         [HttpGet("allitems")]
@@ -26,24 +25,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var items = await _productItemRepository.GetAllItemsAsync();
-                if (items.ToList().Count == 0)
+                var response = await _productItemService.GetAllItemsAsync();
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductItem>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No items found",
-                        ResponseObject = items
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductItem>>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Items founded successfully",
-                    ResponseObject = items
-                });
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<IEnumerable<Address>>
+                    {
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Address>()
+                    });
             }
             catch(Exception ex)
             {
@@ -62,24 +56,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var items = await _productItemRepository.GetAllProductItemsByProductIdAsync(productId);
-                if (items.ToList().Count == 0)
+                var response = await _productItemService.GetAllItemsByProductIdAsync(productId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductItem>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "This product does not contain any items",
-                        ResponseObject = items
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<IEnumerable<ProductItem>>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Items founded successfully",
-                    ResponseObject = items
-                });
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<IEnumerable<Address>>
+                    {
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Address>()
+                    });
             }
             catch(Exception ex)
             {
@@ -98,48 +87,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (productItemDto == null)
+                var response = await _productItemService.AddItemAsync(productItemDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
-                        ResponseObject = new ProductItem()
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
-                }
-                var product = await _productRepository.GetProductByIdAsync(new Guid(productItemDto.ProductId));
-                if(product == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"Product with id ({productItemDto.ProductId}) not exists",
-                        ResponseObject = new ProductItem()
-                    });
-                }
-                string imageUrl = SaveProductImage(productItemDto);
-                productItemDto.ImageUrl = imageUrl;
-                if (imageUrl == null)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<ProductItem>
-                    {
-                        StatusCode = 500,
-                        IsSuccess = false,
-                        Message = $"Can't save item",
-                        ResponseObject = new ProductItem()
-                    });
-                }
-                var item = await _productItemRepository.AddProductItemAsync(ConvertFromDto
-                    .ConvertFromProductItemDto_Add(productItemDto));
-                return StatusCode(StatusCodes.Status201Created, new ApiResponse<ProductItem>
-                {
-                    StatusCode = 201,
-                    IsSuccess = true,
-                    Message = "Item created successfully",
-                    ResponseObject = item
-                });
 
             }
             catch (Exception ex)
@@ -159,70 +119,20 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (productItemDto == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Input must not be null",
-                        ResponseObject = new ProductItem()
-                    });
-                }
-                if (productItemDto.Id == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "You must enter item id",
-                        ResponseObject = new ProductItem()
-                    });
-                }
-                var oldItem = await _productItemRepository.GetProductItemByIdAsync(new Guid(productItemDto.Id));
-                if (oldItem == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"Item with id ({productItemDto.Id}) not exists",
-                        ResponseObject = new ProductItem()
-                    });
-                }
-                bool isImageDeleted = DeleteExistingItemImage(oldItem.ProducItemImageUrl);
 
-                if (!isImageDeleted)
+                var response = await _productItemService.UpdateItemAsync(productItemDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"Can't update item",
-                        ResponseObject = new ProductItem()
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
-                }
-                string imageUrl = SaveProductImage(productItemDto);
-                productItemDto.ImageUrl = imageUrl;
-                if (imageUrl == null)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<ProductItem>
-                    {
-                        StatusCode = 500,
-                        IsSuccess = false,
-                        Message = $"Can't save item",
-                        ResponseObject = new ProductItem()
-                    });
-                }
-                var newItem = await _productItemRepository.UpdateProductItemAsync(ConvertFromDto
-                    .ConvertFromProductItemDto_Update(productItemDto));
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductItem>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Item updated successfully",
-                    ResponseObject = newItem
-                });
 
             }
             catch (Exception ex)
@@ -242,38 +152,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var oldItem = await _productItemRepository.GetProductItemByIdAsync(itemId);
-                if (oldItem == null)
+                var response = await _productItemService.DeleteItemAsync(itemId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"Item with id ({itemId}) not exists",
-                        ResponseObject = new ProductItem()
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
-                }
-                bool isImageDeleted =DeleteExistingItemImage(oldItem.ProducItemImageUrl);
-
-                if (!isImageDeleted)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"Can't delete item",
-                        ResponseObject = new ProductItem()
-                    });
-                }
-
-                var deletedItem = await _productItemRepository.DeleteProductItemByIdAsync(itemId);
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductItem>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Item deleted successfully",
-                    ResponseObject = deletedItem
-                });
 
             }
             catch (Exception ex)
@@ -293,24 +184,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var oldItem = await _productItemRepository.GetProductItemByIdAsync(itemId);
-                if (oldItem == null)
+                var response = await _productItemService.GetItemByIdAsync(itemId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<ProductItem>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Address>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"Item with id ({itemId}) not exists",
-                        ResponseObject = new ProductItem()
+                        Message = "Unknown error",
+                        ResponseObject = new Address()
                     });
-                }
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<ProductItem>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Item founded successfully",
-                    ResponseObject = oldItem
-                });
 
             }
             catch (Exception ex)
@@ -327,45 +213,6 @@ namespace Ecommerce.Api.Controllers
 
 
 
-        // Save Image Url
-        private string SaveProductImage(ProductItemDto productItemDto)
-        {
-            string uniqueFileName = null;
-            if (productItemDto.Image != null)
-            {
-                string path = @"D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Client\wwwroot";
-
-                string uploadsFolder = Path.Combine(path, @"Images\ProductItems");
-
-                uniqueFileName = Guid.NewGuid().ToString().Substring(0, 8)
-                    + "_" + productItemDto.Image.FileName;
-
-                if (!System.IO.Directory.Exists(uploadsFolder))
-                {
-                    System.IO.Directory.CreateDirectory(uploadsFolder);
-                }
-
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    productItemDto.Image.CopyTo(fileStream);
-                    fileStream.Flush();
-                }
-            }
-            return uniqueFileName;
-        }
-
-        private bool DeleteExistingItemImage(string imageUrl)
-        {
-            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/ProductItems/";
-            string existingImage = Path.Combine(path, $"{imageUrl}");
-            if (System.IO.File.Exists(existingImage))
-            {
-                System.IO.File.Delete(existingImage);
-                return true;
-            }
-            return false;
-        }
+        
     }
 }

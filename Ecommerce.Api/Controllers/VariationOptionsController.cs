@@ -4,6 +4,7 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.VariationOptionsRepository;
 using Ecommerce.Repository.Repositories.VariationRepository;
+using Ecommerce.Service.Services.VariationOptionService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +14,10 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class VariationOptionsController : ControllerBase
     {
-        private readonly IVariationOptions _variationOptionsRepository;
-        private readonly IVariation _variationRepository;
-        public VariationOptionsController(IVariationOptions _variationOptionsRepository,
-            IVariation _variationRepository)
+        private readonly IVariationOptionsService _variationOptionsService;
+        public VariationOptionsController(IVariationOptionsService _variationOptionsService)
         {
-            this._variationOptionsRepository = _variationOptionsRepository;
-            this._variationRepository = _variationRepository;
+            this._variationOptionsService = _variationOptionsService;
         }
 
         [HttpGet("allvariationoprions")]
@@ -27,25 +25,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var variationOptions = await _variationOptionsRepository.GetAllVariationOptionsAsync();
-                if (variationOptions.ToList().Count == 0)
+                var response = await _variationOptionsService.GetAllVariationOptionsAsync();
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<VariationOptions>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No variation options founded",
-                        ResponseObject = variationOptions
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<VariationOptions>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Variation options founded successfully",
-                        ResponseObject = variationOptions
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<VariationOptions>()
                     });
             }
             catch(Exception ex)
@@ -66,26 +57,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var variationOptions = await _variationOptionsRepository.GetAllVariationOptionsByVariationIdAsync
-                    (variationId);
-                if (variationOptions.ToList().Count == 0)
+                var response = await _variationOptionsService.GetAllVariationOptionsByVariationIdAsync(variationId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<VariationOptions>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No variation options founded",
-                        ResponseObject = variationOptions
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<VariationOptions>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Variation options founded successfully",
-                        ResponseObject = variationOptions
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<VariationOptions>()
                     });
             }
             catch (Exception ex)
@@ -106,37 +89,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if(variationOptionsDto == null)
+                var response = await _variationOptionsService.AddVariationOptionAsync(variationOptionsDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<VariationOptions>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<VariationOptions>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new VariationOptions()
                     });
-                }
-                Variation variation = await _variationRepository.GetVariationByIdAsync
-                    (new Guid(variationOptionsDto.VariationId));
-                if (variation == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<VariationOptions>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No variations founded with id ({variationOptionsDto.VariationId})",
-                        ResponseObject = new VariationOptions()
-                    });
-                }
-                VariationOptions variationOptions = await _variationOptionsRepository.AddVariationOptionsAsync(
-                    ConvertFromDto.ConvertFromVariationOptions_Add(variationOptionsDto));
-                return StatusCode(StatusCodes.Status201Created, new ApiResponse<VariationOptions>
-                {
-                    StatusCode = 201,
-                    IsSuccess = true,
-                    Message = $"Variation option created successfully",
-                    ResponseObject = variationOptions
-                });
             }
             catch(Exception ex)
             {
@@ -155,47 +120,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (variationOptionsDto == null)
+                var response = await _variationOptionsService.UpdateVariationOptionAsync(variationOptionsDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<VariationOptions>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<VariationOptions>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new VariationOptions()
                     });
-                }
-                if(variationOptionsDto.Id == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<VariationOptions>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Variation option id must not be null",
-                        ResponseObject = new VariationOptions()
-                    });
-                }
-                Variation variation = await _variationRepository.GetVariationByIdAsync
-                    (new Guid(variationOptionsDto.VariationId));
-                if (variation == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<VariationOptions>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No variations founded with id ({variationOptionsDto.VariationId})",
-                        ResponseObject = new VariationOptions()
-                    });
-                }
-                VariationOptions variationOptions = await _variationOptionsRepository.UpdateVariationOptionsAsync(
-                    ConvertFromDto.ConvertFromVariationOptions_Update(variationOptionsDto));
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<VariationOptions>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = $"Variation option updated successfully",
-                    ResponseObject = variationOptions
-                });
             }
             catch (Exception ex)
             {
@@ -214,25 +151,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                VariationOptions variationOptions = await _variationOptionsRepository.GetVariationOptionsByIdAsync
-                    (variationOptionId);
-                if (variationOptions == null)
+                var response = await _variationOptionsService.GetVariationOptionByVariationIdAsync(variationOptionId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<VariationOptions>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<VariationOptions>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No variation options founded with id ({variationOptionId})",
+                        Message = "Unknown error",
                         ResponseObject = new VariationOptions()
                     });
-                }
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<VariationOptions>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Variation option founded successfully",
-                    ResponseObject = variationOptions
-                });
             }
             catch (Exception ex)
             {
@@ -251,27 +182,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                VariationOptions variationOptions = await _variationOptionsRepository
-                    .GetVariationOptionsByIdAsync(variationOptionId);
-                if (variationOptions == null)
+                var response = await _variationOptionsService.DeleteVariationOptionByVariationIdAsync(variationOptionId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<VariationOptions>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<VariationOptions>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No variation options founded with id ({variationOptionId})",
+                        Message = "Unknown error",
                         ResponseObject = new VariationOptions()
                     });
-                }
-                VariationOptions deletedVariationOption = await _variationOptionsRepository
-                    .DeleteVariationOptionsByIdAsync(variationOptionId);
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<VariationOptions>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Variation option deleted successfully",
-                    ResponseObject = deletedVariationOption
-                });
             }
             catch (Exception ex)
             {

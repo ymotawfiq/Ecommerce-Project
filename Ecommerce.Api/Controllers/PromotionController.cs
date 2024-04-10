@@ -1,10 +1,7 @@
 ﻿using Ecommerce.Data.DTOs;
-using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
-using Ecommerce.Repository.Repositories.ProductCategoryRepository;
-using Ecommerce.Repository.Repositories.PromotionRepository;
-using Microsoft.AspNetCore.Http;
+using Ecommerce.Service.Services.PromotionService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -13,10 +10,10 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class PromotionController : ControllerBase
     {
-        private readonly IPromotion _promotionRepository;
-        public PromotionController(IPromotion _promotionRepository)
+        private readonly IPromotionService _promotionService;
+        public PromotionController(IPromotionService _promotionService)
         {
-            this._promotionRepository = _promotionRepository;
+            this._promotionService = _promotionService;
         }
 
         [HttpGet("allpromotions")]
@@ -24,25 +21,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var prromotions = await _promotionRepository.GetAllPromotionsAsync();
-                if (prromotions.ToList().Count == 0)
+                var response = await _promotionService.GetAllPromotionsAsync();
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<Promotion>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No Promotions founded",
-                        ResponseObject = prromotions
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<Promotion>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No Promotions founded",
-                        ResponseObject = prromotions
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Promotion>()
                     });
             }
             catch(Exception ex)
@@ -64,26 +54,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (promotionDto == null)
+                var response = await _promotionService.AddPromotionAsync(promotionDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<Promotion>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new Promotion()
-                    });
-                }
-                Promotion addedPromotion = await _promotionRepository.AddPromotionAsync(
-                    ConvertFromDto.ConvertFromPromotionDto_Add(promotionDto));
-                return StatusCode(StatusCodes.Status201Created
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 201,
-                        IsSuccess = true,
-                        Message = "Promotion created successfully",
-                        ResponseObject = addedPromotion
                     });
             }
             catch (Exception ex)
@@ -105,50 +87,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (promotionDto == null)
+                var response = await _promotionService.UpdatePromotionAsync(promotionDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<Promotion>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Input must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new Promotion()
-                    });
-                }
-                if (promotionDto.Id == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"You must enter promotion id",
-                        ResponseObject = new Promotion()
-                    });
-                }
-                Promotion oldPromotion = await _promotionRepository
-                    .GetPromotionByIdAsync(new Guid(promotionDto.Id));
-                if (oldPromotion == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"Promotion with id ({promotionDto.Id}) not exists",
-                        ResponseObject = new Promotion()
-                    });
-                }
-                Promotion updatedPromotion = await _promotionRepository.UpdatePromotionAsync(
-                    ConvertFromDto.ConvertFromPromotionDto_Update(promotionDto));
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Promotion updated successfully",
-                        ResponseObject = updatedPromotion
                     });
             }
             catch (Exception ex)
@@ -169,25 +119,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Promotion promotion = await _promotionRepository.GetPromotionByIdAsync(promotionId);
-                if (promotion == null)
+                var response = await _promotionService.GetPromotionByIdAsync(promotionId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<Promotion>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"Promotion with id ({promotionId}) not exists",
+                        Message = "Unknown error",
                         ResponseObject = new Promotion()
-                    });
-                }
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Promotion founded successfully",
-                        ResponseObject = promotion
                     });
             }
             catch (Exception ex)
@@ -209,26 +152,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Promotion promotion = await _promotionRepository.GetPromotionByIdAsync(promotionId);
-                if (promotion == null)
+                var response = await _promotionService.DeletePromotionByIdAsync(promotionId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<Promotion>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"Promotion with id ({promotionId}) not exists",
+                        Message = "Unknown error",
                         ResponseObject = new Promotion()
-                    });
-                }
-                Promotion deletedPromotion = await _promotionRepository.DeletePromotionByIdAsync(promotionId);
-                return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Promotion deleted successfully",
-                        ResponseObject = deletedPromotion
                     });
             }
             catch (Exception ex)

@@ -1,9 +1,8 @@
 ﻿using Ecommerce.Data.DTOs;
-using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
-using Ecommerce.Repository.Repositories.ProductCategoryRepository;
-using Ecommerce.Repository.Repositories.VariationRepository;
+
+using Ecommerce.Service.Services.VariationService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -12,12 +11,10 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     public class VariationController : ControllerBase
     {
-        private readonly IVariation _variationRepository;
-        private readonly IProductCategory _categoryRepository;
-        public VariationController(IVariation _variationRepository, IProductCategory _categoryRepository)
+        private readonly IVariationService _variationService;
+        public VariationController(IVariationService _variationService)
         {
-            this._categoryRepository = _categoryRepository;
-            this._variationRepository = _variationRepository;
+            this._variationService = _variationService;
         }
 
         [HttpGet("allvariations")]
@@ -25,25 +22,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var variations = await _variationRepository.GetAllVariationsAsync();
-                if (variations.ToList().Count == 0)
+                var response = await _variationService.GetAllVariationsAsync();
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<Variation>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No variations founded",
-                        ResponseObject = variations
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<Variation>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Variations founded successfully",
-                        ResponseObject = variations
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Variation>()
                     });
             }
             catch(Exception ex)
@@ -59,29 +49,22 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("allvariationsbycategoryId/{categoryId}")]
-        public async Task<IActionResult> GetAllVariationsAsync([FromRoute] Guid categoryId)
+        public async Task<IActionResult> GetAllVariationsByCategoryIdAsync([FromRoute] Guid categoryId)
         {
             try
             {
-                var variations = await _variationRepository.GetAllVariationsByCategoryIdAsync(categoryId);
-                if (variations.ToList().Count == 0)
+                var response = await _variationService.GetAllVariationsByCategoryIdAsync(categoryId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status200OK
-                    , new ApiResponse<IEnumerable<Variation>>
-                    {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "No variations founded",
-                        ResponseObject = variations
-                    });
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status200OK
+                return StatusCode(StatusCodes.Status400BadRequest
                     , new ApiResponse<IEnumerable<Variation>>
                     {
-                        StatusCode = 200,
-                        IsSuccess = true,
-                        Message = "Variations founded successfully",
-                        ResponseObject = variations
+                        StatusCode = 400,
+                        IsSuccess = false,
+                        Message = "Unknown error",
+                        ResponseObject = new List<Variation>()
                     });
             }
             catch (Exception ex)
@@ -101,37 +84,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (variationDto == null)
+                var response = await _variationService.AddVariationAsync(variationDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Variation>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Variation must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new Variation()
                     });
-                }
-                ProductCategory productCategory = await _categoryRepository.GetCategoryByIdAsync
-                    (new Guid(variationDto.CatrgoryId));
-                if (productCategory == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"Category with id ({variationDto.CatrgoryId}) not exists",
-                        ResponseObject = new Variation()
-                    });
-                }
-                Variation variation = await _variationRepository.AddVariationAsync(
-                    ConvertFromDto.ConvertFromVariationDto_Add(variationDto));
-                return StatusCode(StatusCodes.Status201Created, new ApiResponse<Variation>
-                {
-                    StatusCode = 201,
-                    IsSuccess = true,
-                    Message = "Variation created successfully",
-                    ResponseObject = variation
-                });
             }
             catch (Exception ex)
             {
@@ -150,59 +115,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                if (variationDto == null)
+                var response = await _variationService.UpdateVariationAsync(variationDto);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Variation>
                     {
                         StatusCode = 400,
                         IsSuccess = false,
-                        Message = "Variation must not be null",
+                        Message = "Unknown error",
                         ResponseObject = new Variation()
                     });
-                }
-                if (variationDto.Id == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Variation id must not be null",
-                        ResponseObject = new Variation()
-                    });
-                }
-                ProductCategory productCategory = await _categoryRepository.GetCategoryByIdAsync
-                    (new Guid(variationDto.CatrgoryId));
-                if (productCategory == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"Category with id ({variationDto.CatrgoryId}) not exists",
-                        ResponseObject = new Variation()
-                    });
-                }
-                Variation oldVariation = await _variationRepository.GetVariationByIdAsync
-                    (new Guid(variationDto.Id));
-                if(oldVariation == null)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = $"No variations founded with id ({variationDto.Id})",
-                        ResponseObject = new Variation()
-                    });   
-                }
-                Variation variation = await _variationRepository.UpdateVariationAsync(
-                    ConvertFromDto.ConvertFromVariationDto_Update(variationDto));
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<Variation>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Variation updated successfully",
-                    ResponseObject = variation
-                });
             }
             catch (Exception ex)
             {
@@ -221,25 +146,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Variation variation = await _variationRepository.GetVariationByIdAsync(variationId);
-                if(variation == null)
+                var response = await _variationService.DeleteVariationByIdAsync(variationId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, new ApiResponse<Variation>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Variation>
                     {
-                        StatusCode = 404,
+                        StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No variations founded with id ({variationId})",
+                        Message = "Unknown error",
                         ResponseObject = new Variation()
                     });
-                }
-                var deletedVariation = await _variationRepository.DeleteVariationByIdAsync(variationId);
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<Variation>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Variation deleted successfully",
-                    ResponseObject = deletedVariation
-                });
             }
             catch(Exception ex)
             {
@@ -258,24 +177,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                Variation variation = await _variationRepository.GetVariationByIdAsync(variationId);
-                if (variation == null)
+                var response = await _variationService.GetVariationByIdAsync(variationId);
+                if (response.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, new ApiResponse<Variation>
+                    return Ok(response);
+                }
+                return StatusCode(StatusCodes.Status400BadRequest
+                    , new ApiResponse<Variation>
                     {
-                        StatusCode = 404,
+                        StatusCode = 400,
                         IsSuccess = false,
-                        Message = $"No variations founded with id ({variationId})",
+                        Message = "Unknown error",
                         ResponseObject = new Variation()
                     });
-                }
-                return StatusCode(StatusCodes.Status200OK, new ApiResponse<Variation>
-                {
-                    StatusCode = 200,
-                    IsSuccess = true,
-                    Message = "Variation founded successfully",
-                    ResponseObject = variation
-                });
             }
             catch (Exception ex)
             {
