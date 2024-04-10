@@ -129,7 +129,7 @@ namespace Ecommerce.Api.Controllers
                         Message = $"Category with id ({productDto.CategoryId}) not found",
                     });
                 }
-                
+
                 if (productDto.Image == null)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>

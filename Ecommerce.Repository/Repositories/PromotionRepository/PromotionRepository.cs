@@ -18,7 +18,7 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
             try
             {
                 await _dbContext.Promotion.AddAsync(promotion);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return promotion;
             }
             catch (Exception)
@@ -34,7 +34,7 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
                 Promotion promotion = await GetPromotionByIdAsync(id);
                 _dbContext.Promotion.Attach(promotion);
                 _dbContext.Promotion.Remove(promotion);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return promotion;
             }
             catch (Exception)
@@ -74,9 +74,9 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Promotion> UpdatePromotionAsync(Promotion promotion)
@@ -88,7 +88,7 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
                 promotion1.StartDate = promotion.StartDate;
                 promotion1.EndDate = promotion.EndDate;
                 promotion1.Description = promotion.Description;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return promotion1;
             }
             catch (Exception)

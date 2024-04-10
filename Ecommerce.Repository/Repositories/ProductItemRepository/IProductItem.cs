@@ -12,7 +12,7 @@ namespace Ecommerce.Repository.Repositories.ProductItemRepository
         public Task<ProductItem> GetProductItemByIdAsync(Guid id);
         public Task<IEnumerable<ProductItem>> GetAllProductItemsByProductIdAsync(Guid productId);
         public Task<IEnumerable<ProductItem>> GetAllItemsAsync();
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<ProductItem> UpsertAsync(ProductItem productItem);
     }
 }

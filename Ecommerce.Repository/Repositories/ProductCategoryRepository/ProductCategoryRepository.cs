@@ -24,7 +24,7 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             {
                 await _dbContext.Category.AddAsync(productCategory);
                 
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productCategory;
             }
             catch(Exception)
@@ -40,7 +40,7 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
                 ProductCategory oldCategory = await GetCategoryByIdAsync(CategoryId);
                 _dbContext.Category.Attach(oldCategory);
                 _dbContext.Category.Remove(oldCategory);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return oldCategory;
             }
             catch (Exception)
@@ -56,7 +56,7 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
                 ProductCategory category = await GetCategoryByIdAsync(productCategory.Id);
                 category.ParentCategoryId = productCategory.ParentCategoryId;
                 category.CategoryName = productCategory.CategoryName;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return category;
             }
             catch (Exception)
@@ -95,9 +95,9 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<ProductCategory> UpsertAsync(ProductCategory productCategory)

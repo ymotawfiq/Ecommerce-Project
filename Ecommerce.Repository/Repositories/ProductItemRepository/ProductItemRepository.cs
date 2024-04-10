@@ -23,7 +23,7 @@ namespace Ecommerce.Repository.Repositories.ProductItemRepository
             try
             {
                 await _dbContext.ProductItem.AddAsync(productItem);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productItem;
             }
             catch (Exception)
@@ -39,7 +39,7 @@ namespace Ecommerce.Repository.Repositories.ProductItemRepository
                 ProductItem productItem = await GetProductItemByIdAsync(id);
                 _dbContext.ProductItem.Attach(productItem);
                 _dbContext.ProductItem.Remove(productItem);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productItem;
             }
             catch (Exception)
@@ -94,9 +94,9 @@ namespace Ecommerce.Repository.Repositories.ProductItemRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<ProductItem> UpdateProductItemAsync(ProductItem productItem)
@@ -108,7 +108,7 @@ namespace Ecommerce.Repository.Repositories.ProductItemRepository
                 productItem1.ProducItemImageUrl = productItem.ProducItemImageUrl;
                 productItem1.QuantityInStock = productItem.QuantityInStock;
                 productItem1.SKU = productItem.SKU;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productItem1;
             }
             catch (Exception)

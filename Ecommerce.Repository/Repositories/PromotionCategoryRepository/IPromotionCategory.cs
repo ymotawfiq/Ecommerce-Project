@@ -12,7 +12,7 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
         public Task<IEnumerable<PromotionCategory>> GetAllPromotionsAsync();
         public Task<IEnumerable<PromotionCategory>> GetAllPromotionsByPromotionIdAsync(Guid promotionId);
         public Task<IEnumerable<PromotionCategory>> GetAllPromotionsByCategoryIdAsync(Guid categoryId);
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<PromotionCategory> UpsertAsync(PromotionCategory promotionCategory);
     }
 }

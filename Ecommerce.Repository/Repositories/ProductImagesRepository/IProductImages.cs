@@ -12,8 +12,8 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
         public Task<ProductImages> DeleteProductImagesAsync(Guid id);
         public Task<ProductImages> GetProductImagesByIdAsync(Guid id);
         public Task<IEnumerable<ProductImages>> GetAllProductsImagesAsync();
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<ProductImages> UpsertAsync(ProductImages productImages);
-        public bool RemoveImagesByProductIdAsync(Guid productId);
+        public Task<bool> RemoveImagesByProductIdAsync(Guid productId);
     }
 }

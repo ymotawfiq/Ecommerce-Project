@@ -11,6 +11,6 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
         public Task<ProductCategory> GetCategoryByIdAsync(Guid CategoryId);
         public Task<IEnumerable<ProductCategory>> GetAllCategoriesAsync();
         public Task<ProductCategory> UpsertAsync(ProductCategory productCategory);
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
     }
 }

@@ -18,7 +18,7 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             try
             {
                 await _dbContext.Address.AddAsync(address);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return address;
             }
             catch (Exception)
@@ -34,7 +34,7 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
                 Address address = await GetAddressByIdAsync(addressId);
                 _dbContext.Address.Attach(address);
                 _dbContext.Address.Remove(address);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return address;
             }
             catch (Exception)
@@ -88,9 +88,9 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Address> UpdateAddressAsync(Address address)

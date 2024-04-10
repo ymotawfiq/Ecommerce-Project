@@ -14,7 +14,7 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
         public Task<Countary> DeleteCountaryByCountaryIdAsync(Guid countaryId);
         public Task<Countary> GetCountaryByCountaryIdAsync(Guid countaryId);
         public Task<IEnumerable<Countary>> GetAllCountariesAsync();
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<Countary> UpsertAsync(Countary countary);
     }
 }

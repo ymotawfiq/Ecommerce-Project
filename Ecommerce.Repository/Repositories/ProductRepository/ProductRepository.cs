@@ -22,7 +22,7 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             try
             {
                 await _dbContext.Product.AddAsync(product);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return product;
             }
             catch (Exception)
@@ -38,7 +38,7 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
                 Product product = await GetProductByIdAsync(productId);
                 //_dbContext.Product.Attach(product);
                 _dbContext.Product.Remove(product);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return product;
             }
             catch (Exception)
@@ -94,9 +94,9 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Product> UpdateProductAsync(Product product)
@@ -107,7 +107,7 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
                 product1.Name = product.Name;
                 product1.CategoryId = product.CategoryId;
                 product1.Description = product.Description;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return product1;
             }
             catch (Exception)

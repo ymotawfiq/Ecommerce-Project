@@ -10,7 +10,7 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
         public Task<Promotion> GetPromotionByIdAsync(Guid id);
         public Task<Promotion> DeletePromotionByIdAsync(Guid id);
         public Task<IEnumerable<Promotion>> GetAllPromotionsAsync();
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<Promotion> UpsertAsync(Promotion promotion);
     }
 }

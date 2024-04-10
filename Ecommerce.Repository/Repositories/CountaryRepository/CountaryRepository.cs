@@ -18,7 +18,7 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             try
             {
                 await _dbContext.Countary.AddAsync(countary);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return countary;
             }
             catch (Exception)
@@ -34,7 +34,7 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
                 Countary countary = await GetCountaryByCountaryIdAsync(countaryId);
                 _dbContext.Countary.Attach(countary);
                 _dbContext.Countary.Remove(countary);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return countary;
             }
             catch (Exception)
@@ -73,9 +73,9 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Countary> UpdateCountaryAsync(Countary countary)
@@ -84,7 +84,7 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             {
                 Countary countary1 = await GetCountaryByCountaryIdAsync(countary.Id);
                 countary1.Name = countary.Name;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return countary1;
             }
             catch (Exception)

@@ -12,7 +12,7 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
         public Task<VariationOptions> GetVariationOptionsByIdAsync(Guid id);
         public Task<IEnumerable<VariationOptions>> GetAllVariationOptionsAsync();
         public Task<IEnumerable<VariationOptions>> GetAllVariationOptionsByVariationIdAsync(Guid variationId);
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<VariationOptions> UpsertAsync(VariationOptions variationOptions);
     }
 }

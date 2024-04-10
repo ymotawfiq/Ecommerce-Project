@@ -22,7 +22,7 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             try
             {
                 await _dbContext.Variation.AddAsync(variation);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return variation;
             }
             catch (Exception)
@@ -38,7 +38,7 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
                 Variation variation = await GetVariationByIdAsync(variationId);
                 _dbContext.Variation.Attach(variation);
                 _dbContext.Variation.Remove(variation);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return variation;
             }
             catch (Exception)
@@ -94,9 +94,9 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Variation> UpdateVariationAsync(Variation variation)
@@ -107,7 +107,7 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
                 variation1.CategoryId = variation.CategoryId;
                 variation1.Name = variation.Name;
                 
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return variation1;
             }
             catch (Exception)

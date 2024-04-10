@@ -6,7 +6,7 @@ namespace Ecommerce.Data.DTOs
 {
     public class ProductDto
     {
-        public string? Id { get; set; }
+        public string? Id { get; set; } = string.Empty;
 
         [Required]
         public Guid CategoryId { get; set; }

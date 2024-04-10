@@ -24,7 +24,7 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             try
             {
                 await _dbContext.ProductVariation.AddAsync(productVariation);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productVariation;
             }
             catch (Exception)
@@ -40,7 +40,7 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
                 ProductVariation productVariation = await GetProductVariationByIdAsync(id);
                 _dbContext.ProductVariation.Attach(productVariation);
                 _dbContext.ProductVariation.Remove(productVariation);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productVariation;
             }
             catch (Exception)
@@ -111,9 +111,9 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<ProductVariation> UpdateProductVariationAsync(ProductVariation productVariation)
@@ -123,7 +123,7 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
                 ProductVariation productVariation1 = await GetProductVariationByIdAsync(productVariation.Id);
                 productVariation1.ProductItemId = productVariation.ProductItemId;
                 productVariation1.VariationOptionId = productVariation.VariationOptionId;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productVariation1;
             }
             catch (Exception)

@@ -12,7 +12,7 @@ namespace Ecommerce.Repository.Repositories.VariationRepository
         public Task<Variation> DeleteVariationByIdAsync(Guid variationId);
         public Task<IEnumerable<Variation>> GetAllVariationsAsync();
         public Task<IEnumerable<Variation>> GetAllVariationsByCategoryIdAsync(Guid categoryId);
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<Variation> UpsertAsync(Variation variation);
     }
 }

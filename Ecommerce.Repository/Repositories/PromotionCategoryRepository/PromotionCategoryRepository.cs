@@ -18,7 +18,7 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             try
             {
                 await _dbContext.PromotionCategory.AddAsync(promotionCategory);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return promotionCategory;
             }
             catch (Exception)
@@ -34,7 +34,7 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
                 PromotionCategory promotionCategory = await GetPromotionCategoryByIdAsync(id);
                 _dbContext.PromotionCategory.Attach(promotionCategory);
                 _dbContext.PromotionCategory.Remove(promotionCategory);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return promotionCategory;
             }
             catch (Exception)
@@ -103,9 +103,9 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<PromotionCategory> UpdatePromotionCategoryAsync(PromotionCategory promotionCategory)
@@ -115,7 +115,7 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
                 PromotionCategory promotionCategory1 = await GetPromotionCategoryByIdAsync(promotionCategory.Id);
                 promotionCategory1.PromotionId = promotionCategory.PromotionId;
                 promotionCategory1.CategoryId = promotionCategory.CategoryId;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return promotionCategory1;
             }
             catch (Exception)

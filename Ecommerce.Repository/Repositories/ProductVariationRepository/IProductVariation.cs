@@ -13,7 +13,7 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
         public Task<IEnumerable<ProductVariation>> GetAllProductVariationsAsync();
         public Task<IEnumerable<ProductVariation>> GetAllVariationsByProductItemIdAsync(Guid productItemId);
         public Task<IEnumerable<ProductVariation>> GetAllVariationsByVariationOptionIdAsync(Guid variationOptionId);
-        public void SaveChangesAsync();
+        public Task SaveChangesAsync();
         public Task<ProductVariation> UpsertAsync(ProductVariation productVariation);
 
     }

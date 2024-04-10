@@ -19,7 +19,7 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             try
             {
                 await _dbContext.ProductImages.AddAsync(productImages);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productImages;
             }
             catch (Exception)
@@ -35,7 +35,7 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
                 ProductImages productImages = await GetProductImagesByIdAsync(id);
                 _dbContext.ProductImages.Attach(productImages);
                 _dbContext.ProductImages.Remove(productImages);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productImages;
             }
             catch (Exception)
@@ -89,13 +89,13 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public bool RemoveImagesByProductIdAsync(Guid productId)
+        public async Task<bool> RemoveImagesByProductIdAsync(Guid productId)
         {
             try
             {
                 var images = _dbContext.ProductImages.Where(p => p.ProductId == productId);
                 _dbContext.ProductImages.RemoveRange(images);
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -104,9 +104,9 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             }
         }
 
-        public void SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<ProductImages> UpdateProductImagesAsync(ProductImages productImages)
@@ -115,7 +115,7 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             {
                 ProductImages productImages1 = await GetProductImagesByIdAsync(productImages.Id);
                 productImages1.ProductImageUrl = productImages.ProductImageUrl;
-                SaveChangesAsync();
+                await SaveChangesAsync();
                 return productImages1;
             }
             catch (Exception)
