@@ -190,9 +190,9 @@ namespace Ecommerce.Service.Services.AddressService
                 ConvertFromDto.ConvertFromAddressDto_Update(addressDto));
             return new ApiResponse<Address>
             {
-                StatusCode = 201,
+                StatusCode = 200,
                 IsSuccess = true,
-                Message = $"Address added successfully",
+                Message = $"Address updated successfully",
                 ResponseObject = updatedAddress
             };
         }

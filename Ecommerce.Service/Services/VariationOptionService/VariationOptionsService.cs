@@ -183,6 +183,18 @@ namespace Ecommerce.Service.Services.VariationOptionService
                     ResponseObject = new VariationOptions()
                 };
             }
+            VariationOptions oldVariationOptions = await _variationOptionsRepository
+                .GetVariationOptionsByIdAsync(new Guid(variationOptionsDto.Id));
+            if (oldVariationOptions == null)
+            {
+                return new ApiResponse<VariationOptions>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = $"No variation options founded with id ({variationOptionsDto.Id})",
+                    ResponseObject = new VariationOptions()
+                };
+            }
             VariationOptions variationOptions = await _variationOptionsRepository.UpdateVariationOptionsAsync(
                 ConvertFromDto.ConvertFromVariationOptions_Update(variationOptionsDto));
             return new ApiResponse<VariationOptions>

@@ -78,7 +78,7 @@ namespace Ecommerce.Service.Services.PromotionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No Promotions founded",
+                    Message = "Promotions founded successfully",
                     ResponseObject = prromotions
                 };
         }
