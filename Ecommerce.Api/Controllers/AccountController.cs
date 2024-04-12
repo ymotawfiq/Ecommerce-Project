@@ -1,5 +1,7 @@
 ﻿using Ecommerce.Data.DTOs.Authentication.Login;
 using Ecommerce.Data.DTOs.Authentication.Register;
+using Ecommerce.Data.DTOs.Authentication.ResetEmail;
+using Ecommerce.Data.DTOs.Authentication.ResetPassword;
 using Ecommerce.Data.DTOs.Authentication.User;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities.Authentication;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
+
 namespace Ecommerce.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -20,16 +23,18 @@ namespace Ecommerce.Api.Controllers
         private readonly UserManager<SiteUser> _userManager;
         private readonly IUserManagement _userManagementService;
         private readonly IEmailService _emailService;
+        private readonly SignInManager<SiteUser> _signInManager;
 
         public AccountController(UserManager<SiteUser> _userManager, IUserManagement _userManagementService,
-            IEmailService _emailService)
+            IEmailService _emailService, SignInManager<SiteUser> _signInManager)
         {
             this._userManager = _userManager;
             this._userManagementService = _userManagementService;
             this._emailService = _emailService;
+            this._signInManager = _signInManager;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserDto registerUserDto)
         {
 
@@ -89,26 +94,16 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(email);
-                if (user != null)
+                var response = await _userManagementService.ConfirmEmailAsync(token, email);
+                if (response.IsSuccess)
                 {
-                    var result = await _userManager.ConfirmEmailAsync(user, token);
-                    if (result.Succeeded)
-                    {
-                        return StatusCode(StatusCodes.Status200OK, new ApiResponse<SiteUser>
-                        {
-                            IsSuccess = true,
-                            Message = "Email verified successfully",
-                            StatusCode = 200,
-                        });
-                    }
+                    return Ok(response);
                 }
-                return StatusCode(StatusCodes.Status404NotFound, new ApiResponse<SiteUser>
+                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
                 {
+                    StatusCode = 400,
                     IsSuccess = false,
-                    Message = "User not exists",
-                    StatusCode = 404,
-                    ResponseObject = user
+                    Message = "Can't confirm email"
                 });
             }
             catch (Exception ex)
@@ -121,6 +116,51 @@ namespace Ecommerce.Api.Controllers
                 });
             }
         }
+
+
+        [HttpPost("resendconfirmationemail")]
+        public async Task<IActionResult> ResendConfirmationEmail(string email)
+        {
+            try
+            {
+                var token = await _userManagementService.ReSendEmailConfirmation(email);
+                if (token.IsSuccess)
+                {
+                    if (token.ResponseObject != null)
+                    {
+                        var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account"
+                                , new { token = token.ResponseObject, email = email }
+                                , Request.Scheme);
+                        var message = new Message(new string[] { email }
+                        , "Confirmation email link", confirmationLink!);
+                        var responseMsg = _emailService.SendEmail(message);
+                        return StatusCode(StatusCodes.Status200OK, new ApiResponse<string>
+                        {
+                            StatusCode = 200,
+                            IsSuccess = true,
+                            Message = "Confirmation email sent successfully to your email check your inbox"
+                        });
+                    }
+                }
+                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = "Can't send confirmation email"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                });
+            }
+
+        }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginUserDto loginUserDto)
@@ -226,6 +266,259 @@ namespace Ecommerce.Api.Controllers
         public async Task LogoutAsync()
         {
             await HttpContext.SignOutAsync();
+        }
+
+        [HttpPost("forgetpassword")]
+        public async Task<IActionResult> ForgetPasswordAsync(string email)
+        {
+            try
+            {
+                var response = await _userManagementService.GenerateResetPasswordTokenAsync(email);
+                if (response.IsSuccess)
+                {
+                    if (response.ResponseObject != null)
+                    {
+                        var forgetPasswordLink = Url.Action(nameof(GenerateResetPasswordObject), "Account",
+                        new { email = response.ResponseObject.Email, token = response.ResponseObject.Token }
+                        , Request.Scheme);
+
+
+                        var message = new Message(new string[] { response.ResponseObject.Email! }
+                        , "Forget password link", forgetPasswordLink);
+                        _emailService.SendEmail(message);
+                        return StatusCode(StatusCodes.Status200OK, new ApiResponse<string>
+                        {
+                            StatusCode = 200,
+                            IsSuccess = true,
+                            Message = "Forget password sent ssuccessfully to your email"
+                        });
+                    }
+                }
+
+                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = "Can't send forget password link to email please try again"
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("resendforgetpasswordemail")]
+        public async Task<IActionResult> ResendForgetPasswordEmailAsync(string email)
+        {
+            try
+            {
+                var response = await _userManagementService.GenerateResetPasswordTokenAsync(email);
+                if (response.IsSuccess)
+                {
+                    if (response.ResponseObject != null)
+                    {
+                        var forgetPasswordLink = Url.Action(nameof(GenerateResetPasswordObject), "Account",
+                        new { email = response.ResponseObject.Email, token = response.ResponseObject.Token }
+                        , Request.Scheme);
+
+
+                        var message = new Message(new string[] { response.ResponseObject.Email! }
+                        , "Forget password link", forgetPasswordLink);
+                        _emailService.SendEmail(message);
+                        return StatusCode(StatusCodes.Status200OK, new ApiResponse<string>
+                        {
+                            StatusCode = 200,
+                            IsSuccess = true,
+                            Message = "Forget password resent ssuccessfully to your email"
+                        });
+                    }
+                }
+
+                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = "Can't resend forget password link to email please try again"
+                });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<string>
+                {
+                    StatusCode = 500,
+                    IsSuccess = false,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("generateresetpasswordobject")]
+        public async Task<IActionResult> GenerateResetPasswordObject(string email, string token)
+        {
+            try
+            {
+                var resetPassword = new ResetPasswordDto
+                {
+                    Token = token,
+                    Email = email
+                };
+                return StatusCode(StatusCodes.Status200OK, new ApiResponse<ResetPasswordDto>
+                {
+                    StatusCode = 200,
+                    IsSuccess = true,
+                    Message = "Reset password object created",
+                    ResponseObject = resetPassword
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("resetpassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+        {
+            try
+            {
+                var response = await _userManagementService.ResetPasswordAsync(resetPasswordDto);
+                if (response.IsSuccess)
+                {
+                    return Ok(response);
+                }
+
+                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    StatusCode = 400,
+                    Message = "Failed to reset password"
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("sendemailtoresetemail")]
+        public async Task<IActionResult> SendEmailToResetEmailAsync(string oldEmail, string newEmail)
+        {
+            try
+            {
+                var response = await _userManagementService.GenerateResetEmailTokenAsync(
+                new ResetEmailDto
+                {
+                    OldEmail = oldEmail,
+                    NewEmail = newEmail
+                });
+                if (response.IsSuccess)
+                {
+                    if (response.ResponseObject != null)
+                    {
+                        var emailResetLink = Url.Action(nameof(GenerateEmailResetObject), "Account",
+                        new { OldEmail = oldEmail, NewEmail = newEmail, token = response.ResponseObject.Token }
+                        , Request.Scheme);
+
+
+                        var message = new Message(new string[] { response.ResponseObject.OldEmail! }
+                        , "Email reser link", emailResetLink);
+                        _emailService.SendEmail(message);
+                        return StatusCode(StatusCodes.Status200OK, new ApiResponse<string>
+                        {
+                            StatusCode = 200,
+                            IsSuccess = true,
+                            Message = "Email rest link sent to your email"
+                        });
+                    }
+                }
+                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = "Can't send reset email link" 
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("generateemailresetobject")]
+        public async Task<IActionResult> GenerateEmailResetObject(string OldEmail, string NewEmail, string token)
+        {
+            var resetEmailObject = new ResetEmailDto
+            {
+                NewEmail = NewEmail,
+                Token = token,
+                OldEmail = OldEmail
+            };
+            return StatusCode(StatusCodes.Status200OK, new ApiResponse<ResetEmailDto>
+            {
+                StatusCode = 200,
+                IsSuccess = true,
+                Message = "Reset email object created",
+                ResponseObject = resetEmailObject
+            });
+        }
+
+        [HttpPost("resetemail")]
+        public async Task<IActionResult> ResetEmailAsync([FromBody] ResetEmailDto resetEmail)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(resetEmail.OldEmail);
+                if (user != null)
+                {
+                    await _userManager.ChangeEmailAsync(user, resetEmail.NewEmail, resetEmail.Token);
+                    user.UserName = resetEmail.NewEmail;
+                    await _userManager.UpdateAsync(user);
+                    return StatusCode(StatusCodes.Status200OK, new ApiResponse<string>
+                    {
+                        StatusCode = 200,
+                        IsSuccess = true,
+                        Message = "Email changed successfully"
+                    });
+                }
+                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = "Unable to reset email"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    StatusCode = 500,
+                    Message = ex.Message
+                });
+            }
         }
 
 

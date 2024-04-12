@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Authorize(Roles = "User,Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CountaryController : ControllerBase
@@ -21,6 +21,7 @@ namespace Ecommerce.Api.Controllers
             this._countaryService = _countaryService;
         }
 
+  
         [HttpGet("allcountaries")]
         public async Task<IActionResult> GetAllCountariesAsync()
         {

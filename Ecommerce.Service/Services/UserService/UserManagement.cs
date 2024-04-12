@@ -1,16 +1,24 @@
 ﻿
 
+using Azure.Core;
 using Ecommerce.Data.DTOs.Authentication.Login;
 using Ecommerce.Data.DTOs.Authentication.Register;
+using Ecommerce.Data.DTOs.Authentication.ResetEmail;
+using Ecommerce.Data.DTOs.Authentication.ResetPassword;
 using Ecommerce.Data.DTOs.Authentication.User;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities.Authentication;
+using Ecommerce.Data.Models.MessageModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 
 namespace Ecommerce.Service.Services.UserService
@@ -32,6 +40,31 @@ namespace Ecommerce.Service.Services.UserService
             _configuration = configuration;
 
         }
+
+        public async Task<ApiResponse<string>> ConfirmEmailAsync(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                {
+                    return new ApiResponse<string>
+                    {
+                        IsSuccess = true,
+                        Message = "Email verified successfully",
+                        StatusCode = 200,
+                    };
+                }
+            }
+            return new ApiResponse<string>
+            {
+                IsSuccess = false,
+                Message = "User not exists",
+                StatusCode = 404,
+            };
+        }
+
         public async Task<ApiResponse<List<string>>> AssignRoleToUserAsync(List<string> roles, SiteUser user)
         {
             var assignrole = new List<string>();
@@ -52,6 +85,34 @@ namespace Ecommerce.Service.Services.UserService
                 Message = "Roles assigned successfully",
                 StatusCode = 200,
                 ResponseObject = assignrole
+            };
+        }
+
+        public async Task<ApiResponse<string>> ReSendEmailConfirmation(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return new ApiResponse<string>
+                {
+                    IsSuccess = false,
+                    Message = "User doesn't exist",
+                    StatusCode = 400
+                };
+            }
+            if (user.EmailConfirmed)
+            {
+                return new ApiResponse<string>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = "Email already confirmed"
+                };
+            }
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            return new ApiResponse<string>
+            {
+                ResponseObject = token
             };
         }
 
@@ -255,6 +316,98 @@ namespace Ecommerce.Service.Services.UserService
             return response;
         }
 
+        public async Task<ApiResponse<ResetPasswordDto>> GenerateResetPasswordTokenAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                return new ApiResponse<ResetPasswordDto>
+                {
+                    IsSuccess= true,
+                    StatusCode = 200,
+                    Message = "Reset password token generated successfully",
+                    ResponseObject = new ResetPasswordDto
+                    {
+                        Email = email,
+                        Token = token
+                    }
+                };
+            }
+            return new ApiResponse<ResetPasswordDto>
+            {
+                StatusCode = 400,
+                IsSuccess = false,
+                Message = "Can't generate reset password token"
+            };
+        }
+
+        public async Task<ApiResponse<string>> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        {
+            var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
+            if (user != null)
+            {
+                var resetPassword = await _userManager
+                    .ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
+                if (!resetPassword.Succeeded)
+                {
+                    return new ApiResponse<string>
+                    {
+                        IsSuccess = false,
+                        StatusCode = 400,
+                        Message = "Failed to reset password",
+                        ResponseObject = resetPassword.Errors.ToString()
+                    };
+                }
+
+                return new ApiResponse<string>
+                {
+                    StatusCode = 200,
+                    IsSuccess = true,
+                    Message = "Password reset successfully"
+                };
+            }
+            return new ApiResponse<string>
+            {
+                StatusCode = 400,
+                IsSuccess = false,
+                Message = "Can't send link to email please try again"
+            };
+        }
+
+        public async Task<ApiResponse<ResetEmailDto>> GenerateResetEmailTokenAsync(ResetEmailDto resetEmail)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(resetEmail.NewEmail);
+            if (existingUser != null)
+            {
+                return new ApiResponse<ResetEmailDto>
+                {
+                    StatusCode = 400,
+                    IsSuccess = false,
+                    Message = "Email already exists please provide another email"
+                };
+            }
+            var user = await _userManager.FindByEmailAsync(resetEmail.OldEmail);
+            if (user != null)
+            {
+                var token = await _userManager.GenerateChangeEmailTokenAsync(user, resetEmail.NewEmail);
+                resetEmail.Token = token;
+                return new ApiResponse<ResetEmailDto>
+                {
+                    IsSuccess = true,
+                    Message = "Reset email token generated successfully",
+                    StatusCode = 200,
+                    ResponseObject = resetEmail
+                };
+            }
+            return new ApiResponse<ResetEmailDto>
+            {
+                IsSuccess = true,
+                Message = "Can't generate reset email token",
+                StatusCode = 400,
+                ResponseObject = null
+            };
+        }
 
         #region PrivateMethods
         private JwtSecurityToken GetToken(List<Claim> authClaims)
