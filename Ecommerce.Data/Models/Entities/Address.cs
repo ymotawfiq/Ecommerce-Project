@@ -14,5 +14,6 @@ namespace Ecommerce.Data.Models.Entities
         public string Region { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
         public Countary? Countary { get; set; }
+        public List<UserAddress>? UserAddresses { get; set; }
     }
 }

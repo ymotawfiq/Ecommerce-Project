@@ -337,6 +337,32 @@ namespace Ecommerce.Data.Migrations
                     b.ToTable("PromotionCategory");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.UserAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit")
+                        .HasColumnName("Is Address Default");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAddresses");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Variation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -408,14 +434,14 @@ namespace Ecommerce.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "85f99fec-f866-42b8-818c-0ec91b364a8d",
+                            Id = "37fcdfab-c386-4a34-84ae-e512a5887277",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "02ad65ba-7536-47fc-9f88-237b8674f30e",
+                            Id = "7630ea8b-f7e9-4938-8c49-6093855f86f0",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
@@ -606,6 +632,23 @@ namespace Ecommerce.Data.Migrations
                     b.Navigation("Promotion");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.UserAddress", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Models.Entities.Address", "Address")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("AddressId");
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.Authentication.SiteUser", "User")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Variation", b =>
                 {
                     b.HasOne("Ecommerce.Data.Models.Entities.ProductCategory", "Category")
@@ -677,6 +720,16 @@ namespace Ecommerce.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Address", b =>
+                {
+                    b.Navigation("UserAddresses");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.Authentication.SiteUser", b =>
+                {
+                    b.Navigation("UserAddresses");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Countary", b =>

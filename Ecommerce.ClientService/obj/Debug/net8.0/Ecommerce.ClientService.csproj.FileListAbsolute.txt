@@ -1,0 +1,12 @@
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\bin\Debug\net8.0\Ecommerce.ClientService.deps.json
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\bin\Debug\net8.0\Ecommerce.ClientService.dll
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\bin\Debug\net8.0\Ecommerce.ClientService.pdb
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\Ecommerce.ClientService.GeneratedMSBuildEditorConfig.editorconfig
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\Ecommerce.ClientService.AssemblyInfoInputs.cache
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\Ecommerce.ClientService.AssemblyInfo.cs
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\Ecommerce.ClientService.csproj.CoreCompileInputs.cache
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\Ecommerce.ClientService.sourcelink.json
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\Ecommerce.ClientService.dll
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\refint\Ecommerce.ClientService.dll
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\Ecommerce.ClientService.pdb
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.ClientService\obj\Debug\net8.0\ref\Ecommerce.ClientService.dll

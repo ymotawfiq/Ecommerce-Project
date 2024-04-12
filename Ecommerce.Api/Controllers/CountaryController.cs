@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CountaryController : ControllerBase

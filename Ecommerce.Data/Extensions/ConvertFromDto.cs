@@ -272,6 +272,31 @@ namespace Ecommerce.Data.Extensions
             };
         }
 
+        public static UserAddress ConvertFromUserAddressDto_Add(UserAddressDto userAddressDto)
+        {
+            return new UserAddress
+            {
+                AddressId = new Guid(userAddressDto.AddressId),
+                UserId = userAddressDto.UserIdOrEmail,
+                IsDefault = userAddressDto.IsDefault
+            };
+        }
+
+        public static UserAddress ConvertFromUserAddressDto_Update(UserAddressDto userAddressDto)
+        {
+            if(userAddressDto.Id == null)
+            {
+                throw new NullReferenceException("User address id must not be null");
+            }
+            return new UserAddress
+            {
+                Id = new Guid(userAddressDto.Id),
+                AddressId = new Guid(userAddressDto.AddressId),
+                UserId = userAddressDto.UserIdOrEmail,
+                IsDefault = userAddressDto.IsDefault
+            };
+        }
+
 
     }
 }

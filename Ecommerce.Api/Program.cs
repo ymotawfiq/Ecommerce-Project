@@ -10,6 +10,7 @@ using Ecommerce.Repository.Repositories.ProductRepository;
 using Ecommerce.Repository.Repositories.ProductVariationRepository;
 using Ecommerce.Repository.Repositories.PromotionCategoryRepository;
 using Ecommerce.Repository.Repositories.PromotionRepository;
+using Ecommerce.Repository.Repositories.UserAddressRepository;
 using Ecommerce.Repository.Repositories.VariationOptionsRepository;
 using Ecommerce.Repository.Repositories.VariationRepository;
 using Ecommerce.Service.Services.AddressService;
@@ -21,6 +22,7 @@ using Ecommerce.Service.Services.ProductService.ProductService;
 using Ecommerce.Service.Services.ProductVariationService;
 using Ecommerce.Service.Services.PromotionCategoryService;
 using Ecommerce.Service.Services.PromotionService;
+using Ecommerce.Service.Services.UserAddressService;
 using Ecommerce.Service.Services.UserService;
 using Ecommerce.Service.Services.VariationOptionService;
 using Ecommerce.Service.Services.VariationService;
@@ -92,6 +94,7 @@ builder.Services.AddAuthentication(options =>
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -108,6 +111,7 @@ builder.Services.AddScoped<IPromotion, PromotionRepository>();
 builder.Services.AddScoped<IPromotionCategory, PromotionCategoryRepository>();
 builder.Services.AddScoped<ICountary, CountaryRepository>();
 builder.Services.AddScoped<IAddress, AddressRepository>();
+builder.Services.AddScoped<IUserAddress, UserAddressRepository>();
 // inject services
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -121,13 +125,14 @@ builder.Services.AddScoped<ICountaryService, CountaryService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IUserManagement, UserManagement>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserAddressService, UserAddressService>();
 
 
-//// to kill circular in json
-//builder.Services.AddControllers().AddJsonOptions(options =>
-//{
-//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-//});
+// to kill circular in json
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 
 
 builder.Services.AddEndpointsApiExplorer();

@@ -282,3 +282,7 @@ D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\obj\Debug\net8.
 D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\obj\Debug\net8.0\Ecommerce.Api.pdb
 D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\obj\Debug\net8.0\Ecommerce.Api.genruntimeconfig.cache
 D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\obj\Debug\net8.0\ref\Ecommerce.Api.dll
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\bin\Debug\net8.0\ASPSMS.dll
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\bin\Debug\net8.0\Twilio.dll
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\bin\Debug\net8.0\Twilio.AspNet.Common.dll
+D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Api\bin\Debug\net8.0\Twilio.AspNet.Core.dll

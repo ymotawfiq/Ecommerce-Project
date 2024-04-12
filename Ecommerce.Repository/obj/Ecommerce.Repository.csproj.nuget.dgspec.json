@@ -40,6 +40,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "ASPSMS": {
+              "target": "Package",
+              "version": "[0.0.2, )"
+            },
             "MailKit": {
               "target": "Package",
               "version": "[4.4.0, )"
@@ -91,6 +95,10 @@
             "NETCore.MailKit": {
               "target": "Package",
               "version": "[2.1.0, )"
+            },
+            "Twilio": {
+              "target": "Package",
+              "version": "[7.0.4, )"
             }
           },
           "imports": [

@@ -36,7 +36,8 @@ namespace Ecommerce.Data
                 .ApplyConfiguration(new PromotionCategoryConfiguration())
                 .ApplyConfiguration(new CountaryConfiguration())
                 .ApplyConfiguration(new AddressConfiguration())
-                .ApplyConfiguration(new SiteUserConfiguration());
+                .ApplyConfiguration(new SiteUserConfiguration())
+                .ApplyConfiguration(new UserAddressConnfiguration());
         }
 
         private void SeedRoles(ModelBuilder modelBuilder)
@@ -58,5 +59,6 @@ namespace Ecommerce.Data
         public DbSet<PromotionCategory> PromotionCategory { get; set; }
         public DbSet<Countary> Countary { get; set; }
         public DbSet<Address> Address { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
     }
 }

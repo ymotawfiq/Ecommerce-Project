@@ -136,7 +136,7 @@ namespace Ecommerce.Service.Services.UserService
                 UserName = registerUser.Email,
                 Email = registerUser.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                TwoFactorEnabled = true
+                TwoFactorEnabled = true,
             };
             var result = await _userManager.CreateAsync(user, registerUser.Password);
             if (result.Succeeded)

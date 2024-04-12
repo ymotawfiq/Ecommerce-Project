@@ -25,14 +25,20 @@ namespace Ecommerce.Api.Controllers
         private readonly IEmailService _emailService;
         private readonly SignInManager<SiteUser> _signInManager;
 
-        public AccountController(UserManager<SiteUser> _userManager, IUserManagement _userManagementService,
-            IEmailService _emailService, SignInManager<SiteUser> _signInManager)
+        public AccountController
+            (
+            UserManager<SiteUser> _userManager,
+            IUserManagement _userManagementService,
+            IEmailService _emailService,
+            SignInManager<SiteUser> _signInManager
+            )
         {
             this._userManager = _userManager;
             this._userManagementService = _userManagementService;
             this._emailService = _emailService;
             this._signInManager = _signInManager;
         }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserDto registerUserDto)
@@ -55,11 +61,12 @@ namespace Ecommerce.Api.Controllers
                     var message = new Message(new string[] { registerUserDto.Email }
                     , "Confirmation email link", confirmationLink!);
                     var responseMsg = _emailService.SendEmail(message);
+
                     return StatusCode(StatusCodes.Status200OK, new ApiResponse<RegisterUserDto>
                     {
                         IsSuccess = true,
                         StatusCode = 200,
-                        Message = $"{tokenResponse.Message} {responseMsg}"
+                        Message = $"Email verification link sent to ({registerUserDto.Email}) please check your inbox to verify your account"
                     });
                 }
                 return StatusCode(StatusCodes.Status500InternalServerError,
@@ -232,6 +239,7 @@ namespace Ecommerce.Api.Controllers
                 });
             }
         }
+
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshTokenAsync(LoginResponse tokens)
