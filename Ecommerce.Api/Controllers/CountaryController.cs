@@ -4,11 +4,13 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.CountaryRepository;
 using Ecommerce.Service.Services.CountaryService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
+    [Authorize(Roles = "User,Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CountaryController : ControllerBase

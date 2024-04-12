@@ -2,11 +2,14 @@
 
 using Ecommerce.Data.EntityConfigurations;
 using Ecommerce.Data.Models.Entities;
+using Ecommerce.Data.Models.Entities.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<SiteUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -17,6 +20,7 @@ namespace Ecommerce.Data
         {
             base.OnModelCreating(modelBuilder);
             ApplyEntitiesConfigurations(modelBuilder);
+            SeedRoles(modelBuilder);
         }
 
         private void ApplyEntitiesConfigurations(ModelBuilder modelBuilder)
@@ -31,7 +35,16 @@ namespace Ecommerce.Data
                 .ApplyConfiguration(new PromotionConfiguration())
                 .ApplyConfiguration(new PromotionCategoryConfiguration())
                 .ApplyConfiguration(new CountaryConfiguration())
-                .ApplyConfiguration(new AddressConfiguration());
+                .ApplyConfiguration(new AddressConfiguration())
+                .ApplyConfiguration(new SiteUserConfiguration());
+        }
+
+        private void SeedRoles(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole() { ConcurrencyStamp="1", Name = "Admin", NormalizedName = "Admin"},
+                new IdentityRole() { ConcurrencyStamp="2", Name = "User", NormalizedName="User"}
+                );
         }
 
         public DbSet<ProductCategory> Category { get; set; }
