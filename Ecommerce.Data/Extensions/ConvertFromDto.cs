@@ -298,5 +298,100 @@ namespace Ecommerce.Data.Extensions
         }
 
 
+        public static PaymentType ConvertFromPaymentTypeDto_Add(PaymentTypeDto paymentTypeDto)
+        {
+            return new PaymentType
+            {
+                Value = paymentTypeDto.Value
+            };
+        }
+
+        public static PaymentType ConvertFromPaymentTypeDto_Update(PaymentTypeDto paymentTypeDto)
+        {
+            if (paymentTypeDto.Id == null)
+            {
+                throw new NullReferenceException("Payment type id must not be null");
+            }
+            return new PaymentType
+            {
+                Id = new Guid(paymentTypeDto.Id),
+                Value = paymentTypeDto.Value
+            };
+        }
+
+
+        public static ShoppingCartItem ConvertFromShoppingCartItemDto_Add(ShoppingCartItemDto shoppingCartItemDto)
+        {
+            return new ShoppingCartItem
+            {
+                CartId = shoppingCartItemDto.CartId,
+                ProductItemId = shoppingCartItemDto.ProductItemId,
+                Qty = shoppingCartItemDto.Qty
+            };
+        }
+
+        public static ShoppingCartItem ConvertFromShoppingCartItemDto_Update(ShoppingCartItemDto shoppingCartItemDto)
+        {
+            if (shoppingCartItemDto.Id == null)
+            {
+                throw new NullReferenceException("Shopping cart id must not be null");
+            }
+            return new ShoppingCartItem
+            {
+                Id = new Guid(shoppingCartItemDto.Id),
+                CartId = shoppingCartItemDto.CartId,
+                ProductItemId = shoppingCartItemDto.ProductItemId,
+                Qty = shoppingCartItemDto.Qty
+            };
+        }
+
+        public static ShippingMethod ConvertFromShippingMethodDto_Add(ShippingMethodDto shippingMethodDto)
+        {
+            return new ShippingMethod
+            {
+                Name = shippingMethodDto.Name,
+                Price = shippingMethodDto.Price
+            };
+        }
+
+        public static ShippingMethod ConvertFromShippingMethodDto_Update(ShippingMethodDto shippingMethodDto)
+        {
+            if (shippingMethodDto.Id == null)
+            {
+                throw new NullReferenceException("Shipping method id must not be null");
+            }
+            return new ShippingMethod
+            {
+                Id = new Guid(shippingMethodDto.Id),
+                Name = shippingMethodDto.Name,
+                Price = shippingMethodDto.Price
+            };
+        }
+
+
+        public static OrderStatus ConvertFromOrderStatusDto_Add(OrderStatusDto orderStatusDto)
+        {
+            return new OrderStatus
+            {
+                Status = orderStatusDto.Status
+            };
+        }
+
+        public static OrderStatus ConvertFromOrderStatusDto_Update(OrderStatusDto orderStatusDto)
+        {
+            if(orderStatusDto.Id == null)
+            {
+                throw new NullReferenceException("Order status id must not be null");
+            }
+            return new OrderStatus
+            {
+                Id = new Guid(orderStatusDto.Id),
+                Status = orderStatusDto.Status
+            };
+        }
+
+
+
+
     }
 }

@@ -25,18 +25,7 @@ namespace Ecommerce.Api.Controllers
             {
                 var response = await _productService.GetAllProductsAsync();
 
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<IEnumerable<Product>>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Unknown error",
-                    ResponseObject = new List<Product>()
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -58,18 +47,7 @@ namespace Ecommerce.Api.Controllers
             {
                 var response = await _productService.GetAllProductsByCategoryIdAsync(categoryId);
 
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<IEnumerable<Product>>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Unknown error",
-                    ResponseObject = new List<Product>()
-                }); ;
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -92,18 +70,7 @@ namespace Ecommerce.Api.Controllers
             {
                 var response = await _productService.AddProductAsync(productDto);
 
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Unknown error",
-                    ResponseObject = new Product()
-                }); ;
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -124,18 +91,7 @@ namespace Ecommerce.Api.Controllers
             {
                 var response = await _productService.DeleteProductAsync(productId);
 
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Unknown error",
-                    ResponseObject = new Product()
-                }); ;
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -157,18 +113,7 @@ namespace Ecommerce.Api.Controllers
             {
                 var response = await _productService.UpdateProductAsync(productDto);
 
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Unknown error",
-                    ResponseObject = new Product()
-                }); ;
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -190,18 +135,7 @@ namespace Ecommerce.Api.Controllers
             {
                 var response = await _productService.GetProductByProductIdAsync(productId);
 
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<Product>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Unknown error",
-                    ResponseObject = new Product()
-                }); ;
+                return Ok(response);
             }
             catch (Exception ex)
             {

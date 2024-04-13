@@ -11,5 +11,7 @@ namespace Ecommerce.Data.Models.Entities.Authentication
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpierationDate { get; set; }
         public List<UserAddress>? UserAddresses { get; set; }
+        public List<UserPaymentMethod>? UserPaymentMethods { get; set; }
+        public List<ShoppingCart>? ShoppingCarts { get; set; }
     }
 }

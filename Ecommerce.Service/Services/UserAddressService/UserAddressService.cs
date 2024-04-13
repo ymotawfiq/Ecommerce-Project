@@ -109,7 +109,7 @@ namespace Ecommerce.Service.Services.UserAddressService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = "No user address founded"
+                    Message = "No user address found"
                 };
             }
             var deletedUser = await _userAddressRepository.DeleteUserAddressByIdAsync(userAddressId);
@@ -131,7 +131,7 @@ namespace Ecommerce.Service.Services.UserAddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "No user addresses founded",
+                        Message = "No user addresses found",
                         ResponseObject = userAddresses
                     };
             }
@@ -139,7 +139,7 @@ namespace Ecommerce.Service.Services.UserAddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "User addresses founded successfully",
+                        Message = "User addresses found successfully",
                         ResponseObject = userAddresses
                     };
         }
@@ -154,14 +154,14 @@ namespace Ecommerce.Service.Services.UserAddressService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = "No user address founded"
+                    Message = "No user address found"
                 };
             }
             return new ApiResponse<UserAddress>
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = "User address founded successfully",
+                Message = "User address found successfully",
                 ResponseObject = userAddress
             };
         }
@@ -175,7 +175,7 @@ namespace Ecommerce.Service.Services.UserAddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "No user addresses founded for this user",
+                        Message = "No user addresses found for this user",
                         ResponseObject = userAddressesById
                     };
             }
@@ -183,7 +183,7 @@ namespace Ecommerce.Service.Services.UserAddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "User addresses founded successfully",
+                        Message = "User addresses found successfully",
                         ResponseObject = userAddressesById
                     };
         }
@@ -191,15 +191,25 @@ namespace Ecommerce.Service.Services.UserAddressService
         public async Task<ApiResponse<IEnumerable<UserAddress>>> GetUserAddressesByUsernameOrEmailAsync
             (string userNameOrEmail)
         {
+            var user = await _userManager.FindByEmailAsync(userNameOrEmail);
+            if (user == null)
+            {
+                return new ApiResponse<IEnumerable<UserAddress>>
+                {
+                    IsSuccess = false,
+                    Message = "No user address methods found",
+                    StatusCode = 400,
+                };
+            }
             var userAddressesById = await _userAddressRepository
-                                .GetAllUsersAddressesByUserNameOrEmailAsync(userNameOrEmail);
+                                .GetAllUsersAddressesByUserIdAsync(new Guid(user.Id));
             if (userAddressesById.ToList().Count == 0)
             {
                 return new ApiResponse<IEnumerable<UserAddress>>
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "No user addresses founded for this user",
+                        Message = "No user addresses found for this user",
                         ResponseObject = userAddressesById
                     };
             }
@@ -207,7 +217,7 @@ namespace Ecommerce.Service.Services.UserAddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "User addresses founded successfully",
+                        Message = "User addresses found successfully",
                         ResponseObject = userAddressesById
                     };
         }

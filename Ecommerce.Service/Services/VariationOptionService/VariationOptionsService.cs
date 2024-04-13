@@ -41,7 +41,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variations founded with id ({variationOptionsDto.VariationId})",
+                    Message = $"No variations found with id ({variationOptionsDto.VariationId})",
                     ResponseObject = new VariationOptions()
                 };
             }
@@ -66,7 +66,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variation options founded with id ({variationOptionId})",
+                    Message = $"No variation options found with id ({variationOptionId})",
                     ResponseObject = new VariationOptions()
                 };
             }
@@ -90,7 +90,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No variation options founded",
+                    Message = "No variation options found",
                     ResponseObject = variationOptions
                 };
             }
@@ -98,7 +98,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Variation options founded successfully",
+                    Message = "Variation options found successfully",
                     ResponseObject = variationOptions
                 };
         }
@@ -113,7 +113,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No variation options founded",
+                    Message = "No variation options found",
                     ResponseObject = variationOptions
                 };
             }
@@ -121,7 +121,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Variation options founded successfully",
+                    Message = "Variation options found successfully",
                     ResponseObject = variationOptions
                 };
         }
@@ -136,7 +136,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variation options founded with id ({variationOptionId})",
+                    Message = $"No variation options found with id ({variationOptionId})",
                     ResponseObject = new VariationOptions()
                 };
             }
@@ -144,7 +144,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = "Variation option founded successfully",
+                Message = "Variation option found successfully",
                 ResponseObject = variationOptions
             };
         }
@@ -179,7 +179,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variations founded with id ({variationOptionsDto.VariationId})",
+                    Message = $"No variations found with id ({variationOptionsDto.VariationId})",
                     ResponseObject = new VariationOptions()
                 };
             }
@@ -191,7 +191,7 @@ namespace Ecommerce.Service.Services.VariationOptionService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variation options founded with id ({variationOptionsDto.Id})",
+                    Message = $"No variation options found with id ({variationOptionsDto.Id})",
                     ResponseObject = new VariationOptions()
                 };
             }

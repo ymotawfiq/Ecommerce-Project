@@ -3,15 +3,19 @@
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Ecommerce.Data.Models.Entities.Authentication;
 
 namespace Ecommerce.Repository.Repositories.UserAddressRepository
 {
     public class UserAddressRepository : IUserAddress
     {
         private readonly ApplicationDbContext _dbContext;
-        public UserAddressRepository(ApplicationDbContext _dbContext)
+        private readonly UserManager<SiteUser> _userManager;
+        public UserAddressRepository(ApplicationDbContext _dbContext, UserManager<SiteUser> _userManager)
         {
             this._dbContext = _dbContext;
+            this._userManager = _userManager;
         }
 
         public async Task<UserAddress> AddUserAddressAsync(UserAddress userAddress)
@@ -74,10 +78,9 @@ namespace Ecommerce.Repository.Repositories.UserAddressRepository
         {
             try
             {
+                var user = await _userManager.FindByEmailAsync(userNameOrEmail);
                 return
-                    from u in await GetAllUsersAddressesAsync()
-                    where u.User.UserName == userNameOrEmail || u.User.Email == userNameOrEmail
-                    select u;
+                    await GetAllUsersAddressesByUserIdAsync(new Guid(user.Id));
             }
             catch (Exception)
             {

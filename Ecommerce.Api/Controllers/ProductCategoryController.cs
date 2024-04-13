@@ -28,18 +28,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _cateegoryService.GetAllCategoriesAsync();
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<IEnumerable<ProductCategory>>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Unknown error",
-                    ResponseObject = new List<ProductCategory>()
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -60,18 +49,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _cateegoryService.AddCategoryAsync(productCategoryDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductCategory>
-                    {
-                        IsSuccess = false,
-                        StatusCode = 400,
-                        Message = "Unknown error",
-                        ResponseObject = new ProductCategory()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -91,18 +69,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _cateegoryService.GetCategoryByIdAsync(categoryId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductCategory>
-                    {
-                        IsSuccess = false,
-                        StatusCode = 400,
-                        Message = "Unknown error",
-                        ResponseObject = new ProductCategory()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -122,18 +89,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _cateegoryService.UpdateCategoryAsync(productCategoryDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductCategory>
-                    {
-                        IsSuccess = false,
-                        StatusCode = 400,
-                        Message = "Unknown error",
-                        ResponseObject = new ProductCategory()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -153,18 +109,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _cateegoryService.DeleteCategoryByCategoryIdAsync(categoryId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<ProductCategory>
-                    {
-                        IsSuccess = false,
-                        StatusCode = 400,
-                        Message = "Unknown error",
-                        ResponseObject = new ProductCategory()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {

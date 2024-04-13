@@ -26,18 +26,24 @@ namespace Ecommerce.Data
         private void ApplyEntitiesConfigurations(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration())
-                .ApplyConfiguration(new ProductConfiguration())
-                .ApplyConfiguration(new ProductItemConfiguration())
-                .ApplyConfiguration(new ProductVariationConfiguration())
-                .ApplyConfiguration(new VariationConfigurations())
-                .ApplyConfiguration(new VariationOptionsConfiguration())
-                .ApplyConfiguration(new ProductImagesConfigurations())
-                .ApplyConfiguration(new PromotionConfiguration())
-                .ApplyConfiguration(new PromotionCategoryConfiguration())
-                .ApplyConfiguration(new CountaryConfiguration())
-                .ApplyConfiguration(new AddressConfiguration())
-                .ApplyConfiguration(new SiteUserConfiguration())
-                .ApplyConfiguration(new UserAddressConnfiguration());
+                        .ApplyConfiguration(new ProductConfiguration())
+                        .ApplyConfiguration(new ProductItemConfiguration())
+                        .ApplyConfiguration(new ProductVariationConfiguration())
+                        .ApplyConfiguration(new VariationConfigurations())
+                        .ApplyConfiguration(new VariationOptionsConfiguration())
+                        .ApplyConfiguration(new ProductImagesConfigurations())
+                        .ApplyConfiguration(new PromotionConfiguration())
+                        .ApplyConfiguration(new PromotionCategoryConfiguration())
+                        .ApplyConfiguration(new CountaryConfiguration())
+                        .ApplyConfiguration(new AddressConfiguration())
+                        .ApplyConfiguration(new SiteUserConfiguration())
+                        .ApplyConfiguration(new UserAddressConnfiguration())
+                        .ApplyConfiguration(new PaymentTypeConfiguration())
+                        .ApplyConfiguration(new UserPaymentMethodConfiguration())
+                        .ApplyConfiguration(new ShoppingCartConfiguration())
+                        .ApplyConfiguration(new ShoppingCartItemConfiguration())
+                        .ApplyConfiguration(new ShippingMethodConfiguration())
+                        .ApplyConfiguration(new OrderStatusConfiguration());
         }
 
         private void SeedRoles(ModelBuilder modelBuilder)
@@ -60,5 +66,11 @@ namespace Ecommerce.Data
         public DbSet<Countary> Countary { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<PaymentType> PaymentType { get; set; }
+        public DbSet<UserPaymentMethod> UserPaymentMethod { get; set; }
+        public DbSet<ShoppingCart> ShoppingCart { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
+        public DbSet<ShippingMethod> ShippingMethod { get; set; }
+        public DbSet<OrderStatus> OrderStatus { get; set; }
     }
 }

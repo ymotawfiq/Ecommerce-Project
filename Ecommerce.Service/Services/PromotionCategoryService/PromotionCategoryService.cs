@@ -85,7 +85,7 @@ namespace Ecommerce.Service.Services.PromotionCategoryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No promotion category founded",
+                    Message = "No promotion category found",
                     ResponseObject = promotionCategories
                 };
             }
@@ -93,7 +93,7 @@ namespace Ecommerce.Service.Services.PromotionCategoryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Promotion category founded successfully",
+                    Message = "Promotion category found successfully",
                     ResponseObject = promotionCategories
                 };
         }
@@ -108,7 +108,7 @@ namespace Ecommerce.Service.Services.PromotionCategoryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = $"No promotion category founded with category id ({categoryId})",
+                    Message = $"No promotion category found with category id ({categoryId})",
                     ResponseObject = promotionCategories
                 };
             }
@@ -116,7 +116,7 @@ namespace Ecommerce.Service.Services.PromotionCategoryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Promotion category founded successfully",
+                    Message = "Promotion category found successfully",
                     ResponseObject = promotionCategories
                 };
         }
@@ -131,7 +131,7 @@ namespace Ecommerce.Service.Services.PromotionCategoryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = $"No promotion category founded with promotion id ({promotionId})",
+                    Message = $"No promotion category found with promotion id ({promotionId})",
                     ResponseObject = promotionCategories
                 };
             }
@@ -139,7 +139,7 @@ namespace Ecommerce.Service.Services.PromotionCategoryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Promotion category founded successfully",
+                    Message = "Promotion category found successfully",
                     ResponseObject = promotionCategories
                 };
         }
@@ -162,7 +162,7 @@ namespace Ecommerce.Service.Services.PromotionCategoryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = $"Promotion category founded successfully",
+                    Message = $"Promotion category found successfully",
                     ResponseObject = promotionCategory
                 };
         }

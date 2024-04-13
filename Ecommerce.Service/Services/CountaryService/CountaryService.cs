@@ -48,7 +48,7 @@ namespace Ecommerce.Service.Services.CountaryService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No country founded with id ({countaryId})",
+                    Message = $"No country found with id ({countaryId})",
                     ResponseObject = new Countary()
                 };
             }
@@ -71,7 +71,7 @@ namespace Ecommerce.Service.Services.CountaryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No countaries founded",
+                    Message = "No countaries found",
                     ResponseObject = countaries
                 };
             }
@@ -79,7 +79,7 @@ namespace Ecommerce.Service.Services.CountaryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Countaries founded successfully",
+                    Message = "Countaries found successfully",
                     ResponseObject = countaries
                 };
         }
@@ -93,7 +93,7 @@ namespace Ecommerce.Service.Services.CountaryService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No country founded with id ({countaryId})",
+                    Message = $"No country found with id ({countaryId})",
                     ResponseObject = new Countary()
                 };
             }
@@ -101,7 +101,7 @@ namespace Ecommerce.Service.Services.CountaryService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = $"Countary founded successfully",
+                    Message = $"Countary found successfully",
                     ResponseObject = countary
                 };
         }
@@ -136,7 +136,7 @@ namespace Ecommerce.Service.Services.CountaryService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No country founded with id ({countaryDto.Id})",
+                    Message = $"No country found with id ({countaryDto.Id})",
                     ResponseObject = new Countary()
                 };
             }

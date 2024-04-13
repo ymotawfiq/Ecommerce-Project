@@ -38,7 +38,7 @@ namespace Ecommerce.Service.Services.AddressService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No countaries founded with id ({addressDto.CountaryId})",
+                    Message = $"No countaries found with id ({addressDto.CountaryId})",
                     ResponseObject = new Address()
                 };
             }
@@ -62,7 +62,7 @@ namespace Ecommerce.Service.Services.AddressService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No address founded with id ({addressId})",
+                    Message = $"No address found with id ({addressId})",
                     ResponseObject = new Address()
                 };
             }
@@ -85,7 +85,7 @@ namespace Ecommerce.Service.Services.AddressService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No address founded with id ({addressId})",
+                    Message = $"No address found with id ({addressId})",
                     ResponseObject = new Address()
                 };
             }
@@ -93,7 +93,7 @@ namespace Ecommerce.Service.Services.AddressService
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = $"Address founded successfully",
+                Message = $"Address found successfully",
                 ResponseObject = address
             };
         }
@@ -107,7 +107,7 @@ namespace Ecommerce.Service.Services.AddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "No addresses founded",
+                        Message = "No addresses found",
                         ResponseObject = addresses
                     };
             }
@@ -115,7 +115,7 @@ namespace Ecommerce.Service.Services.AddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "Addresses founded successfully",
+                        Message = "Addresses found successfully",
                         ResponseObject = addresses
                     };
         }
@@ -129,7 +129,7 @@ namespace Ecommerce.Service.Services.AddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "No addresses founded for this countary",
+                        Message = "No addresses found for this countary",
                         ResponseObject = addresses
                     };
             }
@@ -137,7 +137,7 @@ namespace Ecommerce.Service.Services.AddressService
                     {
                         StatusCode = 200,
                         IsSuccess = true,
-                        Message = "Addresses founded successfully",
+                        Message = "Addresses found successfully",
                         ResponseObject = addresses
                     };
         }
@@ -171,7 +171,7 @@ namespace Ecommerce.Service.Services.AddressService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No addresses founded with id ({addressDto.Id})",
+                    Message = $"No addresses found with id ({addressDto.Id})",
                     ResponseObject = new Address()
                 };
             }
@@ -182,7 +182,7 @@ namespace Ecommerce.Service.Services.AddressService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No countaries founded with id ({addressDto.CountaryId})",
+                    Message = $"No countaries found with id ({addressDto.CountaryId})",
                     ResponseObject = new Address()
                 };
             }

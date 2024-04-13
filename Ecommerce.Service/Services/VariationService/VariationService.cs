@@ -6,6 +6,7 @@ using Ecommerce.Repository.Repositories.ProductCategoryRepository;
 using Ecommerce.Repository.Repositories.VariationRepository;
 using Microsoft.AspNetCore.Http;
 
+
 namespace Ecommerce.Service.Services.VariationService
 {
     public class VariationService : IVariationService
@@ -62,7 +63,7 @@ namespace Ecommerce.Service.Services.VariationService
                 {
                     StatusCode = 404,
                     IsSuccess = false,
-                    Message = $"No variations founded with id ({variationId})",
+                    Message = $"No variations found with id ({variationId})",
                     ResponseObject = new Variation()
                 };
             }
@@ -85,7 +86,7 @@ namespace Ecommerce.Service.Services.VariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No variations founded",
+                    Message = "No variations found",
                     ResponseObject = variations
                 };
             }
@@ -93,7 +94,7 @@ namespace Ecommerce.Service.Services.VariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Variations founded successfully",
+                    Message = "Variations found successfully",
                     ResponseObject = variations
                 };
         }
@@ -107,7 +108,7 @@ namespace Ecommerce.Service.Services.VariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No variations founded",
+                    Message = "No variations found",
                     ResponseObject = variations
                 };
             }
@@ -115,7 +116,7 @@ namespace Ecommerce.Service.Services.VariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Variations founded successfully",
+                    Message = "Variations found successfully",
                     ResponseObject = variations
                 };
         }
@@ -129,7 +130,7 @@ namespace Ecommerce.Service.Services.VariationService
                 {
                     StatusCode = 404,
                     IsSuccess = false,
-                    Message = $"No variations founded with id ({variationId})",
+                    Message = $"No variations found with id ({variationId})",
                     ResponseObject = new Variation()
                 };
             }
@@ -137,7 +138,7 @@ namespace Ecommerce.Service.Services.VariationService
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = "Variation founded successfully",
+                Message = "Variation found successfully",
                 ResponseObject = variation
             };
         }
@@ -184,7 +185,7 @@ namespace Ecommerce.Service.Services.VariationService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variations founded with id ({variationDto.Id})",
+                    Message = $"No variations found with id ({variationDto.Id})",
                     ResponseObject = new Variation()
                 };
             }

@@ -12,6 +12,7 @@ namespace Ecommerce.Data.Models.Entities
         public decimal Price { get; set; }
         public Product? Product { get; set; }
         public HashSet<ProductVariation>? ProductVariation2 { get; set; }
+        public List<ShoppingCartItem>? ShoppingCartItems { get; set; }
 
     }
 }

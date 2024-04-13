@@ -51,7 +51,7 @@ namespace Ecommerce.Service.Services.ProductService.ProductService
                     {
                         IsSuccess = false,
                         StatusCode = 400,
-                        Message = $"No categories founded with id ({productDto.CategoryId})",
+                        Message = $"No categories found with id ({productDto.CategoryId})",
                         ResponseObject = new Product()
                     };
                 }
@@ -202,7 +202,7 @@ namespace Ecommerce.Service.Services.ProductService.ProductService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Product founded successfully",
+                    Message = "Product found successfully",
                     ResponseObject = ExistingProduct
                 };
             }
@@ -260,7 +260,7 @@ namespace Ecommerce.Service.Services.ProductService.ProductService
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = "Products founded successfully",
+                Message = "Products found successfully",
                 ResponseObject = products
             };
             
@@ -385,7 +385,7 @@ namespace Ecommerce.Service.Services.ProductService.ProductService
                 //{
                 //    DeleteExistingProductImage(productImageDto.ImageUrl);
                 //}
-                string path = @"D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Client\wwwroot";
+                string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Api/";
 
                 string uploadsFolder = Path.Combine(path, "Images/Products");
                 if (!Directory.Exists(uploadsFolder))
@@ -406,7 +406,7 @@ namespace Ecommerce.Service.Services.ProductService.ProductService
 
         private void DeleteExistingProductImage(string imageUrl)
         {
-            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/Products/";
+            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Api/Images/Products/";
             string existingImage = Path.Combine(path, $"{imageUrl}");
             if (File.Exists(existingImage))
             {
@@ -416,7 +416,7 @@ namespace Ecommerce.Service.Services.ProductService.ProductService
 
         private void DeleteExistingItemImage(string imageUrl)
         {
-            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/ProductItems/";
+            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Api/Images/ProductItems/";
             string existingImage = Path.Combine(path, $"{imageUrl}");
             if (File.Exists(existingImage))
             {

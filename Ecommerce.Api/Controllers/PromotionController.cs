@@ -22,18 +22,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _promotionService.GetAllPromotionsAsync();
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<IEnumerable<Promotion>>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new List<Promotion>()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -55,18 +44,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _promotionService.AddPromotionAsync(promotionDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Promotion()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -88,18 +66,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _promotionService.UpdatePromotionAsync(promotionDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Promotion()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -120,18 +87,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _promotionService.GetPromotionByIdAsync(promotionId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Promotion()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -153,18 +109,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _promotionService.DeletePromotionByIdAsync(promotionId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Promotion>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Promotion()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {

@@ -70,7 +70,7 @@ namespace Ecommerce.Service.Services.PromotionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No Promotions founded",
+                    Message = "No Promotions found",
                     ResponseObject = prromotions
                 };
             }
@@ -78,7 +78,7 @@ namespace Ecommerce.Service.Services.PromotionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Promotions founded successfully",
+                    Message = "Promotions found successfully",
                     ResponseObject = prromotions
                 };
         }
@@ -100,7 +100,7 @@ namespace Ecommerce.Service.Services.PromotionService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Promotion founded successfully",
+                    Message = "Promotion found successfully",
                     ResponseObject = promotion
                 };
         }

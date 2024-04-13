@@ -26,16 +26,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _userAddressService.GetAllUserAddressAsync();
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<UserAddress>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Failed to get users addresses"
-                });
+                return Ok(response);
             }
             catch(Exception ex) 
             {
@@ -55,16 +46,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _userAddressService.GetUserAddressesByUserIdAsync(userId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<UserAddress>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Failed to get users addresses for this user"
-                });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -79,23 +61,14 @@ namespace Ecommerce.Api.Controllers
 
 
 
-        [HttpPost("getuseraddressesbyusernameoremail")]
+        [HttpGet("getuseraddressesbyusernameoremail")]
         public async Task<IActionResult> GetUserAddressesByUsernameOrEmailAsync
             (string userNameOrEmail)
         {
             try
             {
                 var response = await _userAddressService.GetUserAddressesByUsernameOrEmailAsync(userNameOrEmail);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<UserAddress>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Failed to get users addresses for this user"
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -114,16 +87,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _userAddressService.AddUserAddressAsync(userAddressDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<UserAddress>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Failed to add user addresse"
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -143,16 +107,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _userAddressService.UpdateUserAddressAsync(userAddressDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<UserAddress>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Failed to update user addresse"
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -171,16 +126,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _userAddressService.GetUserAddressByIdAsync(userAddressId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<UserAddress>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Failed to find user addresse"
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -199,16 +145,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _userAddressService.DeleteUserAddressByIdAsync(userAddressId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<UserAddress>
-                {
-                    StatusCode = 400,
-                    IsSuccess = false,
-                    Message = "Failed to delete user addresse"
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {

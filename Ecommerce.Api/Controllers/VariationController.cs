@@ -23,18 +23,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _variationService.GetAllVariationsAsync();
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<IEnumerable<Variation>>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new List<Variation>()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -54,18 +43,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _variationService.GetAllVariationsByCategoryIdAsync(categoryId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<IEnumerable<Variation>>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new List<Variation>()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -85,18 +63,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _variationService.AddVariationAsync(variationDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Variation()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -116,18 +83,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _variationService.UpdateVariationAsync(variationDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Variation()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -147,18 +103,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _variationService.DeleteVariationByIdAsync(variationId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Variation()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -178,18 +123,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _variationService.GetVariationByIdAsync(variationId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Variation>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Variation()
-                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {

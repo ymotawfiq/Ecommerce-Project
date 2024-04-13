@@ -26,18 +26,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _productItemService.GetAllItemsAsync();
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<IEnumerable<Address>>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new List<Address>()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -57,18 +46,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _productItemService.GetAllItemsByProductIdAsync(productId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<IEnumerable<Address>>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new List<Address>()
-                    });
+                return Ok(response);
             }
             catch(Exception ex)
             {
@@ -88,18 +66,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _productItemService.AddItemAsync(productItemDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Address()
-                    });
+                return Ok(response);
 
             }
             catch (Exception ex)
@@ -121,18 +88,7 @@ namespace Ecommerce.Api.Controllers
             {
 
                 var response = await _productItemService.UpdateItemAsync(productItemDto);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Address()
-                    });
+                return Ok(response);
 
             }
             catch (Exception ex)
@@ -153,18 +109,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _productItemService.DeleteItemAsync(itemId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Address()
-                    });
+                return Ok(response);
 
             }
             catch (Exception ex)
@@ -185,18 +130,7 @@ namespace Ecommerce.Api.Controllers
             try
             {
                 var response = await _productItemService.GetItemByIdAsync(itemId);
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return StatusCode(StatusCodes.Status400BadRequest
-                    , new ApiResponse<Address>
-                    {
-                        StatusCode = 400,
-                        IsSuccess = false,
-                        Message = "Unknown error",
-                        ResponseObject = new Address()
-                    });
+                return Ok(response);
 
             }
             catch (Exception ex)

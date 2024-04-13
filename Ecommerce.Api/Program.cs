@@ -3,6 +3,8 @@ using Ecommerce.Data.Models.EmailModel;
 using Ecommerce.Data.Models.Entities.Authentication;
 using Ecommerce.Repository.Repositories.AddressRepository;
 using Ecommerce.Repository.Repositories.CountaryRepository;
+using Ecommerce.Repository.Repositories.OrderStatusRepository;
+using Ecommerce.Repository.Repositories.PaymentTypeRepository;
 using Ecommerce.Repository.Repositories.ProductCategoryRepository;
 using Ecommerce.Repository.Repositories.ProductImagesRepository;
 using Ecommerce.Repository.Repositories.ProductItemRepository;
@@ -10,19 +12,29 @@ using Ecommerce.Repository.Repositories.ProductRepository;
 using Ecommerce.Repository.Repositories.ProductVariationRepository;
 using Ecommerce.Repository.Repositories.PromotionCategoryRepository;
 using Ecommerce.Repository.Repositories.PromotionRepository;
+using Ecommerce.Repository.Repositories.ShippingMethodRepository;
+using Ecommerce.Repository.Repositories.ShoppingCartItemRepository;
+using Ecommerce.Repository.Repositories.ShoppingCartRepository;
 using Ecommerce.Repository.Repositories.UserAddressRepository;
+using Ecommerce.Repository.Repositories.UserPaymentMethodRepository;
 using Ecommerce.Repository.Repositories.VariationOptionsRepository;
 using Ecommerce.Repository.Repositories.VariationRepository;
 using Ecommerce.Service.Services.AddressService;
 using Ecommerce.Service.Services.CountaryService;
 using Ecommerce.Service.Services.EmailService;
+using Ecommerce.Service.Services.OrderStatusService;
+using Ecommerce.Service.Services.PaymentTypeService;
 using Ecommerce.Service.Services.ProductCategoryService;
 using Ecommerce.Service.Services.ProductItemService;
 using Ecommerce.Service.Services.ProductService.ProductService;
 using Ecommerce.Service.Services.ProductVariationService;
 using Ecommerce.Service.Services.PromotionCategoryService;
 using Ecommerce.Service.Services.PromotionService;
+using Ecommerce.Service.Services.ShippingMethodService;
+using Ecommerce.Service.Services.ShoppingCartItemService;
+using Ecommerce.Service.Services.ShoppingCartService;
 using Ecommerce.Service.Services.UserAddressService;
+using Ecommerce.Service.Services.UserPaymentMethodService;
 using Ecommerce.Service.Services.UserService;
 using Ecommerce.Service.Services.VariationOptionService;
 using Ecommerce.Service.Services.VariationService;
@@ -99,7 +111,7 @@ builder.Services.AddSingleton(emailConfig);
 
 builder.Services.AddControllers();
 
-// Repositories Injection
+// inject repositories
 builder.Services.AddScoped<IProductCategory, ProductCategoryRepository>();
 builder.Services.AddScoped<IProduct, ProductRepository>();
 builder.Services.AddScoped<IProductImages, ProductImagesRepository>();
@@ -112,6 +124,12 @@ builder.Services.AddScoped<IPromotionCategory, PromotionCategoryRepository>();
 builder.Services.AddScoped<ICountary, CountaryRepository>();
 builder.Services.AddScoped<IAddress, AddressRepository>();
 builder.Services.AddScoped<IUserAddress, UserAddressRepository>();
+builder.Services.AddScoped<IPaymentType, PaymentTypeRepository>();
+builder.Services.AddScoped<IUserPaymentMethod, UserPaymentMethodRepository>();
+builder.Services.AddScoped<IShoppingCart, ShoppingCartRepository>();
+builder.Services.AddScoped<IShoppingCartItem, ShoppingCartItemRepository>();
+builder.Services.AddScoped<IShippingMethod, ShippingMethodRepository>();
+builder.Services.AddScoped<IOrderStatus, OrderStatusRepository>();
 // inject services
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -126,6 +144,12 @@ builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IUserManagement, UserManagement>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserAddressService, UserAddressService>();
+builder.Services.AddScoped<IPaymentTypeService, PaymentTypeService>();
+builder.Services.AddScoped<IUserPaymentMethodService, UserPaymentMethodService>();
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<IShoppingCartItemService, ShoppingCartItemService>();
+builder.Services.AddScoped<IShippingMethodService, ShippingMethodService>();
+builder.Services.AddScoped<IOrderStatusService, OrderStatusService>();
 
 
 // to kill circular in json

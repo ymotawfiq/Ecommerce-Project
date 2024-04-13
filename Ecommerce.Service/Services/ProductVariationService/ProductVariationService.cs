@@ -43,7 +43,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No product items founded with product id ({productVariationDto.ProductItemId})",
+                    Message = $"No product items found with product id ({productVariationDto.ProductItemId})",
                     ResponseObject = new ProductVariation()
                 };
             }
@@ -55,7 +55,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variation options founded with id ({productVariationDto.VariationOptionId})",
+                    Message = $"No variation options found with id ({productVariationDto.VariationOptionId})",
                     ResponseObject = new ProductVariation()
                 };
             }
@@ -81,7 +81,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No product variation founded with id ({productVariationId})",
+                    Message = $"No product variation found with id ({productVariationId})",
                     ResponseObject = new ProductVariation()
                 };
             }
@@ -91,7 +91,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Product variation founded successfully",
+                    Message = "Product variation found successfully",
                     ResponseObject = deletedProductVariation
                 };
         }
@@ -105,7 +105,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No product variations founded",
+                    Message = "No product variations found",
                     ResponseObject = new List<ProductVariation>()
                 };
             }
@@ -113,7 +113,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Product variations founded successfully",
+                    Message = "Product variations found successfully",
                     ResponseObject = new List<ProductVariation>()
                 };
         }
@@ -129,7 +129,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No variations founded for this product",
+                    Message = "No variations found for this product",
                     ResponseObject = new List<ProductVariation>()
                 };
             }
@@ -137,7 +137,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Product variations founded successfully",
+                    Message = "Product variations found successfully",
                     ResponseObject = new List<ProductVariation>()
                 };
         }
@@ -153,7 +153,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "No products founded for this variation",
+                    Message = "No products found for this variation",
                     ResponseObject = new List<ProductVariation>()
                 };
             }
@@ -161,7 +161,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Product variations founded successfully",
+                    Message = "Product variations found successfully",
                     ResponseObject = new List<ProductVariation>()
                 };
         }
@@ -176,7 +176,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No product variation founded with id ({productVariationId})",
+                    Message = $"No product variation found with id ({productVariationId})",
                     ResponseObject = new ProductVariation()
                 };
             }
@@ -184,7 +184,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 200,
                     IsSuccess = true,
-                    Message = "Product variation founded successfully",
+                    Message = "Product variation found successfully",
                     ResponseObject = productVariation
                 };
         }
@@ -220,7 +220,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No product items founded with product id ({productVariationDto.ProductItemId})",
+                    Message = $"No product items found with product id ({productVariationDto.ProductItemId})",
                     ResponseObject = new ProductVariation()
                 };
             }
@@ -232,7 +232,7 @@ namespace Ecommerce.Service.Services.ProductVariationService
                 {
                     StatusCode = 400,
                     IsSuccess = false,
-                    Message = $"No variation options founded with id ({productVariationDto.VariationOptionId})",
+                    Message = $"No variation options found with id ({productVariationDto.VariationOptionId})",
                     ResponseObject = new ProductVariation()
                 };
             }

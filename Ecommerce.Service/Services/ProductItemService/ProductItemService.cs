@@ -37,7 +37,7 @@ namespace Ecommerce.Service.Services.ProductItemService
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = "Items founded successfully",
+                Message = "Items found successfully",
                 ResponseObject = items
             };
         }
@@ -59,7 +59,7 @@ namespace Ecommerce.Service.Services.ProductItemService
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = "Items founded successfully",
+                Message = "Items found successfully",
                 ResponseObject = items
             };
         }
@@ -231,7 +231,7 @@ namespace Ecommerce.Service.Services.ProductItemService
             {
                 StatusCode = 200,
                 IsSuccess = true,
-                Message = "Item founded successfully",
+                Message = "Item found successfully",
                 ResponseObject = oldItem
             };
         }
@@ -243,9 +243,9 @@ namespace Ecommerce.Service.Services.ProductItemService
             string uniqueFileName = null;
             if (productItemDto.Image != null)
             {
-                string path = @"D:\my_source_code\C sharp\EcommerceProjectSolution\Ecommerce.Client\wwwroot";
+                string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Api/";
 
-                string uploadsFolder = Path.Combine(path, @"Images\ProductItems");
+                string uploadsFolder = Path.Combine(path, @"Images/ProductItems");
 
                 uniqueFileName = Guid.NewGuid().ToString().Substring(0, 8)
                     + "_" + productItemDto.Image.FileName;
@@ -268,7 +268,7 @@ namespace Ecommerce.Service.Services.ProductItemService
 
         private bool DeleteExistingItemImage(string imageUrl)
         {
-            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/ProductItems/";
+            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Api/Images/ProductItems/";
             string existingImage = Path.Combine(path, $"{imageUrl}");
             if (System.IO.File.Exists(existingImage))
             {

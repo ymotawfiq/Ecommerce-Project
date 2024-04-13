@@ -220,7 +220,7 @@ namespace Ecommerce.Service.Services.ProductCategoryService
 
         private void DeleteExistingProductImage(string imageUrl)
         {
-            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Client/wwwroot/Images/Products/";
+            string path = @"D:/my_source_code/C sharp/EcommerceProjectSolution/Ecommerce.Api/Images/Products/";
             string existingImage = Path.Combine(path, $"{imageUrl}");
             if (System.IO.File.Exists(existingImage))
             {
