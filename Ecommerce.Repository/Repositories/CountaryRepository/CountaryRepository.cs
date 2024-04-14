@@ -61,10 +61,6 @@ namespace Ecommerce.Repository.Repositories.CountaryRepository
             {
                 Countary? countary = await _dbContext.Countary.Where(e => e.Id == countaryId)
                     .FirstOrDefaultAsync();
-                if(countary == null)
-                {
-                    return null;
-                }
                 return countary;
             }
             catch (Exception)

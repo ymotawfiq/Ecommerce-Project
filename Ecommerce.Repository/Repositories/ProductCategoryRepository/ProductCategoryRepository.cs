@@ -83,10 +83,6 @@ namespace Ecommerce.Repository.Repositories.ProductCategoryRepository
             {
                 ProductCategory? category = await _dbContext.Category.Where(e => e.Id == CategoryId)
                     .FirstOrDefaultAsync(); 
-                if(category == null)
-                {
-                    return null;
-                }
                 return category;
             }
             catch (Exception)

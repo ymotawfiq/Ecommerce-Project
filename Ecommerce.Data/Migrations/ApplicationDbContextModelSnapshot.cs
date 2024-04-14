@@ -161,6 +161,35 @@ namespace Ecommerce.Data.Migrations
                     b.ToTable("Countary");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.OrderLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Order Price");
+
+                    b.Property<Guid>("ProductItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Qty")
+                        .HasColumnType("int")
+                        .HasColumnName("Order quantity");
+
+                    b.Property<Guid>("ShopOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductItemId");
+
+                    b.HasIndex("ShopOrderId");
+
+                    b.ToTable("OrderLine");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.OrderStatus", b =>
                 {
                     b.Property<Guid>("Id")
@@ -389,6 +418,51 @@ namespace Ecommerce.Data.Migrations
                     b.ToTable("ShippingMethod");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.ShopOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Order Date");
+
+                    b.Property<Guid>("OrderStatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("OrderTotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Total Order Price");
+
+                    b.Property<Guid>("PaymentMethodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ShippingAddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ShippingMethodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderStatusId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("ShippingAddressId");
+
+                    b.HasIndex("ShippingMethodId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ShopOrder");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.ShoppingCart", b =>
                 {
                     b.Property<Guid>("Id")
@@ -495,6 +569,37 @@ namespace Ecommerce.Data.Migrations
                     b.ToTable("UserPaymentMethod");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.UserReview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("User Comment");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("int")
+                        .HasColumnName("User Rate");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserReview");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Variation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -566,14 +671,14 @@ namespace Ecommerce.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dfc194f3-9fa9-4645-a085-d4541c572b4d",
+                            Id = "28f9f787-704a-4a74-9ab1-39329b0298b5",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "e18b5207-ab8f-4ea6-bfcb-d4483fcdaaca",
+                            Id = "9fb00e11-1494-4dd8-815c-d6174f350c58",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
@@ -697,6 +802,25 @@ namespace Ecommerce.Data.Migrations
                     b.Navigation("Countary");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.OrderLine", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Models.Entities.ProductItem", "ProductItem")
+                        .WithMany("OrderLines")
+                        .HasForeignKey("ProductItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.ShopOrder", "ShopOrder")
+                        .WithMany("OrderLines")
+                        .HasForeignKey("ShopOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductItem");
+
+                    b.Navigation("ShopOrder");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Product", b =>
                 {
                     b.HasOne("Ecommerce.Data.Models.Entities.ProductCategory", "Category")
@@ -764,6 +888,47 @@ namespace Ecommerce.Data.Migrations
                     b.Navigation("Promotion");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.ShopOrder", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Models.Entities.OrderStatus", "OrderStatus")
+                        .WithMany("ShopOrders")
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.UserPaymentMethod", "PaymentMethod")
+                        .WithMany("ShopOrders")
+                        .HasForeignKey("PaymentMethodId");
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.Address", "Address")
+                        .WithMany("ShopOrders")
+                        .HasForeignKey("ShippingAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.ShippingMethod", "ShippingMethod")
+                        .WithMany("ShopOrders")
+                        .HasForeignKey("ShippingMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.Authentication.SiteUser", "User")
+                        .WithMany("ShopOrders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("OrderStatus");
+
+                    b.Navigation("PaymentMethod");
+
+                    b.Navigation("ShippingMethod");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.ShoppingCart", b =>
                 {
                     b.HasOne("Ecommerce.Data.Models.Entities.Authentication.SiteUser", "User")
@@ -826,6 +991,23 @@ namespace Ecommerce.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PaymentType");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.UserReview", b =>
+                {
+                    b.HasOne("Ecommerce.Data.Models.Entities.OrderLine", "OrderLine")
+                        .WithMany("UserReview")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Ecommerce.Data.Models.Entities.Authentication.SiteUser", "User")
+                        .WithMany("UserReview")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderLine");
 
                     b.Navigation("User");
                 });
@@ -905,21 +1087,37 @@ namespace Ecommerce.Data.Migrations
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Address", b =>
                 {
+                    b.Navigation("ShopOrders");
+
                     b.Navigation("UserAddresses");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Authentication.SiteUser", b =>
                 {
+                    b.Navigation("ShopOrders");
+
                     b.Navigation("ShoppingCarts");
 
                     b.Navigation("UserAddresses");
 
                     b.Navigation("UserPaymentMethods");
+
+                    b.Navigation("UserReview");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Countary", b =>
                 {
                     b.Navigation("Addresses");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.OrderLine", b =>
+                {
+                    b.Navigation("UserReview");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.OrderStatus", b =>
+                {
+                    b.Navigation("ShopOrders");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.PaymentType", b =>
@@ -945,6 +1143,8 @@ namespace Ecommerce.Data.Migrations
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.ProductItem", b =>
                 {
+                    b.Navigation("OrderLines");
+
                     b.Navigation("ProductVariation2");
 
                     b.Navigation("ShoppingCartItems");
@@ -955,9 +1155,24 @@ namespace Ecommerce.Data.Migrations
                     b.Navigation("PromotionCategories");
                 });
 
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.ShippingMethod", b =>
+                {
+                    b.Navigation("ShopOrders");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.ShopOrder", b =>
+                {
+                    b.Navigation("OrderLines");
+                });
+
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.ShoppingCart", b =>
                 {
                     b.Navigation("ShoppingCartItems");
+                });
+
+            modelBuilder.Entity("Ecommerce.Data.Models.Entities.UserPaymentMethod", b =>
+                {
+                    b.Navigation("ShopOrders");
                 });
 
             modelBuilder.Entity("Ecommerce.Data.Models.Entities.Variation", b =>

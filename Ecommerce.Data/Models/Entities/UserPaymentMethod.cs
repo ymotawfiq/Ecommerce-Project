@@ -15,5 +15,6 @@ namespace Ecommerce.Data.Models.Entities
         public bool IsDefault { get; set; }
         public SiteUser? User { get; set; }
         public PaymentType? PaymentType { get; set; }
+        public List<ShopOrder>? ShopOrders { get; set; }
     }
 }

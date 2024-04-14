@@ -13,5 +13,7 @@ namespace Ecommerce.Data.Models.Entities.Authentication
         public List<UserAddress>? UserAddresses { get; set; }
         public List<UserPaymentMethod>? UserPaymentMethods { get; set; }
         public List<ShoppingCart>? ShoppingCarts { get; set; }
+        public List<ShopOrder>? ShopOrders { get; set; }
+        public List<UserReview>? UserReview { get; set; }
     }
 }

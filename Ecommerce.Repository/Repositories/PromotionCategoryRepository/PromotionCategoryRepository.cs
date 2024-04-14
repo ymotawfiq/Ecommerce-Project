@@ -91,10 +91,6 @@ namespace Ecommerce.Repository.Repositories.PromotionCategoryRepository
             {
                 PromotionCategory? promotionCategory = await _dbContext.PromotionCategory
                     .Where(e => e.Id == id).FirstOrDefaultAsync();
-                if(promotionCategory == null)
-                {
-                    return null;
-                }
                 return promotionCategory;
             }
             catch (Exception)

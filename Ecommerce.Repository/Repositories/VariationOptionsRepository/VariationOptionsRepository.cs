@@ -83,10 +83,7 @@ namespace Ecommerce.Repository.Repositories.VariationOptionsRepository
             {
                 VariationOptions? variationOptions = await _dbContext.VariationOptions.Where(e => e.Id == id)
                     .FirstOrDefaultAsync();
-                if (variationOptions == null)
-                {
-                    return null;
-                }
+
 
                 return variationOptions;
             }

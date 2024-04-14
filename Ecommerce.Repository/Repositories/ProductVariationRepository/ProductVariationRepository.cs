@@ -99,10 +99,6 @@ namespace Ecommerce.Repository.Repositories.ProductVariationRepository
             {
                 ProductVariation? productVariation = await _dbContext.ProductVariation
                     .Where(e => e.Id == id).FirstOrDefaultAsync();
-                if(productVariation == null)
-                {
-                    return null;
-                }
                 return productVariation;
             }
             catch (Exception)

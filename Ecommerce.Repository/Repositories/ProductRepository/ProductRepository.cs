@@ -66,10 +66,6 @@ namespace Ecommerce.Repository.Repositories.ProductRepository
             {
                 Product? product = await _dbContext.Product.Where(p => p.Id == productId)
                     .FirstOrDefaultAsync();
-                if(product == null)
-                {
-                    return null;
-                }
                 return product;
             }
             catch (Exception)

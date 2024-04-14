@@ -94,10 +94,6 @@ namespace Ecommerce.Repository.Repositories.UserAddressRepository
             {
                 UserAddress? userAddress = await
                     _dbContext.UserAddresses.Where(e => e.Id == id).FirstOrDefaultAsync();
-                if (userAddress == null)
-                {
-                    return null;
-                }
                 return userAddress;
             }
             catch (Exception)

@@ -60,10 +60,6 @@ namespace Ecommerce.Repository.Repositories.OrderStatusRepository
             {
                 OrderStatus? orderStatus = await _dbContext.OrderStatus
                     .Where(e => e.Id == orderStatusId).FirstOrDefaultAsync();
-                if (orderStatus == null)
-                {
-                    return null;
-                }
                 return orderStatus;
             }
             catch (Exception)

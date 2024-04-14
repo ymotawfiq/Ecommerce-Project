@@ -60,10 +60,6 @@ namespace Ecommerce.Repository.Repositories.PaymentTypeRepository
             {
                 PaymentType? paymentType = await _dbContext.PaymentType
                     .Where(e => e.Id == paymentTypeId).FirstOrDefaultAsync();
-                if(paymentType == null)
-                {
-                    return null;
-                }
                 return paymentType;
             }
             catch (Exception)

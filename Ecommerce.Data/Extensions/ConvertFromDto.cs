@@ -391,6 +391,33 @@ namespace Ecommerce.Data.Extensions
         }
 
 
+        public static OrderLine ConvertFromOrderLineDto_Add(OrderLineDto orderLineDto)
+        {
+            return new OrderLine
+            {
+                ProductItemId = orderLineDto.ProductItemId,
+                Qty = orderLineDto.Qty,
+                ShopOrderId = orderLineDto.ShopOrderId,
+                Price = orderLineDto.Price
+            };
+        }
+
+        public static OrderLine ConvertFromOrderLineDto_Update(OrderLineDto orderLineDto)
+        {
+            if (orderLineDto.Id == null)
+            {
+                throw new NullReferenceException("Order Line id must not be null");
+            }
+            return new OrderLine
+            {
+                Id = new Guid(orderLineDto.Id),
+                ProductItemId = orderLineDto.ProductItemId,
+                Qty = orderLineDto.Qty,
+                ShopOrderId = orderLineDto.ShopOrderId,
+                Price = orderLineDto.Price
+            };
+        }
+
 
 
     }

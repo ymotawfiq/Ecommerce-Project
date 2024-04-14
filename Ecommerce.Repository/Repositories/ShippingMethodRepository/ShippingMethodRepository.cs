@@ -60,10 +60,6 @@ namespace Ecommerce.Repository.Repositories.ShippingMethodRepository
             {
                 ShippingMethod? shippingMethod = await _dbContext.ShippingMethod
                     .Where(e => e.Id == shippingMethodId).FirstOrDefaultAsync();
-                if (shippingMethod == null)
-                {
-                    return null;
-                }
                 return shippingMethod;
             }
             catch (Exception)

@@ -43,7 +43,10 @@ namespace Ecommerce.Data
                         .ApplyConfiguration(new ShoppingCartConfiguration())
                         .ApplyConfiguration(new ShoppingCartItemConfiguration())
                         .ApplyConfiguration(new ShippingMethodConfiguration())
-                        .ApplyConfiguration(new OrderStatusConfiguration());
+                        .ApplyConfiguration(new OrderStatusConfiguration())
+                        .ApplyConfiguration(new ShopOrderConfiguration())
+                        .ApplyConfiguration(new OrderLineConfiguration())
+                        .ApplyConfiguration(new UserReviewConfiguration());
         }
 
         private void SeedRoles(ModelBuilder modelBuilder)
@@ -72,5 +75,8 @@ namespace Ecommerce.Data
         public DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
         public DbSet<ShippingMethod> ShippingMethod { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
+        public DbSet<ShopOrder> ShopOrder { get; set; }
+        public DbSet<OrderLine> OrderLine { get; set; }
+        public DbSet<UserReview> UserReview { get; set; }
     }
 }

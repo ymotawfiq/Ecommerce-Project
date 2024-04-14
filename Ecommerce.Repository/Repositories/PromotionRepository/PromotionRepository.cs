@@ -62,10 +62,6 @@ namespace Ecommerce.Repository.Repositories.PromotionRepository
             {
                 Promotion? promotion = await _dbContext.Promotion.Where(e => e.Id == id)
                     .FirstOrDefaultAsync();
-                if (promotion == null)
-                {
-                    return null;
-                }
                 return promotion;
             }
             catch (Exception)

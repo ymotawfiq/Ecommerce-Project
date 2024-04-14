@@ -49,10 +49,6 @@ namespace Ecommerce.Repository.Repositories.AddressRepository
             {
                 Address? address = await _dbContext.Address.Where(e => e.Id == addressId)
                     .FirstOrDefaultAsync();
-                if (address == null)
-                {
-                    return null;
-                }
                 return address;
             }
             catch (Exception)

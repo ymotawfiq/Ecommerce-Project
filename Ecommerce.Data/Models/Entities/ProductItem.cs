@@ -13,6 +13,7 @@ namespace Ecommerce.Data.Models.Entities
         public Product? Product { get; set; }
         public HashSet<ProductVariation>? ProductVariation2 { get; set; }
         public List<ShoppingCartItem>? ShoppingCartItems { get; set; }
+        public List<OrderLine>? OrderLines { get; set; }
 
     }
 }

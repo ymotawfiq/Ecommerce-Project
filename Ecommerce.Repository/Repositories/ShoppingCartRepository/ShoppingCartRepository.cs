@@ -94,10 +94,6 @@ namespace Ecommerce.Repository.Repositories.ShoppingCartRepository
             {
                 ShoppingCart? shoppingCart = await _dbContext.ShoppingCart
                     .Where(e => e.Id == shoppingCartId).FirstOrDefaultAsync();
-                if (shoppingCart == null)
-                {
-                    return null;
-                }
                 return shoppingCart;
             }
             catch (Exception)

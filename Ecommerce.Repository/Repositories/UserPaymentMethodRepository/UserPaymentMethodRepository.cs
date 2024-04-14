@@ -95,10 +95,6 @@ namespace Ecommerce.Repository.Repositories.UserPaymentMethodRepository
             {
                 UserPaymentMethod? userPaymentMethod = await _dbContext.UserPaymentMethod
                     .Where(e => e.Id == userPaymentMethodId).FirstOrDefaultAsync();
-                if(userPaymentMethod == null)
-                {
-                    return null;
-                }
                 return userPaymentMethod;
             }
             catch (Exception)

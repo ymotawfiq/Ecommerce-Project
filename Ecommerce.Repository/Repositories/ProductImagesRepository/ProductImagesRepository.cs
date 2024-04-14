@@ -62,10 +62,6 @@ namespace Ecommerce.Repository.Repositories.ProductImagesRepository
             {
                 ProductImages? productImages = await _dbContext.ProductImages.Where(p => p.Id == id)
                     .FirstOrDefaultAsync();
-                if(productImages == null)
-                {
-                    return null;
-                }
                 return productImages;
             }
             catch (Exception)
