@@ -3,7 +3,7 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 
 using Ecommerce.Service.Services.ProductService.ProductService;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -18,6 +18,7 @@ namespace Ecommerce.Api.Controllers
             this._productService = _productService;
         }
 
+        [AllowAnonymous]
         [HttpGet("allproducts")]
         public async Task<IActionResult> GetAllProductsAsync()
         {
@@ -40,6 +41,7 @@ namespace Ecommerce.Api.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet("allproductsbycategoryid/{categoryId}")]
         public async Task<IActionResult> GetAllProductsByCategoryIdAsync([FromRoute] Guid categoryId)
         {
@@ -62,7 +64,7 @@ namespace Ecommerce.Api.Controllers
 
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("addproduct")]
         public async Task<IActionResult> AddProductAsync([FromForm] ProductDto productDto)
         {
@@ -84,6 +86,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteproduct/{productId}")]
         public async Task<IActionResult> DeleteProductAsync([FromRoute] Guid productId)
         {
@@ -105,7 +108,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("updateproduct")]
         public async Task<IActionResult> UpdateProductAsync([FromForm] ProductDto productDto)
         {
@@ -127,7 +130,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         [HttpGet("getproduct/{productId}")]
         public async Task<IActionResult> GetProductByProductIdAsync([FromRoute] Guid productId)
         {

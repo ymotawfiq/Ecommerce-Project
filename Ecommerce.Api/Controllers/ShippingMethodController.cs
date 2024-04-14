@@ -3,6 +3,7 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ShippingMethodRepository;
 using Ecommerce.Service.Services.ShippingMethodService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,7 @@ namespace Ecommerce.Api.Controllers
             this._shippingMethodService = _shippingMethodService;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("allshipingmethods")]
         public async Task<IActionResult> GetAllShippingMethodAsync()
         {
@@ -39,6 +40,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addshipingmethod")]
         public async Task<IActionResult> AddShippingMethodAsync([FromBody] ShippingMethodDto shippingMethodDto)
         {
@@ -59,6 +61,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updateshipingmethod")]
         public async Task<IActionResult> UpdateShippingMethodAsync([FromBody] ShippingMethodDto shippingMethodDto)
         {
@@ -79,6 +82,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("getshipingmethodbyid/{shippinMethodId}")]
         public async Task<IActionResult> GetShippingMethodByIdAsync([FromRoute] Guid shippinMethodId)
         {
@@ -99,6 +103,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteshipingmethodbyid/{shippinMethodId}")]
         public async Task<IActionResult> DeleteShippingMethodByIdAsync([FromRoute] Guid shippinMethodId)
         {

@@ -11,6 +11,7 @@ using Ecommerce.Service.Services.UserService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 
 
@@ -322,6 +323,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+
         [HttpPost("resendforgetpasswordemail")]
         public async Task<IActionResult> ResendForgetPasswordEmailAsync(string email)
         {
@@ -529,6 +531,11 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [HttpGet("getcurrentuser")]
+        public ClaimsPrincipal GetCurrentUserAsync()
+        {
+            return HttpContext.User;
+        }
 
     }
 }

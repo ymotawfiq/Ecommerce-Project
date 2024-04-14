@@ -3,6 +3,7 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 
 using Ecommerce.Service.Services.VariationService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -17,6 +18,7 @@ namespace Ecommerce.Api.Controllers
             this._variationService = _variationService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allvariations")]
         public async Task<IActionResult> GetAllVariationsAsync()
         {
@@ -37,6 +39,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("allvariationsbycategoryId/{categoryId}")]
         public async Task<IActionResult> GetAllVariationsByCategoryIdAsync([FromRoute] Guid categoryId)
         {
@@ -57,6 +60,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addvariation")]
         public async Task<IActionResult> AddVariationAsync([FromBody] VariationDto variationDto)
         {
@@ -77,6 +81,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updatevariation")]
         public async Task<IActionResult> UpdateVariationAsync([FromBody] VariationDto variationDto)
         {
@@ -97,6 +102,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deletevariation/{variationId}")]
         public async Task<IActionResult> DeleteVariationByIdAsync([FromRoute] Guid variationId)
         {
@@ -117,6 +123,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("getvariation/{variationId}")]
         public async Task<IActionResult> GetVariationByIdAsync([FromRoute] Guid variationId)
         {

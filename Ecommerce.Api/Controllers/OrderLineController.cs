@@ -1,8 +1,12 @@
 ﻿using Ecommerce.Data.DTOs;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
+using Ecommerce.Data.Models.Entities.Authentication;
 using Ecommerce.Service.Services.OrderLineService;
+using Ecommerce.Service.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -12,12 +16,14 @@ namespace Ecommerce.Api.Controllers
     public class OrderLineController : ControllerBase
     {
         private readonly IOrderLineService _orderLineService;
-        public OrderLineController(IOrderLineService _orderLineService)
+        private readonly UserManager<SiteUser> _userManager;
+        public OrderLineController(IOrderLineService _orderLineService, UserManager<SiteUser> _userManager)
         {
             this._orderLineService = _orderLineService;
+            this._userManager = _userManager;
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("allorderline")]
         public async Task<IActionResult> AllOrderLineAsync()
         {
@@ -37,7 +43,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("allorderlinebyproductitemid/{productItemId}")]
         public async Task<IActionResult> AllOrderLineByProductItemIdAsync([FromRoute] Guid productItemId)
         {
@@ -57,7 +63,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("allorderlinebyshoporderid/{shopOrderId}")]
         public async Task<IActionResult> AllOrderLineByShopOrderIdAsync([FromRoute] Guid shopOrderId)
         {
@@ -77,7 +83,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("addorderline")]
         public async Task<IActionResult> AddOrderLineAsync([FromBody] OrderLineDto orderLineDto)
         {
@@ -97,6 +103,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("updateorderline")]
         public async Task<IActionResult> UpdateOrderLineAsync([FromBody] OrderLineDto orderLineDto)
         {
@@ -116,6 +123,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("getorderlinebyid/{orderLineId}")]
         public async Task<IActionResult> GetOrderLineByIdAsync([FromRoute] Guid orderLineId)
         {
@@ -135,6 +143,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteorderlinebyid/{orderLineId}")]
         public async Task<IActionResult> DeleteOrderLineByIdAsync([FromRoute] Guid orderLineId)
         {

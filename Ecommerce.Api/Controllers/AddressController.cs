@@ -2,24 +2,30 @@
 using Ecommerce.Data.Extensions;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
-
+using Ecommerce.Data.Models.Entities.Authentication;
 using Ecommerce.Service.Services.AddressService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Ecommerce.Api.Controllers
 {
+    [Authorize(Roles ="Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AddressController : ControllerBase
     {
         private readonly IAddressService _addressService;
-        public AddressController(IAddressService _addressService)
+        private readonly UserManager<SiteUser> _userManager;
+        public AddressController(IAddressService _addressService, UserManager<SiteUser> _userManager)
         {
             this._addressService = _addressService;
+            this._userManager = _userManager;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("alladdresses")]
         public async Task<IActionResult> GetAllAddressesAsync()
         {
@@ -41,6 +47,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("alladdressesbycountaryid/{countaryId}")]
         public async Task<IActionResult> GetAllAddressesByCountaryIdAsync([FromRoute] Guid countaryId)
         {
@@ -63,13 +70,14 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("addaddress")]
         public async Task<IActionResult> AddAddressAsync([FromBody] AddressDto addressDto)
         {
             try
             {
                 var response = await _addressService.AddAddressAsync(addressDto);
+                
                 return Ok(response);
             }
             catch(Exception ex)
@@ -84,6 +92,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updateaddress")]
         public async Task<IActionResult> UpdateAddressAsync([FromBody] AddressDto addressDto)
         {
@@ -104,7 +113,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("getaddressbyid/{addressId}")]
         public async Task<IActionResult> GetAddressByIdAsync([FromRoute] Guid addressId)
         {
@@ -125,6 +134,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteaddressbyid/{addressId}")]
         public async Task<IActionResult> DeleteAddressByIdAsync([FromRoute] Guid addressId)
         {
@@ -144,7 +154,6 @@ namespace Ecommerce.Api.Controllers
                 });
             }
         }
-
 
 
     }

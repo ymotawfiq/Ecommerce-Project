@@ -2,11 +2,13 @@
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Service.Services.OrderStatusService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
+    [Authorize(Roles ="Admin,User")]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderStatusController : ControllerBase
@@ -17,6 +19,7 @@ namespace Ecommerce.Api.Controllers
             this._orderStatusService = _orderStatusService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allorderstatus")]
         public async Task<IActionResult> GetAllOrderStatusAsync()
         {
@@ -36,7 +39,7 @@ namespace Ecommerce.Api.Controllers
                     });
             }
         }
-
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("addorderstatus")]
         public async Task<IActionResult> AddOrderStatusAsync([FromBody] OrderStatusDto orderStatusDto)
         {
@@ -57,6 +60,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("updateorderstatus")]
         public async Task<IActionResult> UpdateOrderStatusAsync([FromBody] OrderStatusDto orderStatusDto)
         {
@@ -77,6 +81,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("getorderstatusbyid/{orderStatusId}")]
         public async Task<IActionResult> GetOrderStatusByIdAsync([FromRoute] Guid orderStatusId)
         {
@@ -97,6 +102,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteorderstatusbyid/{orderStatusId}")]
         public async Task<IActionResult> DeleteOrderStatusByIdAsync([FromRoute] Guid orderStatusId)
         {

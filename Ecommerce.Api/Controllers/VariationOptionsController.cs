@@ -5,6 +5,7 @@ using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.VariationOptionsRepository;
 using Ecommerce.Repository.Repositories.VariationRepository;
 using Ecommerce.Service.Services.VariationOptionService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace Ecommerce.Api.Controllers
             this._variationOptionsService = _variationOptionsService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allvariationoprions")]
         public async Task<IActionResult> GetAllVariationOptionsAsync()
         {
@@ -41,6 +43,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("allvariationoprionsbyvariationid/{variationId}")]
         public async Task<IActionResult> GetAllVariationOptionsByVariationIdAsync([FromRoute] Guid variationId)
         {
@@ -62,6 +65,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addvariationoption")]
         public async Task<IActionResult> AddVariationOptionAsync(VariationOptionsDto variationOptionsDto)
         {
@@ -82,6 +86,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updatevariationoption")]
         public async Task<IActionResult> UpdateVariationOptionAsync(VariationOptionsDto variationOptionsDto)
         {
@@ -122,6 +127,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deletevariationoption/{variationOptionId}")]
         public async Task<IActionResult> DeleteVariationOptionByVariationIdAsync([FromRoute] Guid variationOptionId)
         {

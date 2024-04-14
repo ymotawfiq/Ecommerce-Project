@@ -1,8 +1,11 @@
 ﻿using Ecommerce.Data.DTOs;
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
+using Ecommerce.Data.Models.Entities.Authentication;
 using Ecommerce.Service.Services.UserPaymentMethodService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -12,12 +15,15 @@ namespace Ecommerce.Api.Controllers
     public class UserPaymentMethodController : ControllerBase
     {
         private readonly IUserPaymentMethodService _userPaymentMethodService;
-        public UserPaymentMethodController(IUserPaymentMethodService _userPaymentMethodService)
+        private readonly UserManager<SiteUser> _userManager;
+        public UserPaymentMethodController(IUserPaymentMethodService _userPaymentMethodService,
+            UserManager<SiteUser> _userManager)
         {
             this._userPaymentMethodService = _userPaymentMethodService;
+            this._userManager = _userManager;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("alluserpaymentmethods")]
         public async Task<IActionResult> GetAllUsersPaymentsMethodsAsync()
         {
@@ -38,13 +44,23 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("alluserpaymentmethodsbyuserid/{userId}")]
         public async Task<IActionResult> GetAllUsersPaymentsMethodsByUserIdAsync([FromRoute] string userId)
         {
             try
             {
-                var response = await _userPaymentMethodService.GetAllUsersPaymentMethodsAsyncByUserIdAsync(userId);
-                return Ok(response);
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                    if(admins.Contains(user) || user.Id == userId)
+                    {
+                        var response = await _userPaymentMethodService.GetAllUsersPaymentMethodsAsyncByUserIdAsync(userId);
+                        return Ok(response);
+                    }
+                }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -58,15 +74,26 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("alluserpaymentmethodsbyuserusernameoremail")]
         public async Task<IActionResult> GetAllUsersPaymentsMethodsByUserUsernameOrEmailAsync
             (string userNameOrEmail)
         {
             try
             {
-                var response = await _userPaymentMethodService
-                    .GetAllUsersPaymentMethodsAsyncByUserUsernameOrEmailAsync(userNameOrEmail);
-                return Ok(response);
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                    if (admins.Contains(user) || user.Email == userNameOrEmail 
+                        || user.UserName == userNameOrEmail)
+                    {
+                        var response = await _userPaymentMethodService
+                            .GetAllUsersPaymentMethodsAsyncByUserUsernameOrEmailAsync(userNameOrEmail);
+                        return Ok(response);
+                    }
+                }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -80,6 +107,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("adduserpaymentmethod")]
         public async Task<IActionResult> AddUserPaymentMethodAsync
             ([FromBody] UserPaymentMethodDto userPaymentMethodDto)
@@ -103,7 +131,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("updateuserpaymentmethod")]
         public async Task<IActionResult> UpdateUserPaymentMethodAsync([FromBody] UserPaymentMethodDto userPaymentMethodDto)
         {
@@ -124,6 +152,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("getuserpaymentmethodbyid/{userMethodId}")]
         public async Task<IActionResult> GetUserPaymentMethodAsync([FromRoute] Guid userMethodId)
         {
@@ -144,6 +173,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteuserpaymentmethodbyid/{userMethodId}")]
         public async Task<IActionResult> DeleteUserPaymentMethodAsync([FromRoute] Guid userMethodId)
         {

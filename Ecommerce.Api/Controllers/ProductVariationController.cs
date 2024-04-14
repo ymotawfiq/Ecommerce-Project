@@ -2,6 +2,7 @@
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Service.Services.ProductVariationService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -16,6 +17,7 @@ namespace Ecommerce.Api.Controllers
             this._productVariationService = _productVariationService;
         }
 
+        [AllowAnonymous]
         [HttpGet("allproductvariations")]
         public async Task<IActionResult> GetAllProductVariationsAsync()
         {
@@ -37,6 +39,8 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+
+        [AllowAnonymous]
         [HttpGet("allproductvariationsbyvariationoptionid/{variationOptionId}")]
         public async Task<IActionResult> GetAllProductVariationsByVariationOptionIdAsync
             ([FromRoute]Guid variationOptionId)
@@ -61,6 +65,7 @@ namespace Ecommerce.Api.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet("allproductvariationsbyproductitemid/{productItemId}")]
         public async Task<IActionResult> GetAllProductVariationsByProductItemIdAsync
             ([FromRoute] Guid productItemId)
@@ -84,6 +89,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addproductvariation")]
         public async Task<IActionResult> AddProductVariationAsync
             ([FromBody] ProductVariationDto productVariationDto)
@@ -107,7 +113,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("updateproductvariation")]
         public async Task<IActionResult> UpdateProductVariationAsync
             ([FromBody] ProductVariationDto productVariationDto)
@@ -130,6 +136,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("getproductvariationbyid/{productVariationId}")]
         public async Task<IActionResult> GetProductVariationByIdAsync([FromRoute] Guid productVariationId)
         {
@@ -151,6 +158,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteproductvariationbyid/{productVariationId}")]
         public async Task<IActionResult> DeleteProductVariationByIdAsync([FromRoute] Guid productVariationId)
         {

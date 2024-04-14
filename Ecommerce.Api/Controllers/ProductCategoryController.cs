@@ -6,6 +6,7 @@ using Ecommerce.Repository.Repositories.ProductCategoryRepository;
 using Ecommerce.Repository.Repositories.ProductImagesRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
 using Ecommerce.Service.Services.ProductCategoryService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +23,7 @@ namespace Ecommerce.Api.Controllers
             this._cateegoryService = _cateegoryService;
         }
 
+        [AllowAnonymous]
         [HttpGet("allcategories")]
         public async Task<IActionResult> GetAllCategoriesAsync()
         {
@@ -43,6 +45,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addcategory")]
         public async Task<IActionResult> AddCategoryAsync([FromBody] ProductCategoryDto productCategoryDto)
         {
@@ -63,6 +66,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("getcategorybyid/{categoryId}")]
         public async Task<IActionResult> GetCategoryByIdAsync([FromRoute] Guid categoryId)
         {
@@ -83,6 +87,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updatecategory")]
         public async Task<IActionResult> UpdateCategoryAsync(ProductCategoryDto productCategoryDto)
         {
@@ -103,6 +108,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deletecategory/{categoryId}")]
         public async Task<IActionResult> DeleteCategoryByCategoryIdAsync([FromRoute] Guid categoryId)
         {

@@ -70,13 +70,13 @@ builder.Services.AddIdentity<SiteUser, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 
-
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
     // Set the expiration time for the OTP
     options.TokenLifespan = TimeSpan.FromMinutes(5); // Adjust the time span as needed
 });
 
+builder.Services.AddHttpContextAccessor();
 
 //Add Config for Required Email
 builder.Services.Configure<IdentityOptions>(

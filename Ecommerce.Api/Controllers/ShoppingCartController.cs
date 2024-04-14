@@ -1,7 +1,11 @@
 ﻿using Ecommerce.Data.DTOs;
 using Ecommerce.Data.Models.ApiModel;
+using Ecommerce.Data.Models.Entities.Authentication;
+using Ecommerce.Repository.Repositories.ShoppingCartRepository;
 using Ecommerce.Service.Services.ShoppingCartService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -11,11 +15,17 @@ namespace Ecommerce.Api.Controllers
     public class ShoppingCartController : ControllerBase
     {
         private readonly IShoppingCartService _shoppingCartService;
-        public ShoppingCartController(IShoppingCartService _shoppingCartService)
+        private readonly UserManager<SiteUser> _userManager;
+        private readonly IShoppingCart _shoppingCartRepository;
+        public ShoppingCartController(IShoppingCartService _shoppingCartService
+            , UserManager<SiteUser> _userManager, IShoppingCart _shoppingCartRepository)
         {
             this._shoppingCartService = _shoppingCartService;
+            this._userManager = _userManager;
+            this._shoppingCartRepository = _shoppingCartRepository;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("getallshoppingcarts")]
         public async Task<IActionResult> GetAllShoppingCartAsync()
         {
@@ -36,6 +46,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("getallshoppingcartsbyuserid/{userId}")]
         public async Task<IActionResult> GetAllShoppingCartAsync(string userId)
         {
@@ -57,6 +68,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("getallshoppingcartsbyuserusernameoremail/{usernameOrEmail}")]
         public async Task<IActionResult> GetAllShoppingCartByUserUsernameOrEmailAsync(string usernameOrEmail)
         {
@@ -78,16 +90,26 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("addshoppingcart")]
         public async Task<IActionResult> AddShoppingCartAsync([FromBody] ShoppingCartDto shoppingCartDto)
         {
             try
             {
-                var response = await _shoppingCartService.AddShoppingCartAsync(shoppingCartDto);
-                
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                    if(user.Email == shoppingCartDto.UserIdOrEmail || user.Id == shoppingCartDto.UserIdOrEmail
+                        || admins.Contains(user))
+                    {
+                        var response = await _shoppingCartService.AddShoppingCartAsync(shoppingCartDto);
 
-                return Ok(response);
+
+                        return Ok(response);
+                    }
+                }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -101,14 +123,25 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("updateshoppingcart")]
         public async Task<IActionResult> UpdateShoppingCartAsync([FromBody] ShoppingCartDto shoppingCartDto)
         {
             try
             {
-                var response = await _shoppingCartService.UpdateShoppingCartAsync(shoppingCartDto);
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                    if (user.Email == shoppingCartDto.UserIdOrEmail || user.Id == shoppingCartDto.UserIdOrEmail
+                        || admins.Contains(user))
+                    {
+                        var response = await _shoppingCartService.UpdateShoppingCartAsync(shoppingCartDto);
 
-                return Ok(response);
+                        return Ok(response);
+                    }
+                }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -122,14 +155,25 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("getshoppingcartbyid/{shoppingCartId}")]
         public async Task<IActionResult> GetShoppingCartByIdAsync([FromRoute] Guid shoppingCartId)
         {
             try
             {
-                var response = await _shoppingCartService.GetShoppingCartByIdAsync(shoppingCartId);
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                    var shoppingCart = await _shoppingCartRepository.GetShoppingCartByIdAsync(shoppingCartId);
+                    if (user.Id == shoppingCart.UserId || admins.Contains(user))
+                    {
+                        var response = await _shoppingCartService.GetShoppingCartByIdAsync(shoppingCartId);
 
-                return Ok(response);
+                        return Ok(response);
+                    }
+                }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -143,6 +187,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteshoppingcartbyid/{shoppingCartId}")]
         public async Task<IActionResult> DeleteShoppingCartByIdAsync([FromRoute] Guid shoppingCartId)
         {

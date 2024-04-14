@@ -5,6 +5,7 @@ using Ecommerce.Data.Models.Entities;
 using Ecommerce.Repository.Repositories.ProductItemRepository;
 using Ecommerce.Repository.Repositories.ProductRepository;
 using Ecommerce.Service.Services.ProductItemService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace Ecommerce.Api.Controllers
             this._productItemService = _productItemService;
         }
 
+        [AllowAnonymous]
         [HttpGet("allitems")]
         public async Task<IActionResult> GetAllItemsAsync()
         {
@@ -40,6 +42,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("allitemsbyproductid/{productId}")]
         public async Task<IActionResult> GetAllItemsByProductIdAsync([FromRoute] Guid productId)
         {
@@ -60,6 +63,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("additem")]
         public async Task<IActionResult> AddItemAsync([FromForm]ProductItemDto productItemDto)
         {
@@ -81,6 +85,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updateitem")]
         public async Task<IActionResult> UpdateItemAsync([FromForm] ProductItemDto productItemDto)
         {
@@ -103,6 +108,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteitem/{itemId}")]
         public async Task<IActionResult> DeleteItemAsync([FromRoute] Guid itemId)
         {
@@ -124,6 +130,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("getitem/{itemId}")]
         public async Task<IActionResult> GetItemByIdAsync([FromRoute] Guid itemId)
         {

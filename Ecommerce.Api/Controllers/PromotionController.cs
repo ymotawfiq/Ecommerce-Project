@@ -2,6 +2,7 @@
 using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 using Ecommerce.Service.Services.PromotionService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -16,6 +17,7 @@ namespace Ecommerce.Api.Controllers
             this._promotionService = _promotionService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allpromotions")]
         public async Task<IActionResult> GetAllPromotionsAsync()
         {
@@ -37,7 +39,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("addpromotion")]
         public async Task<IActionResult> AddPromotionAsync([FromBody] PromotionDto promotionDto)
         {
@@ -59,7 +61,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("Updatepromotion")]
         public async Task<IActionResult> UpdatePromotionAsync([FromBody] PromotionDto promotionDto)
         {
@@ -81,6 +83,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("getpromotionbyid/{promotionId}")]
         public async Task<IActionResult> GetPromotionByIdAsync([FromRoute] Guid promotionId)
         {
@@ -102,7 +105,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deletepromotionbyid/{promotionId}")]
         public async Task<IActionResult> DeletePromotionByIdAsync([FromRoute] Guid promotionId)
         {

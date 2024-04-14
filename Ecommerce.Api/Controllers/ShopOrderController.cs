@@ -1,7 +1,10 @@
 ﻿using Ecommerce.Data.DTOs;
 using Ecommerce.Data.Models.ApiModel;
+using Ecommerce.Data.Models.Entities.Authentication;
 using Ecommerce.Service.Services.ShopOrderService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -11,11 +14,14 @@ namespace Ecommerce.Api.Controllers
     public class ShopOrderController : ControllerBase
     {
         private readonly IShopOrderService _shopOrderService;
-        public ShopOrderController(IShopOrderService _shopOrderService)
+        private readonly UserManager<SiteUser> _userManager;
+        public ShopOrderController(IShopOrderService _shopOrderService, UserManager<SiteUser> _userManager)
         {
             this._shopOrderService = _shopOrderService;
+            this._userManager = _userManager;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allshoppingorders")]
         public async Task<IActionResult> GetAllShopOrdersAsync()
         {
@@ -35,13 +41,24 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("allshoppingordersbyusernameoremail")]
         public async Task<IActionResult> GetAllShopOrdersByUserUsernameOrEmailAsync(string usernameOrEmail)
         {
             try
             {
-                var response = await _shopOrderService.GetAllShopOrdersByUserUsernameOrEmailAsync(usernameOrEmail);
-                return Ok(response);
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                    if(user.Email == usernameOrEmail || user.UserName == usernameOrEmail
+                        || admins.Contains(user))
+                    {
+                        var response = await _shopOrderService.GetAllShopOrdersByUserUsernameOrEmailAsync(usernameOrEmail);
+                        return Ok(response);
+                    }
+                }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -54,6 +71,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allshoppingordersbydate")]
         public async Task<IActionResult> GetAllShopOrdersByDateAsync(DateTime date)
         {
@@ -73,6 +91,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allshoppingordersbyshippingmethodid/{shippingMethodId}")]
         public async Task<IActionResult> GetAllShopOrdersByShippingMethodIdAsync(Guid shippingMethodId)
         {
@@ -92,6 +111,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allshoppingordersbyaddressid/{addressId}")]
         public async Task<IActionResult> GetAllShopOrdersByAddressIdAsync(Guid addressId)
         {
@@ -111,6 +131,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("allshoppingordersbypaymentmethodid/{paymentMethodId}")]
         public async Task<IActionResult> GetAllShopOrdersByPaymentIdAsync(Guid paymentMethodId)
         {
@@ -130,7 +151,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("addshoporder")]
         public async Task<IActionResult> AddShopOrderAsync([FromBody] ShopOrderDto shopOrderDto)
         {
@@ -150,14 +171,25 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("updateshoporder")]
         public async Task<IActionResult> UpdateShopOrderAsync([FromBody] ShopOrderDto shopOrderDto)
         {
             try
             {
-                var response = await _shopOrderService.UpdateShopOrderAsync(shopOrderDto);
-                return Ok(response);
+
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                    if (user.Email == shopOrderDto.UsernameOrEmail || user.UserName == shopOrderDto.UsernameOrEmail
+                        || admins.Contains(user))
+                    {
+                        var response = await _shopOrderService.UpdateShopOrderAsync(shopOrderDto);
+                        return Ok(response);
+                    }
+                }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
@@ -170,6 +202,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("getshoporderbyid/{shopOrderId}")]
         public async Task<IActionResult> GetShopOrderByIdAsync([FromRoute] Guid shopOrderId)
         {
@@ -189,6 +222,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteshoporderbyid/{shopOrderId}")]
         public async Task<IActionResult> DeleteShopOrder([FromRoute] Guid shopOrderId)
         {

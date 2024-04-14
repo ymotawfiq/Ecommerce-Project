@@ -3,6 +3,7 @@ using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.Entities;
 
 using Ecommerce.Service.Services.PromotionCategoryService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
@@ -20,7 +21,7 @@ namespace Ecommerce.Api.Controllers
             this._promotionCategoryService = _promotionCategoryService;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("allpromotioncategory")]
         public async Task<IActionResult> GetAllPromotionCategoriesAsync()
         {
@@ -42,7 +43,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         [HttpGet("allpromotioncategorybycategoryid/{categoryId}")]
         public async Task<IActionResult> GetAllPromotionCategoriesByCategoryIdAsync([FromRoute] Guid categoryId)
         {
@@ -64,6 +65,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("allpromotioncategorybypromotionid/{promotionId}")]
         public async Task<IActionResult> GetAllPromotionCategoriesByPromotionIdAsync
             ([FromRoute] Guid promotionId)
@@ -86,6 +88,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addpromotioncategory")]
         public async Task<IActionResult> AddPromotionCategoryAsync
             ([FromBody] PromotionCategoryDto promotionCategoryDto)
@@ -108,6 +111,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updatepromotioncategory")]
         public async Task<IActionResult> UpdatePromotionCategoryAsync
             ([FromBody] PromotionCategoryDto promotionCategoryDto)
@@ -130,7 +134,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         [HttpGet("getpromotioncategorybyid/{promotionCategoryId}")]
         public async Task<IActionResult> GetPromotionCategoryByIdAsync([FromRoute] Guid promotionCategoryId)
         {
@@ -152,7 +156,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deletepromotioncategorybyid/{promotionCategoryId}")]
         public async Task<IActionResult> DeletePromotionCategoryByIdAsync([FromRoute] Guid promotionCategoryId)
         {
