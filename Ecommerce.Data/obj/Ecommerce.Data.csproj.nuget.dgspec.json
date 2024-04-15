@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {}
+    "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {}
   },
   "projects": {
-    "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
+    "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
+        "projectUniqueName": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
         "projectName": "Ecommerce.Data",
-        "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
+        "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
         "packagesPath": "C:\\Users\\Yousef\\.nuget\\packages\\",
-        "outputPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\obj\\",
+        "outputPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yousef\\AppData\\Roaming\\NuGet\\NuGet.Config",

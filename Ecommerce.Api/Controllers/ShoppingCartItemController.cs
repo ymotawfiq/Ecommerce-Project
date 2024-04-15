@@ -51,16 +51,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var shoppingCart = await _shoppingCartRepository.GetShoppingCartByIdAsync(cartId);
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if(shoppingCart.UserId == user.Id || admins.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _shoppingCartItemService
-                            .GetAllShoppingCartItemsByCartIdAsync(cartId);
-                        return Ok(response);
+                        var shoppingCart = await _shoppingCartRepository.GetShoppingCartByIdAsync(cartId);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (shoppingCart.UserId == user.Id || admins.Contains(user))
+                        {
+                            var response = await _shoppingCartItemService
+                                .GetAllShoppingCartItemsByCartIdAsync(cartId);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -82,26 +85,29 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    if (shoppingCartItemDto.Id == null)
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                        if (shoppingCartItemDto.Id == null)
                         {
-                            StatusCode = 400,
-                            IsSuccess = false,
-                            Message = "Shopping cart item id must not be null"
-                        });
-                    }
-                    var shoppingCart = await _shoppingCartRepository
-                        .GetShoppingCartByIdAsync(new Guid(shoppingCartItemDto.Id));
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (shoppingCart.UserId == user.Id || admins.Contains(user))
-                    {
-                        var response = await _shoppingCartItemService
-                            .AddShoppingCartItemAsync(shoppingCartItemDto);
-                        return Ok(response);
+                            return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                            {
+                                StatusCode = 400,
+                                IsSuccess = false,
+                                Message = "Shopping cart item id must not be null"
+                            });
+                        }
+                        var shoppingCart = await _shoppingCartRepository
+                            .GetShoppingCartByIdAsync(new Guid(shoppingCartItemDto.Id));
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (shoppingCart.UserId == user.Id || admins.Contains(user))
+                        {
+                            var response = await _shoppingCartItemService
+                                .AddShoppingCartItemAsync(shoppingCartItemDto);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -124,26 +130,29 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    if (shoppingCartItemDto.Id == null)
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                        if (shoppingCartItemDto.Id == null)
                         {
-                            StatusCode = 400,
-                            IsSuccess = false,
-                            Message = "Shopping cart item id must not be null"
-                        });
-                    }
-                    var shoppingCart = await _shoppingCartRepository
-                        .GetShoppingCartByIdAsync(new Guid(shoppingCartItemDto.Id));
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (shoppingCart.UserId == user.Id || admins.Contains(user))
-                    {
-                        var response = await _shoppingCartItemService
-                            .UpdateShoppingCartItemAsync(shoppingCartItemDto);
-                        return Ok(response);
+                            return StatusCode(StatusCodes.Status400BadRequest, new ApiResponse<string>
+                            {
+                                StatusCode = 400,
+                                IsSuccess = false,
+                                Message = "Shopping cart item id must not be null"
+                            });
+                        }
+                        var shoppingCart = await _shoppingCartRepository
+                            .GetShoppingCartByIdAsync(new Guid(shoppingCartItemDto.Id));
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (shoppingCart.UserId == user.Id || admins.Contains(user))
+                        {
+                            var response = await _shoppingCartItemService
+                                .UpdateShoppingCartItemAsync(shoppingCartItemDto);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -166,17 +175,20 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var shoppingCart = await _shoppingCartRepository
-                        .GetShoppingCartByIdAsync(shoppingCartItemId);
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (shoppingCart.UserId == user.Id || admins.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _shoppingCartItemService
-                            .GetShoppingCartItemAsync(shoppingCartItemId);
-                        return Ok(response);
+                        var shoppingCart = await _shoppingCartRepository
+                            .GetShoppingCartByIdAsync(shoppingCartItemId);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (shoppingCart.UserId == user.Id || admins.Contains(user))
+                        {
+                            var response = await _shoppingCartItemService
+                                .GetShoppingCartItemAsync(shoppingCartItemId);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();

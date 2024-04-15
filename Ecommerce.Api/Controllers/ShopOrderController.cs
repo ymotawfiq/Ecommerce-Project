@@ -47,17 +47,21 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if(HttpContext.User.Identity!=null && HttpContext.User.Identity.Name != null)
                 {
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if(user.Email == usernameOrEmail || user.UserName == usernameOrEmail
-                        || admins.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _shopOrderService.GetAllShopOrdersByUserUsernameOrEmailAsync(usernameOrEmail);
-                        return Ok(response);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Email == usernameOrEmail || user.UserName == usernameOrEmail
+                            || admins.Contains(user))
+                        {
+                            var response = await _shopOrderService.GetAllShopOrdersByUserUsernameOrEmailAsync(usernameOrEmail);
+                            return Ok(response);
+                        }
                     }
                 }
+
                 return Unauthorized();
             }
             catch (Exception ex)
@@ -178,15 +182,18 @@ namespace Ecommerce.Api.Controllers
             try
             {
 
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (user.Email == shopOrderDto.UsernameOrEmail || user.UserName == shopOrderDto.UsernameOrEmail
-                        || admins.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _shopOrderService.UpdateShopOrderAsync(shopOrderDto);
-                        return Ok(response);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Email == shopOrderDto.UsernameOrEmail || user.UserName == shopOrderDto.UsernameOrEmail
+                            || admins.Contains(user))
+                        {
+                            var response = await _shopOrderService.UpdateShopOrderAsync(shopOrderDto);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();

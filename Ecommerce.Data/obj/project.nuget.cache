@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7r6qCxmnp2azMFl6yJZsM0s/3H/9+Nvzoxl7tfHK86cY7WFzUmenYZVSl5etf5j+c/690R/BH2NJpYkYcni3/w==",
+  "dgSpecHash": "QA5yyNVwtUNH1pB6fOfNucloEgER5aA8qkr25g50WC704sK62F55P5vYgjtlAS706SyQQo57WoQpgm5RB3m6yQ==",
   "success": true,
-  "projectFilePath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
+  "projectFilePath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yousef\\.nuget\\packages\\aspsms\\0.0.2\\aspsms.0.0.2.nupkg.sha512",
     "C:\\Users\\Yousef\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",

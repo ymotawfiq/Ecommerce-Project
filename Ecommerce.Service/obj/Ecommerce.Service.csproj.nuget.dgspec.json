@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj": {}
+    "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj": {}
   },
   "projects": {
-    "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
+    "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
+        "projectUniqueName": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
         "projectName": "Ecommerce.Data",
-        "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
+        "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj",
         "packagesPath": "C:\\Users\\Yousef\\.nuget\\packages\\",
-        "outputPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\obj\\",
+        "outputPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yousef\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -121,14 +121,14 @@
         }
       }
     },
-    "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj": {
+    "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj",
+        "projectUniqueName": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj",
         "projectName": "Ecommerce.Repository",
-        "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj",
+        "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj",
         "packagesPath": "C:\\Users\\Yousef\\.nuget\\packages\\",
-        "outputPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\obj\\",
+        "outputPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yousef\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -145,8 +145,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
-                "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj"
+              "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
+                "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj"
               }
             }
           }
@@ -180,14 +180,14 @@
         }
       }
     },
-    "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj": {
+    "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
+        "projectUniqueName": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
         "projectName": "Ecommerce.Service",
-        "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
+        "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
         "packagesPath": "C:\\Users\\Yousef\\.nuget\\packages\\",
-        "outputPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\obj\\",
+        "outputPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yousef\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -204,11 +204,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
-                "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj"
+              "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
+                "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj"
               },
-              "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj": {
-                "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj"
+              "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj": {
+                "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj"
               }
             }
           }

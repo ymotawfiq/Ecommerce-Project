@@ -50,14 +50,17 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if(admins.Contains(user) || user.Id == userId)
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userPaymentMethodService.GetAllUsersPaymentMethodsAsyncByUserIdAsync(userId);
-                        return Ok(response);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (admins.Contains(user) || user.Id == userId)
+                        {
+                            var response = await _userPaymentMethodService.GetAllUsersPaymentMethodsAsyncByUserIdAsync(userId);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -81,16 +84,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (admins.Contains(user) || user.Email == userNameOrEmail 
-                        || user.UserName == userNameOrEmail)
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userPaymentMethodService
-                            .GetAllUsersPaymentMethodsAsyncByUserUsernameOrEmailAsync(userNameOrEmail);
-                        return Ok(response);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (admins.Contains(user) || user.Email == userNameOrEmail
+                            || user.UserName == userNameOrEmail)
+                        {
+                            var response = await _userPaymentMethodService
+                                .GetAllUsersPaymentMethodsAsyncByUserUsernameOrEmailAsync(userNameOrEmail);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();

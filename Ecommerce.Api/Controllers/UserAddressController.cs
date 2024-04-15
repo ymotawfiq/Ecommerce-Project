@@ -55,14 +55,17 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
-                    if(user.Id == userId.ToString() || adminUsers.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userAddressService.GetUserAddressesByUserIdAsync(userId);
-                        return Ok(response);
+                        var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Id == userId.ToString() || adminUsers.Contains(user))
+                        {
+                            var response = await _userAddressService.GetUserAddressesByUserIdAsync(userId);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -86,15 +89,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (user.Email == userNameOrEmail || adminUsers.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userAddressService
-                            .GetUserAddressesByUsernameOrEmailAsync(userNameOrEmail);
-                        return Ok(response);
+                        var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Email == userNameOrEmail || adminUsers.Contains(user))
+                        {
+                            var response = await _userAddressService
+                                .GetUserAddressesByUsernameOrEmailAsync(userNameOrEmail);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -117,15 +123,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (user.Email == userAddressDto.UserIdOrEmail
-                        || user.Id == userAddressDto.UserIdOrEmail || adminUsers.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userAddressService.AddUserAddressAsync(userAddressDto);
-                        return Ok(response);
+                        var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Email == userAddressDto.UserIdOrEmail
+                            || user.Id == userAddressDto.UserIdOrEmail || adminUsers.Contains(user))
+                        {
+                            var response = await _userAddressService.AddUserAddressAsync(userAddressDto);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -148,15 +157,18 @@ namespace Ecommerce.Api.Controllers
             try
             {
 
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (user.Email == userAddressDto.UserIdOrEmail
-                        || user.Id == userAddressDto.UserIdOrEmail || adminUsers.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userAddressService.UpdateUserAddressAsync(userAddressDto);
-                        return Ok(response);
+                        var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Email == userAddressDto.UserIdOrEmail
+                            || user.Id == userAddressDto.UserIdOrEmail || adminUsers.Contains(user))
+                        {
+                            var response = await _userAddressService.UpdateUserAddressAsync(userAddressDto);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -178,16 +190,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                var userAddress = await _userAddressRepository.GetUserAddressByIdAsync(userAddressId);
-                if (user != null && userAddress != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (user.Id == userAddress.UserId
-                        || adminUsers.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    var userAddress = await _userAddressRepository.GetUserAddressByIdAsync(userAddressId);
+                    if (user != null && userAddress != null)
                     {
-                        var response = await _userAddressService.GetUserAddressByIdAsync(userAddressId);
-                        return Ok(response);
+                        var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Id == userAddress.UserId
+                            || adminUsers.Contains(user))
+                        {
+                            var response = await _userAddressService.GetUserAddressByIdAsync(userAddressId);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -210,16 +225,19 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                var userAddress = await _userAddressRepository.GetUserAddressByIdAsync(userAddressId);
-                if (user != null && userAddress != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (user.Id == userAddress.UserId
-                        || adminUsers.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    var userAddress = await _userAddressRepository.GetUserAddressByIdAsync(userAddressId);
+                    if (user != null && userAddress != null)
                     {
-                        var response = await _userAddressService.DeleteUserAddressByIdAsync(userAddressId);
-                        return Ok(response);
+                        var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (user.Id == userAddress.UserId
+                            || adminUsers.Contains(user))
+                        {
+                            var response = await _userAddressService.DeleteUserAddressByIdAsync(userAddressId);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();

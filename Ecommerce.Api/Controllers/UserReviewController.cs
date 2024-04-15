@@ -92,15 +92,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if(userReviewDto.UsernameOrEmail==user.Email 
-                        || userReviewDto.UsernameOrEmail == user.UserName || admins.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userReviewService.AddUserReviewAsync(userReviewDto);
-                        return Ok(response);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (userReviewDto.UsernameOrEmail == user.Email
+                            || userReviewDto.UsernameOrEmail == user.UserName || admins.Contains(user))
+                        {
+                            var response = await _userReviewService.AddUserReviewAsync(userReviewDto);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -122,15 +125,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (userReviewDto.UsernameOrEmail == user.Email
-                        || userReviewDto.UsernameOrEmail == user.UserName || admins.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userReviewService.UpdateUserReviewAsync(userReviewDto);
-                        return Ok(response);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (userReviewDto.UsernameOrEmail == user.Email
+                            || userReviewDto.UsernameOrEmail == user.UserName || admins.Contains(user))
+                        {
+                            var response = await _userReviewService.UpdateUserReviewAsync(userReviewDto);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();
@@ -172,15 +178,18 @@ namespace Ecommerce.Api.Controllers
         {
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user != null)
+                if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    UserReview userReview = await _userReviewRepository.GetUserReviewByIdAsync(userReviewId);
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                    if (userReview.UserId == user.Id || admins.Contains(user))
+                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    if (user != null)
                     {
-                        var response = await _userReviewService.DeleteUserReviewByIdAsync(userReviewId);
-                        return Ok(response);
+                        UserReview userReview = await _userReviewRepository.GetUserReviewByIdAsync(userReviewId);
+                        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                        if (userReview.UserId == user.Id || admins.Contains(user))
+                        {
+                            var response = await _userReviewService.DeleteUserReviewByIdAsync(userReviewId);
+                            return Ok(response);
+                        }
                     }
                 }
                 return Unauthorized();

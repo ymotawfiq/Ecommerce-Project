@@ -12647,11 +12647,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
+      "projectUniqueName": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
       "projectName": "Ecommerce.Service",
-      "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
+      "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\Ecommerce.Service.csproj",
       "packagesPath": "C:\\Users\\Yousef\\.nuget\\packages\\",
-      "outputPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Service\\obj\\",
+      "outputPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Yousef\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -12668,11 +12668,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
-              "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj"
+            "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj": {
+              "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Data\\Ecommerce.Data.csproj"
             },
-            "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj": {
-              "projectPath": "D:\\my_source_code\\C sharp\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj"
+            "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj": {
+              "projectPath": "D:\\my_source_code\\Projects\\EcommerceProjectSolution\\Ecommerce.Repository\\Ecommerce.Repository.csproj"
             }
           }
         }
