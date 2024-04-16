@@ -106,6 +106,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("variationOption/{variationOptionId}")]
         public async Task<IActionResult> GetVariationOptionByVariationIdAsync([FromRoute] Guid variationOptionId)
         {

@@ -80,7 +80,11 @@ builder.Services.AddHttpContextAccessor();
 
 //Add Config for Required Email
 builder.Services.Configure<IdentityOptions>(
-    opts => opts.SignIn.RequireConfirmedEmail = true
+    opts => 
+    {
+        opts.SignIn.RequireConfirmedEmail = true;
+        opts.Password.RequiredLength = 8;
+    }
     );
 
 // Adding Authentication

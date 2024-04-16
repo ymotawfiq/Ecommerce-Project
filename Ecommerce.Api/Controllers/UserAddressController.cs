@@ -66,6 +66,7 @@ namespace Ecommerce.Api.Controllers
                             return Ok(response);
                         }
                     }
+                    return Unauthorized();
                 }
                 return Unauthorized();
             }
@@ -238,6 +239,7 @@ namespace Ecommerce.Api.Controllers
                             return Ok(response);
                         }
                     }
+                    return Unauthorized();
                 }
                 return Unauthorized();
             }

@@ -51,11 +51,12 @@ namespace Ecommerce.Api.Controllers
             {
                 if (HttpContext.User.Identity != null && HttpContext.User.Identity.Name != null)
                 {
-                    var user = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
-                    if (user != null)
+                    var loggedInUser = await _userManager.FindByEmailAsync(HttpContext.User.Identity.Name);
+                    var userWithId = await _userManager.FindByIdAsync(userId);
+                    if (loggedInUser != null && userWithId!=null)
                     {
                         var admins = await _userManager.GetUsersInRoleAsync("Admin");
-                        if (admins.Contains(user) || user.Id == userId)
+                        if (admins.Contains(loggedInUser) || userWithId.Id == userId)
                         {
                             var response = await _userPaymentMethodService.GetAllUsersPaymentMethodsAsyncByUserIdAsync(userId);
                             return Ok(response);
