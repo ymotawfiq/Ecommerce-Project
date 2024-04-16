@@ -99,7 +99,7 @@ namespace Ecommerce.Api.Controllers
             return StatusCode(StatusCodes.Status200OK, "Email Sent Successfully");
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
