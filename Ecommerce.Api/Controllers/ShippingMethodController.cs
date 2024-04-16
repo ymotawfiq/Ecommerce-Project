@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ShippingMethodController : ControllerBase
     {
@@ -20,7 +19,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allshipingmethods")]
+        [HttpGet("shipingMethods")]
         public async Task<IActionResult> GetAllShippingMethodAsync()
         {
             try
@@ -41,7 +40,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addshipingmethod")]
+        [HttpPost("addShipingMethod")]
         public async Task<IActionResult> AddShippingMethodAsync([FromBody] ShippingMethodDto shippingMethodDto)
         {
             try
@@ -62,7 +61,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updateshipingmethod")]
+        [HttpPut("updateShipingMethod")]
         public async Task<IActionResult> UpdateShippingMethodAsync([FromBody] ShippingMethodDto shippingMethodDto)
         {
             try
@@ -83,7 +82,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getshipingmethodbyid/{shippinMethodId}")]
+        [HttpGet("shipingMethod/{shippinMethodId}")]
         public async Task<IActionResult> GetShippingMethodByIdAsync([FromRoute] Guid shippinMethodId)
         {
             try
@@ -104,7 +103,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteshipingmethodbyid/{shippinMethodId}")]
+        [HttpDelete("deleteShipingMethod/{shippinMethodId}")]
         public async Task<IActionResult> DeleteShippingMethodByIdAsync([FromRoute] Guid shippinMethodId)
         {
             try

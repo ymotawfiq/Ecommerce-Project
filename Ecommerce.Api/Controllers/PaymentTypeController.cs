@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class PaymentTypeController : ControllerBase
     {
@@ -19,7 +18,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getallpaymenttypes")]
+        [HttpGet("payment-types")]
         public async Task<IActionResult> GetAllPaymentTypesAsync()
         {
             try
@@ -40,7 +39,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addpaymenttype")]
+        [HttpPost("addPaymentType")]
         public async Task<IActionResult> AddPaymentTypeAsync([FromBody] PaymentTypeDto paymentTypeDto)
         {
             try
@@ -61,7 +60,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatepaymenttype")]
+        [HttpPut("updatePaymentType")]
         public async Task<IActionResult> UpdatePaymentTypeAsync([FromBody] PaymentTypeDto paymentTypeDto)
         {
             try
@@ -82,7 +81,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getpaymenttypebyid/{paymentTypeId}")]
+        [HttpGet("paymentType/{paymentTypeId}")]
         public async Task<IActionResult> GetPaymentTypeByIdAsync([FromRoute] Guid paymentTypeId)
         {
             try
@@ -103,7 +102,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletepaymenttypebyid/{paymentTypeId}")]
+        [HttpDelete("deletePaymentType/{paymentTypeId}")]
         public async Task<IActionResult> DeletePaymentTypeByIdAsync([FromRoute] Guid paymentTypeId)
         {
             try

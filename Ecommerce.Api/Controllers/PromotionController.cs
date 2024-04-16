@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class PromotionController : ControllerBase
     {
@@ -18,7 +17,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allpromotions")]
+        [HttpGet("promotions")]
         public async Task<IActionResult> GetAllPromotionsAsync()
         {
             try
@@ -40,7 +39,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addpromotion")]
+        [HttpPost("add-promotion")]
         public async Task<IActionResult> AddPromotionAsync([FromBody] PromotionDto promotionDto)
         {
             try
@@ -62,7 +61,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("Updatepromotion")]
+        [HttpPut("update-promotion")]
         public async Task<IActionResult> UpdatePromotionAsync([FromBody] PromotionDto promotionDto)
         {
             try
@@ -84,7 +83,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getpromotionbyid/{promotionId}")]
+        [HttpGet("promotion/{promotionId}")]
         public async Task<IActionResult> GetPromotionByIdAsync([FromRoute] Guid promotionId)
         {
             try
@@ -106,7 +105,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletepromotionbyid/{promotionId}")]
+        [HttpDelete("deletePromotion/{promotionId}")]
         public async Task<IActionResult> DeletePromotionByIdAsync([FromRoute] Guid promotionId)
         {
             try

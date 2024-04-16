@@ -13,7 +13,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ProductCategoryController : ControllerBase
     {
@@ -24,7 +23,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allcategories")]
+        [HttpGet("all-categories")]
         public async Task<IActionResult> GetAllCategoriesAsync()
         {
             try
@@ -46,7 +45,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addcategory")]
+        [HttpPost("add-category")]
         public async Task<IActionResult> AddCategoryAsync([FromBody] ProductCategoryDto productCategoryDto)
         {
             try
@@ -67,7 +66,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getcategorybyid/{categoryId}")]
+        [HttpGet("category/{categoryId}")]
         public async Task<IActionResult> GetCategoryByIdAsync([FromRoute] Guid categoryId)
         {
             try
@@ -88,7 +87,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatecategory")]
+        [HttpPut("update-category")]
         public async Task<IActionResult> UpdateCategoryAsync(ProductCategoryDto productCategoryDto)
         {
             try
@@ -109,7 +108,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletecategory/{categoryId}")]
+        [HttpDelete("delete-category/{categoryId}")]
         public async Task<IActionResult> DeleteCategoryByCategoryIdAsync([FromRoute] Guid categoryId)
         {
             try

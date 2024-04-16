@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ShopOrderController : ControllerBase
     {
@@ -22,7 +21,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allshoppingorders")]
+        [HttpGet("shoppingOrders")]
         public async Task<IActionResult> GetAllShopOrdersAsync()
         {
             try
@@ -42,7 +41,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("allshoppingordersbyusernameoremail")]
+        [HttpGet("shoppingOrdersByUsernameOrEmail")]
         public async Task<IActionResult> GetAllShopOrdersByUserUsernameOrEmailAsync(string usernameOrEmail)
         {
             try
@@ -76,7 +75,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allshoppingordersbydate")]
+        [HttpGet("shoppingOrdersByDate")]
         public async Task<IActionResult> GetAllShopOrdersByDateAsync(DateTime date)
         {
             try
@@ -96,7 +95,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allshoppingordersbyshippingmethodid/{shippingMethodId}")]
+        [HttpGet("shoppingOrdersByShippingMethod/{shippingMethodId}")]
         public async Task<IActionResult> GetAllShopOrdersByShippingMethodIdAsync(Guid shippingMethodId)
         {
             try
@@ -116,7 +115,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allshoppingordersbyaddressid/{addressId}")]
+        [HttpGet("shoppingOrdersByAddress/{addressId}")]
         public async Task<IActionResult> GetAllShopOrdersByAddressIdAsync(Guid addressId)
         {
             try
@@ -136,7 +135,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allshoppingordersbypaymentmethodid/{paymentMethodId}")]
+        [HttpGet("shoppingOrdersByPaymentMethod/{paymentMethodId}")]
         public async Task<IActionResult> GetAllShopOrdersByPaymentIdAsync(Guid paymentMethodId)
         {
             try
@@ -156,7 +155,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPost("addshoporder")]
+        [HttpPost("addShopOrder")]
         public async Task<IActionResult> AddShopOrderAsync([FromBody] ShopOrderDto shopOrderDto)
         {
             try
@@ -176,7 +175,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPut("updateshoporder")]
+        [HttpPut("updateShopOrder")]
         public async Task<IActionResult> UpdateShopOrderAsync([FromBody] ShopOrderDto shopOrderDto)
         {
             try
@@ -210,7 +209,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getshoporderbyid/{shopOrderId}")]
+        [HttpGet("shopOrder/{shopOrderId}")]
         public async Task<IActionResult> GetShopOrderByIdAsync([FromRoute] Guid shopOrderId)
         {
             try
@@ -230,7 +229,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteshoporderbyid/{shopOrderId}")]
+        [HttpDelete("deleteShopOrder/{shopOrderId}")]
         public async Task<IActionResult> DeleteShopOrder([FromRoute] Guid shopOrderId)
         {
             try

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -19,7 +18,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allproducts")]
+        [HttpGet("all-products")]
         public async Task<IActionResult> GetAllProductsAsync()
         {
             try
@@ -42,7 +41,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allproductsbycategoryid/{categoryId}")]
+        [HttpGet("allProductsByCategory/{categoryId}")]
         public async Task<IActionResult> GetAllProductsByCategoryIdAsync([FromRoute] Guid categoryId)
         {
             try
@@ -65,7 +64,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addproduct")]
+        [HttpPost("add-product")]
         public async Task<IActionResult> AddProductAsync([FromForm] ProductDto productDto)
         {
             try
@@ -87,7 +86,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteproduct/{productId}")]
+        [HttpDelete("delete-product/{productId}")]
         public async Task<IActionResult> DeleteProductAsync([FromRoute] Guid productId)
         {
             try
@@ -109,7 +108,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updateproduct")]
+        [HttpPut("update-product")]
         public async Task<IActionResult> UpdateProductAsync([FromForm] ProductDto productDto)
         {
             try
@@ -131,7 +130,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getproduct/{productId}")]
+        [HttpGet("product/{productId}")]
         public async Task<IActionResult> GetProductByProductIdAsync([FromRoute] Guid productId)
         {
             try

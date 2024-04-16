@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ShoppingCartController : ControllerBase
     {
@@ -26,7 +25,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("getallshoppingcarts")]
+        [HttpGet("shoppingCarts")]
         public async Task<IActionResult> GetAllShoppingCartAsync()
         {
             try
@@ -47,7 +46,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getallshoppingcartsbyuserid/{userId}")]
+        [HttpGet("shoppingCartsByuserId/{userId}")]
         public async Task<IActionResult> GetAllShoppingCartAsync(string userId)
         {
             try
@@ -69,7 +68,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getallshoppingcartsbyuserusernameoremail/{usernameOrEmail}")]
+        [HttpGet("shoppingCartsByusername/{usernameOrEmail}")]
         public async Task<IActionResult> GetAllShoppingCartByUserUsernameOrEmailAsync(string usernameOrEmail)
         {
             try
@@ -91,7 +90,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPost("addshoppingcart")]
+        [HttpPost("addShoppingCart")]
         public async Task<IActionResult> AddShoppingCartAsync([FromBody] ShoppingCartDto shoppingCartDto)
         {
             try
@@ -128,7 +127,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPut("updateshoppingcart")]
+        [HttpPut("updateShoppingCart")]
         public async Task<IActionResult> UpdateShoppingCartAsync([FromBody] ShoppingCartDto shoppingCartDto)
         {
             try
@@ -165,7 +164,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getshoppingcartbyid/{shoppingCartId}")]
+        [HttpGet("shoppingCart/{shoppingCartId}")]
         public async Task<IActionResult> GetShoppingCartByIdAsync([FromRoute] Guid shoppingCartId)
         {
             try
@@ -200,7 +199,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteshoppingcartbyid/{shoppingCartId}")]
+        [HttpDelete("deleteShoppingCart/{shoppingCartId}")]
         public async Task<IActionResult> DeleteShoppingCartByIdAsync([FromRoute] Guid shoppingCartId)
         {
             try

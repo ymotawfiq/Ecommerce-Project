@@ -13,7 +13,6 @@ using System.Security.Claims;
 namespace Ecommerce.Api.Controllers
 {
     [Authorize(Roles ="Admin")]
-    [Route("api/[controller]")]
     [ApiController]
     public class AddressController : ControllerBase
     {
@@ -26,7 +25,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("alladdresses")]
+        [HttpGet("all-addresses")]
         public async Task<IActionResult> GetAllAddressesAsync()
         {
             try
@@ -48,7 +47,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("alladdressesbycountaryid/{countaryId}")]
+        [HttpGet("allAddressesByCountary/{countaryId}")]
         public async Task<IActionResult> GetAllAddressesByCountaryIdAsync([FromRoute] Guid countaryId)
         {
             try
@@ -71,7 +70,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addaddress")]
+        [HttpPost("add-address")]
         public async Task<IActionResult> AddAddressAsync([FromBody] AddressDto addressDto)
         {
             try
@@ -93,7 +92,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updateaddress")]
+        [HttpPut("update-address")]
         public async Task<IActionResult> UpdateAddressAsync([FromBody] AddressDto addressDto)
         {
             try
@@ -114,7 +113,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("getaddressbyid/{addressId}")]
+        [HttpGet("address/{addressId}")]
         public async Task<IActionResult> GetAddressByIdAsync([FromRoute] Guid addressId)
         {
             try
@@ -135,7 +134,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteaddressbyid/{addressId}")]
+        [HttpDelete("delete-address/{addressId}")]
         public async Task<IActionResult> DeleteAddressByIdAsync([FromRoute] Guid addressId)
         {
             try

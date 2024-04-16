@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class UserPaymentMethodController : ControllerBase
     {
@@ -24,7 +23,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("alluserpaymentmethods")]
+        [HttpGet("userPaymentMethods")]
         public async Task<IActionResult> GetAllUsersPaymentsMethodsAsync()
         {
             try
@@ -45,7 +44,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("alluserpaymentmethodsbyuserid/{userId}")]
+        [HttpGet("userPaymentMethods/{userId}")]
         public async Task<IActionResult> GetAllUsersPaymentsMethodsByUserIdAsync([FromRoute] string userId)
         {
             try
@@ -78,7 +77,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("alluserpaymentmethodsbyuserusernameoremail")]
+        [HttpGet("userPaymentMethodsByUsername")]
         public async Task<IActionResult> GetAllUsersPaymentsMethodsByUserUsernameOrEmailAsync
             (string userNameOrEmail)
         {
@@ -114,7 +113,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("adduserpaymentmethod")]
+        [HttpPost("addUserPaymentMethod")]
         public async Task<IActionResult> AddUserPaymentMethodAsync
             ([FromBody] UserPaymentMethodDto userPaymentMethodDto)
         {
@@ -138,7 +137,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updateuserpaymentmethod")]
+        [HttpPut("updateUserPaymentMethod")]
         public async Task<IActionResult> UpdateUserPaymentMethodAsync([FromBody] UserPaymentMethodDto userPaymentMethodDto)
         {
             try
@@ -159,7 +158,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getuserpaymentmethodbyid/{userMethodId}")]
+        [HttpGet("userPaymentMethod/{userMethodId}")]
         public async Task<IActionResult> GetUserPaymentMethodAsync([FromRoute] Guid userMethodId)
         {
             try
@@ -180,7 +179,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteuserpaymentmethodbyid/{userMethodId}")]
+        [HttpDelete("deleteUserPaymentMethod/{userMethodId}")]
         public async Task<IActionResult> DeleteUserPaymentMethodAsync([FromRoute] Guid userMethodId)
         {
             try

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ecommerce.Api.Controllers
 {
     [Authorize(Roles = "Admin")]
-    [Route("api/[controller]")]
     [ApiController]
     public class CountaryController : ControllerBase
     {
@@ -22,7 +21,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allcountaries")]
+        [HttpGet("all-countaries")]
         public async Task<IActionResult> GetAllCountariesAsync()
         {
             try
@@ -44,7 +43,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addcountary")]
+        [HttpPost("add-countary")]
         public async Task<IActionResult> AddCountaryAsync([FromBody] CountaryDto countaryDto)
         {
             try
@@ -66,7 +65,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatecountary")]
+        [HttpPut("update-countary")]
         public async Task<IActionResult> UpdateCountaryAsync([FromBody] CountaryDto countaryDto)
         {
             try
@@ -88,7 +87,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("getcountrybyid/{countaryId}")]
+        [HttpGet("country/{countaryId}")]
         public async Task<IActionResult> GetCountryByIdAsync([FromRoute] Guid countaryId)
         {
             try
@@ -110,7 +109,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletecountrybyid/{countaryId}")]
+        [HttpDelete("delete-country/{countaryId}")]
         public async Task<IActionResult> DeleteCountryByIdAsync([FromRoute] Guid countaryId)
         {
             try

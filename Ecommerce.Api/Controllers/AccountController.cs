@@ -19,7 +19,6 @@ using System.Security.Claims;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -92,7 +91,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles ="Admin")]
-        [HttpGet("testemailsendingmessage")]
+        [HttpGet("testEmailSendingMessage")]
         public  IActionResult TestEmail()
         {
             var message = new Message(new string[] { "amoyoussef2003@gmail.com" }, "Testing", "Test smtp");
@@ -130,7 +129,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("resendconfirmationemail")]
+        [HttpPost("resendConfirmationEmail")]
         public async Task<IActionResult> ResendConfirmationEmail(string email)
         {
             try
@@ -282,7 +281,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("forgetpassword")]
+        [HttpPost("forget-password")]
         public async Task<IActionResult> ForgetPasswordAsync(string email)
         {
             try
@@ -329,7 +328,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("resendforgetpasswordemail")]
+        [HttpPost("resendForgetPasswordEmail")]
         public async Task<IActionResult> ResendForgetPasswordEmailAsync(string email)
         {
             try
@@ -375,7 +374,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("generateresetpasswordobject")]
+        [HttpGet("generateResetPasswordObject")]
         public async Task<IActionResult> GenerateResetPasswordObject(string email, string token)
         {
             try
@@ -405,7 +404,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("resetpassword")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
         {
             try
@@ -436,7 +435,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("sendemailtoresetemail")]
+        [HttpPost("sendEmailToResetEmail")]
         public async Task<IActionResult> SendEmailToResetEmailAsync(string oldEmail, string newEmail)
         {
             try
@@ -486,7 +485,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("generateemailresetobject")]
+        [HttpGet("generatEemailResetObject")]
         public async Task<IActionResult> GenerateEmailResetObject(string OldEmail, string NewEmail, string token)
         {
             var resetEmailObject = new ResetEmailDto
@@ -505,7 +504,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("resetemail")]
+        [HttpPost("reset-email")]
         public async Task<IActionResult> ResetEmailAsync([FromBody] ResetEmailDto resetEmail)
         {
             try
@@ -542,7 +541,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("getcurrentuser")]
+        [HttpGet("getCurrentUser")]
         public ClaimsPrincipal GetCurrentUserAsync()
         {
             return HttpContext.User;

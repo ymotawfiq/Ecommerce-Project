@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class VariationController : ControllerBase
     {
@@ -19,7 +18,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allvariations")]
+        [HttpGet("variations")]
         public async Task<IActionResult> GetAllVariationsAsync()
         {
             try
@@ -40,7 +39,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allvariationsbycategoryId/{categoryId}")]
+        [HttpGet("variationsByCategory/{categoryId}")]
         public async Task<IActionResult> GetAllVariationsByCategoryIdAsync([FromRoute] Guid categoryId)
         {
             try
@@ -61,7 +60,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addvariation")]
+        [HttpPost("add-variation")]
         public async Task<IActionResult> AddVariationAsync([FromBody] VariationDto variationDto)
         {
             try
@@ -82,7 +81,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatevariation")]
+        [HttpPut("update-variation")]
         public async Task<IActionResult> UpdateVariationAsync([FromBody] VariationDto variationDto)
         {
             try
@@ -103,7 +102,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletevariation/{variationId}")]
+        [HttpDelete("deleteVariation/{variationId}")]
         public async Task<IActionResult> DeleteVariationByIdAsync([FromRoute] Guid variationId)
         {
             try
@@ -124,7 +123,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getvariation/{variationId}")]
+        [HttpGet("variation/{variationId}")]
         public async Task<IActionResult> GetVariationByIdAsync([FromRoute] Guid variationId)
         {
             try

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class UserReviewController : ControllerBase
     {
@@ -27,7 +26,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allreviews")]
+        [HttpGet("reviews")]
         public async Task<IActionResult> GetAllReviewsAsync()
         {
             try
@@ -47,7 +46,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allreviewsbyorderid/{orderLineId}")]
+        [HttpGet("reviewsByOrder/{orderLineId}")]
         public async Task<IActionResult> GetAllReviewsByOrderLineIdAsync([FromRoute] Guid orderLineId)
         {
             try
@@ -67,7 +66,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allreviewsbyusernameoremail")]
+        [HttpGet("reviewsByUsernameOrEmail")]
         public async Task<IActionResult> GetAllReviewsByUsernameOrEmailAsync(string usernameOrEmail)
         {
             try
@@ -87,7 +86,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPost("adduserreview")]
+        [HttpPost("addUserReview")]
         public async Task<IActionResult> AddUserReviewAsync([FromBody] UserReviewDto userReviewDto)
         {
             try
@@ -120,7 +119,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPut("updateuserreview")]
+        [HttpPut("updateUserReview")]
         public async Task<IActionResult> UpdateUserReviewAsync([FromBody] UserReviewDto userReviewDto)
         {
             try
@@ -153,7 +152,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getuserreviewbyid/{userReviewId}")]
+        [HttpGet("userReview/{userReviewId}")]
         public async Task<IActionResult> GetUserReviewByIdAsync([FromRoute] Guid userReviewId)
         {
             try
@@ -173,7 +172,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpDelete("deleteuserreviewbyid/{userReviewId}")]
+        [HttpDelete("deleteUserReview/{userReviewId}")]
         public async Task<IActionResult> DeleteUserReviewByIdAsync([FromRoute] Guid userReviewId)
         {
             try

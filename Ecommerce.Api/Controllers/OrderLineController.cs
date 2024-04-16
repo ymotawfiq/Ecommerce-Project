@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class OrderLineController : ControllerBase
     {
@@ -24,7 +23,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allorderline")]
+        [HttpGet("allOrderLine")]
         public async Task<IActionResult> AllOrderLineAsync()
         {
             try
@@ -44,7 +43,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allorderlinebyproductitemid/{productItemId}")]
+        [HttpGet("allOrderLineByProductItem/{productItemId}")]
         public async Task<IActionResult> AllOrderLineByProductItemIdAsync([FromRoute] Guid productItemId)
         {
             try
@@ -64,7 +63,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allorderlinebyshoporderid/{shopOrderId}")]
+        [HttpGet("allOrderLineByShopOrder/{shopOrderId}")]
         public async Task<IActionResult> AllOrderLineByShopOrderIdAsync([FromRoute] Guid shopOrderId)
         {
             try
@@ -84,7 +83,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPost("addorderline")]
+        [HttpPost("addOrderLine")]
         public async Task<IActionResult> AddOrderLineAsync([FromBody] OrderLineDto orderLineDto)
         {
             try
@@ -104,7 +103,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPut("updateorderline")]
+        [HttpPut("updateOrderLine")]
         public async Task<IActionResult> UpdateOrderLineAsync([FromBody] OrderLineDto orderLineDto)
         {
             try
@@ -124,7 +123,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getorderlinebyid/{orderLineId}")]
+        [HttpGet("orderLine/{orderLineId}")]
         public async Task<IActionResult> GetOrderLineByIdAsync([FromRoute] Guid orderLineId)
         {
             try
@@ -144,7 +143,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteorderlinebyid/{orderLineId}")]
+        [HttpDelete("deleteOrderLine/{orderLineId}")]
         public async Task<IActionResult> DeleteOrderLineByIdAsync([FromRoute] Guid orderLineId)
         {
             try

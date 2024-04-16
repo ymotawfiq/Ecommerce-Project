@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ProductItemController : ControllerBase
     {
@@ -22,7 +21,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allitems")]
+        [HttpGet("all-items")]
         public async Task<IActionResult> GetAllItemsAsync()
         {
             try
@@ -43,7 +42,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allitemsbyproductid/{productId}")]
+        [HttpGet("allItemsByProduct/{productId}")]
         public async Task<IActionResult> GetAllItemsByProductIdAsync([FromRoute] Guid productId)
         {
             try
@@ -64,7 +63,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("additem")]
+        [HttpPost("add-item")]
         public async Task<IActionResult> AddItemAsync([FromForm]ProductItemDto productItemDto)
         {
             try
@@ -86,7 +85,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updateitem")]
+        [HttpPut("update-item")]
         public async Task<IActionResult> UpdateItemAsync([FromForm] ProductItemDto productItemDto)
         {
             try
@@ -109,7 +108,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteitem/{itemId}")]
+        [HttpDelete("delete-item/{itemId}")]
         public async Task<IActionResult> DeleteItemAsync([FromRoute] Guid itemId)
         {
             try
@@ -131,7 +130,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getitem/{itemId}")]
+        [HttpGet("item/{itemId}")]
         public async Task<IActionResult> GetItemByIdAsync([FromRoute] Guid itemId)
         {
             try

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ShoppingCartItemController : ControllerBase
     {
@@ -26,7 +25,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allshoppingcartitem")]
+        [HttpGet("shoppingCartItem")]
         public async Task<IActionResult> GetAllShoppingCartItemsAsync()
         {
             try
@@ -46,7 +45,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("allshoppingcartitembycartid/{cartId}")]
+        [HttpGet("shoppingCartItemByCart/{cartId}")]
         public async Task<IActionResult> GetAllShoppingCartItemsByCartIdAsync([FromRoute] Guid cartId)
         {
             try
@@ -80,7 +79,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPost("addshoppingcartitem")]
+        [HttpPost("addShoppingCartItem")]
         public async Task<IActionResult> AddShoppingCartItemsAsync([FromBody] ShoppingCartItemDto shoppingCartItemDto)
         {
             try
@@ -125,7 +124,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPut("updateshoppingcartitem")]
+        [HttpPut("updateShoppingCartItem")]
         public async Task<IActionResult> UpdateShoppingCartItemsAsync([FromBody] ShoppingCartItemDto shoppingCartItemDto)
         {
             try
@@ -170,7 +169,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getshoppingcartitembyid/{shoppingCartItemId}")]
+        [HttpGet("shoppingCartItem/{shoppingCartItemId}")]
         public async Task<IActionResult> UpdateShoppingCartItemsAsync([FromRoute] Guid shoppingCartItemId)
         {
             try
@@ -205,7 +204,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteshoppingcartitembyid/{shoppingCartItemId}")]
+        [HttpDelete("deleteShoppingCartItem/{shoppingCartItemId}")]
         public async Task<IActionResult> DeleteShoppingCartItemsAsync([FromRoute] Guid shoppingCartItemId)
         {
             try

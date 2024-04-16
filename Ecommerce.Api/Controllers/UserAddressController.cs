@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ecommerce.Api.Controllers
 {
     [Authorize(Roles ="Admin,User")]
-    [Route("api/[controller]")]
     [ApiController]
     public class UserAddressController : ControllerBase
     {
@@ -30,7 +29,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles ="Admin")]
-        [HttpGet("allusersaddresses")]
+        [HttpGet("users-addresses")]
         public async Task<IActionResult> GetAllUserAddressAsync()
         {
             try
@@ -50,7 +49,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getuseraddressesbyuserid/{userId}")]
+        [HttpGet("userAddresses/{userId}")]
         public async Task<IActionResult> GetUserAddressesByUserIdAsync([FromRoute] Guid userId)
         {
             try
@@ -83,7 +82,7 @@ namespace Ecommerce.Api.Controllers
 
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getuseraddressesbyusernameoremail")]
+        [HttpGet("userAddresses")]
         public async Task<IActionResult> GetUserAddressesByUsernameOrEmailAsync
             (string userNameOrEmail)
         {
@@ -118,7 +117,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPost("adduseraddress")]
+        [HttpPost("addUserAddress")]
         public async Task<IActionResult> AddUserAddressAsync([FromBody] UserAddressDto userAddressDto)
         {
             try
@@ -151,7 +150,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpPut("updateuseraddress")]
+        [HttpPut("updateUserAddress")]
         public async Task<IActionResult> UpdateUserAddressAsync([FromBody] UserAddressDto userAddressDto)
         {
             try
@@ -185,7 +184,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpGet("getuseraddressbyid/{userAddressId}")]
+        [HttpGet("userAddress/{userAddressId}")]
         public async Task<IActionResult> GetUserAddressByIdAsync([FromRoute] Guid userAddressId)
         {
             try
@@ -220,7 +219,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        [HttpDelete("deleteuseraddressbyid/{userAddressId}")]
+        [HttpDelete("deleteUserAddress/{userAddressId}")]
         public async Task<IActionResult> DeleteUserAddressByIdAsync([FromRoute] Guid userAddressId)
         {
             try

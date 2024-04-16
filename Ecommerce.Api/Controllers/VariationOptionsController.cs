@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class VariationOptionsController : ControllerBase
     {
@@ -22,7 +21,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("allvariationoprions")]
+        [HttpGet("variationOptions")]
         public async Task<IActionResult> GetAllVariationOptionsAsync()
         {
             try
@@ -44,7 +43,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allvariationoprionsbyvariationid/{variationId}")]
+        [HttpGet("variationOprionsByVariation/{variationId}")]
         public async Task<IActionResult> GetAllVariationOptionsByVariationIdAsync([FromRoute] Guid variationId)
         {
             try
@@ -66,7 +65,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addvariationoption")]
+        [HttpPost("addVariationOption")]
         public async Task<IActionResult> AddVariationOptionAsync(VariationOptionsDto variationOptionsDto)
         {
             try
@@ -87,7 +86,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("updatevariationoption")]
+        [HttpPut("updateVariationOption")]
         public async Task<IActionResult> UpdateVariationOptionAsync(VariationOptionsDto variationOptionsDto)
         {
             try
@@ -107,7 +106,7 @@ namespace Ecommerce.Api.Controllers
             }
         }
 
-        [HttpGet("getvariationoption/{variationOptionId}")]
+        [HttpGet("variationOption/{variationOptionId}")]
         public async Task<IActionResult> GetVariationOptionByVariationIdAsync([FromRoute] Guid variationOptionId)
         {
             try
@@ -128,7 +127,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("deletevariationoption/{variationOptionId}")]
+        [HttpDelete("deleteVariationOption/{variationOptionId}")]
         public async Task<IActionResult> DeleteVariationOptionByVariationIdAsync([FromRoute] Guid variationOptionId)
         {
             try
