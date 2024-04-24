@@ -20,6 +20,7 @@ namespace Ecommerce.Data
         {
             base.OnModelCreating(modelBuilder);
             ApplyEntitiesConfigurations(modelBuilder);
+			// seed on first migration
             SeedRoles(modelBuilder);
         }
 
@@ -49,11 +50,13 @@ namespace Ecommerce.Data
                         .ApplyConfiguration(new UserReviewConfiguration());
         }
 
-        private void SeedRoles(ModelBuilder modelBuilder)
+        //seed on first migration
+        private void SeedRoles(ModelBuilder builder)
         {
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole() { ConcurrencyStamp="1", Name = "Admin", NormalizedName = "Admin"},
-                new IdentityRole() { ConcurrencyStamp="2", Name = "User", NormalizedName="User"}
+            builder.Entity<IdentityRole>().HasData
+                (
+                    new IdentityRole() { ConcurrencyStamp = "1", Name = "Admin", NormalizedName = "Admin" },
+                    new IdentityRole() { ConcurrencyStamp = "2", Name = "User", NormalizedName = "User" }
                 );
         }
 

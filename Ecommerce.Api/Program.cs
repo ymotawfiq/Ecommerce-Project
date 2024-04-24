@@ -1,4 +1,5 @@
 using Ecommerce.Data;
+using Ecommerce.Data.Models.ApiModel;
 using Ecommerce.Data.Models.EmailModel;
 using Ecommerce.Data.Models.Entities.Authentication;
 using Ecommerce.Repository.Repositories.AddressRepository;
@@ -45,6 +46,7 @@ using Ecommerce.Service.Services.UserService;
 using Ecommerce.Service.Services.VariationOptionService;
 using Ecommerce.Service.Services.VariationService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -57,11 +59,14 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+
 // Connect to database
 builder.Services.AddDbContext<ApplicationDbContext>(op =>
-
-    op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
-    ServiceLifetime.Transient);
+{
+    op.UseMySql(connection, ServerVersion.AutoDetect(connection));
+}
+);
 builder.Services.AddIdentity<SiteUser, IdentityRole>(options =>
 {
     // Other identity options
@@ -215,12 +220,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseCors(policy =>
-{
-    policy.WithOrigins(builder.Configuration["ClentSideUrl"]?? "https://localhost:7206")
-    .AllowAnyMethod()
-    .WithHeaders(HeaderNames.ContentType);
-});
+app.UseStatusCodePagesWithRedirects("/error/{0}");
 
 app.UseSwaggerUI(c =>
 {
