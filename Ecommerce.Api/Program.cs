@@ -64,7 +64,7 @@ var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 // Connect to database
 builder.Services.AddDbContext<ApplicationDbContext>(op =>
 {
-    op.UseMySql(connection, ServerVersion.AutoDetect(connection));
+    op.UseSqlServer(connection);
 }
 );
 builder.Services.AddIdentity<SiteUser, IdentityRole>(options =>
@@ -183,7 +183,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecommerce API", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecommerce APIs", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,

@@ -7,10 +7,11 @@ namespace Ecommerce.Data.DTOs.Authentication.ResetPassword
     public class ResetPasswordDto
     {
         [Required]
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; } = null!;
+
         [Compare("Password", ErrorMessage = "The password and conformation password don't match...")]
-        public string ConfirmPassword { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Token { get; set; } = string.Empty;
+        public string ConfirmPassword { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string Token { get; set; } = null!;
     }
 }
